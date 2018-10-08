@@ -35,7 +35,7 @@ public interface IBasePage<T> {
 
     void clearAnswer();
 
-    void initView();
+    void initView(View v);
 
     void blockPage();
 

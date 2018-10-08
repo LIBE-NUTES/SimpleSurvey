@@ -124,7 +124,7 @@ public abstract class BasePage<T extends BaseConfigPage> extends Fragment implem
             } else boxImage.setVisibility(View.GONE);
         }
 
-        initView();
+        initView(view);
 
         return view;
     }
