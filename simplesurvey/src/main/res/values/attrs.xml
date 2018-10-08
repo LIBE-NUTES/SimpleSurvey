@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="CustomSelectSpinner">
+    <declare-styleable name="SelectSpinner">
         <attr name="android:entries" />
         <attr name="android:hint" />
 
@@ -14,7 +14,7 @@
         </attr>
     </declare-styleable>
 
-    <declare-styleable name="CustomMultiSelectSpinner" parent="CustomSelectSpinner">
+    <declare-styleable name="MultiSelectSpinner" parent="CustomSelectSpinner">
         <attr name="android:entries" />
         <attr name="android:hint" />
 

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -16,20 +15,20 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="25dp"
             android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_horizontal_margin">
+            android:paddingBottom="25dp">
 
             <ImageButton
                 android:id="@+id/close_imageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/text_cancel"
-                app:srcCompat="@drawable/ic_action_close_light"
-                android:layout_alignParentLeft="true" />
+                app:srcCompat="@drawable/ic_action_close_light" />
 
         </RelativeLayout>
         <!-- END BOX MENU BAR -->
@@ -115,16 +114,16 @@
             android:orientation="vertical"
             android:padding="@dimen/spinner_answer_margin">
 
-            <br.edu.uepb.nutes.haniot.ui.CustomMultiSelectSpinner
+            <br.edu.uepb.nutes.simplesurvey.ui.MultiSelectSpinner
                 android:id="@+id/answer_multi_select_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:entries="@array/answers_fall_characterization_q6_array"
+                android:entries="@null"
                 android:hint="@string/survey_select_the_answers"
                 app:colorBackgroundTint="@color/colorPurple"
-                app:textAlign="center"
                 app:colorSelectedText="@android:color/black"
-                app:enabledAddNewItem="false" />
+                app:enabledAddNewItem="false"
+                app:textAlign="center" />
         </LinearLayout>
         <!-- END BOX INPUT -->
 

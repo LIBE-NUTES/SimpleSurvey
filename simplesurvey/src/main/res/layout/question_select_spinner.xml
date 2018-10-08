@@ -109,11 +109,11 @@
             android:orientation="vertical"
             android:padding="@dimen/spinner_answer_margin">
 
-            <br.edu.uepb.nutes.haniot.ui.CustomSelectSpinner
+            <br.edu.uepb.nutes.simplesurvey.ui.SelectSpinner
                 android:id="@+id/answer_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:entries="@array/answers_fall_characterization_q4_array"
+                android:entries="@null"
                 android:hint="@string/survey_select_an_answer"
                 app:colorBackgroundTint="@color/colorPurple"
                 app:enabledAddNewItem="false"
