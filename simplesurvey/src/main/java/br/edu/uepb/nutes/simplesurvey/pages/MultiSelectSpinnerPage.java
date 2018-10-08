@@ -25,9 +25,6 @@ package br.edu.uepb.nutes.simplesurvey.pages;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.view.View;
 
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
@@ -36,6 +33,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import br.edu.uepb.nutes.simplesurvey.R;
 import br.edu.uepb.nutes.simplesurvey.base.BaseConfigPage;
 import br.edu.uepb.nutes.simplesurvey.base.BasePage;
@@ -358,10 +358,6 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
 
     /**
      * Interface OnMultiSelectSpinnerListener.
-     *
-     * @author Douglas Rafael <douglas.rafael@nutes.uepb.edu.br>
-     * @version 1.0
-     * @copyright Copyright (c) 2017, NUTES UEPB
      */
     public interface OnMultiSelectSpinnerListener extends OnPageListener {
         void onMultiSelectSpinner(int page, List<String> values, List<Integer> indexValues);

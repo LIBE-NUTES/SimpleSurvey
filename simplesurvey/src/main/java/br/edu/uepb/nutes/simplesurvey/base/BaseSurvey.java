@@ -24,14 +24,14 @@ package br.edu.uepb.nutes.simplesurvey.base;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
 import com.github.paolorotolo.appintro.AppIntro;
+import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import br.edu.uepb.nutes.simplesurvey.R;
 

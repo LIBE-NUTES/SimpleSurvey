@@ -25,9 +25,6 @@ package br.edu.uepb.nutes.simplesurvey.pages;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.view.View;
 
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
@@ -35,6 +32,9 @@ import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 import java.io.Serializable;
 import java.util.List;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import br.edu.uepb.nutes.simplesurvey.R;
 import br.edu.uepb.nutes.simplesurvey.base.BaseConfigPage;
 import br.edu.uepb.nutes.simplesurvey.base.BasePage;
@@ -211,7 +211,6 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
      * Class config page.
      */
     public static class ConfigPage extends BaseConfigPage<ConfigPage> implements Serializable {
-
         @ColorInt
         protected int colorSelectedText;
         @ColorInt
@@ -305,10 +304,6 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
 
     /**
      * Interface OnSpinnerListener.
-     *
-     * @author Douglas Rafael <douglas.rafael@nutes.uepb.edu.br>
-     * @version 1.0
-     * @copyright Copyright (c) 2017, NUTES UEPB
      */
     public interface OnSpinnerListener extends OnPageListener {
         void onAnswerSpinner(int page, String value, int indexValue);

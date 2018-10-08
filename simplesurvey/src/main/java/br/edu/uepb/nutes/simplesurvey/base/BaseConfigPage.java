@@ -22,11 +22,10 @@
  */
 package br.edu.uepb.nutes.simplesurvey.base;
 
-import android.support.annotation.ColorInt;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.StringRes;
-
+import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 
 /**

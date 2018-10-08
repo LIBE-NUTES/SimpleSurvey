@@ -25,17 +25,17 @@ package br.edu.uepb.nutes.simplesurvey.pages;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 
 import java.io.Serializable;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.widget.AppCompatButton;
 import br.edu.uepb.nutes.simplesurvey.R;
 import br.edu.uepb.nutes.simplesurvey.base.BaseConfigPage;
 import br.edu.uepb.nutes.simplesurvey.base.BasePage;

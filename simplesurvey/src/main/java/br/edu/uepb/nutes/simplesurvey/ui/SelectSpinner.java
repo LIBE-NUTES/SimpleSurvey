@@ -32,12 +32,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.TextViewCompat;
-import android.support.v7.widget.AppCompatSpinner;
 import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -57,6 +51,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatSpinner;
+import androidx.core.view.ViewCompat;
+import androidx.core.widget.TextViewCompat;
 import br.edu.uepb.nutes.simplesurvey.R;
 
 public class SelectSpinner extends LinearLayout {
@@ -97,8 +97,8 @@ public class SelectSpinner extends LinearLayout {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SelectSpinner);
         if (typedArray != null && typedArray.length() > 0) {
             try {
-                setItems(typedArray.getTextArray(R.styleable.CustomSelectSpinner_android_entries));
-                setHint(typedArray.getString(R.styleable.CustomSelectSpinner_android_hint));
+                setItems(typedArray.getTextArray(R.styleable.SelectSpinner_android_entries));
+                setHint(typedArray.getString(R.styleable.SelectSpinner_android_hint));
                 setColorSelectedText(typedArray.getColor(R.styleable.SelectSpinner_colorSelectedText, Color.GRAY));
                 setColorBackgroundTint(typedArray.getColor(R.styleable.SelectSpinner_colorBackgroundTint, Color.GRAY));
                 setEnabledAddNewItem(typedArray.getBoolean(R.styleable.SelectSpinner_colorBackgroundTint, true));
