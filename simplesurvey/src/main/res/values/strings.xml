@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">SimpleSurvey</string>
+    <string name="image">Image</string>
+    <string name="text_cancel">Cancel</string>
+    <string name="text_no">No</string>
+    <string name="text_yes">Yes</string>
+    <string name="text_ok">Ok</string>
+    <string name="survey_add_new_answer">Add new answer</string>
+    <string name="message_blocked_page">Answer the current question to go to next&#8230;</string>
 </resources>
