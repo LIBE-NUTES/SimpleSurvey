@@ -32,6 +32,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.github.chrisbanes.photoview.PhotoView;
@@ -66,7 +67,8 @@ public abstract class BasePage<T extends BaseConfigPage> extends Fragment implem
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(getLayout(), container, false);
 
         // Initialize components
@@ -80,27 +82,32 @@ public abstract class BasePage<T extends BaseConfigPage> extends Fragment implem
         this.boxInput = view.findViewById(R.id.box_input);
 
         if (boxTitle != null && titleTextView != null) {
-            if (getConfigsPage().title != 0)
+            if (getConfigsPage().title != 0) {
                 titleTextView.setText(getConfigsPage().title);
-            else if (getConfigsPage().titleStr != null && !getConfigsPage().titleStr.isEmpty())
+            } else if (getConfigsPage().titleStr != null && !getConfigsPage().titleStr.isEmpty()) {
                 titleTextView.setText(getConfigsPage().titleStr);
-            else
+            } else {
                 boxTitle.setVisibility(View.GONE);
+            }
 
-            if (getConfigsPage().titleColor != 0)
+            if (getConfigsPage().titleColor != 0) {
                 titleTextView.setTextColor(getConfigsPage().titleColor);
+            }
         }
 
         if (boxDescription != null && descTextView != null) {
-            if (getConfigsPage().description != 0)
+            if (getConfigsPage().description != 0) {
                 descTextView.setText(getConfigsPage().description);
-            else if (getConfigsPage().descriptionStr != null && !getConfigsPage().descriptionStr.isEmpty())
+            } else if (getConfigsPage().descriptionStr != null
+                    && !getConfigsPage().descriptionStr.isEmpty()) {
                 descTextView.setText(getConfigsPage().descriptionStr);
-            else
+            } else {
                 boxDescription.setVisibility(View.GONE);
+            }
 
-            if (getConfigsPage().descriptionColor != 0)
+            if (getConfigsPage().descriptionColor != 0) {
                 descTextView.setTextColor(getConfigsPage().descriptionColor);
+            }
         }
 
         if (closeImageButton != null) {
@@ -112,7 +119,9 @@ public abstract class BasePage<T extends BaseConfigPage> extends Fragment implem
                         mPageListener.onClosePage();
                     }
                 });
-            } else closeImageButton.setVisibility(View.GONE);
+            } else {
+                closeImageButton.setVisibility(View.GONE);
+            }
         }
 
         if (boxImage != null && questionImageView != null) {

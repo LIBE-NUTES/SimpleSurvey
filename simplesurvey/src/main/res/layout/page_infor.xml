@@ -79,7 +79,6 @@
 
         <!-- BOX DESCRIPTION -->
         <ScrollView
-            android:id="@+id/box_description"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -89,14 +88,21 @@
             android:padding="25dp"
             android:scrollbars="vertical">
 
-            <TextView
-                android:id="@+id/question_description"
+            <LinearLayout
+                android:id="@+id/box_description"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="@null"
-                android:textAppearance="@android:style/TextAppearance.Medium" />
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/question_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@null"
+                    android:textAppearance="@android:style/TextAppearance.Medium" />
+            </LinearLayout>
+
         </ScrollView>
         <!-- END BOX DESCRIPTION -->
 

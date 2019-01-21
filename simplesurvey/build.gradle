@@ -33,7 +33,7 @@ dependencies {
     implementation 'com.android.support:design:28.0.0'
 
     // APPINTRO
-    implementation 'com.github.apl-devs:appintro:v4.2.3'
+    api 'com.github.apl-devs:appintro:v4.2.3'
 
     // PHOTO VIEW (Zoom in Image)
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'

@@ -33,10 +33,10 @@ import android.support.v4.app.Fragment;
  * @param <T>
  */
 public abstract class BaseConfigPage<T> {
-    public String titleStr,
+    protected String titleStr,
             descriptionStr;
 
-    public int layout,
+    protected int layout,
             title,
             description,
             image,
@@ -47,9 +47,9 @@ public abstract class BaseConfigPage<T> {
             drawableClose,
             drawablePause;
 
-    public boolean zoomDisabled;
+    protected boolean zoomDisabled;
 
-    public BaseConfigPage() {
+    protected BaseConfigPage() {
         this.layout = 0;
         this.title = 0;
         this.description = 0;
@@ -65,7 +65,7 @@ public abstract class BaseConfigPage<T> {
     /**
      * Set resource layout.
      *
-     * @param layout
+     * @param layout @{@link LayoutRes}
      * @return T
      */
     public T layout(@LayoutRes int layout) {

@@ -120,8 +120,10 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
             public void onItemSelected(String item, int indexItem) {
                 if (indexItem != oldIndexAnswerValue) {
                     oldIndexAnswerValue = indexItem;
-                    mListener.onAnswerSpinner(SelectSpinnerPage.super.pageNumber, item, indexItem);
                     SelectSpinnerPage.super.unlockPage();
+                    if (mListener != null) {
+                        mListener.onAnswerSpinner(SelectSpinnerPage.super.pageNumber, item, indexItem);
+                    }
                 }
             }
 
@@ -164,8 +166,6 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
         if (context instanceof OnSpinnerListener) {
             this.mListener = (OnSpinnerListener) context;
             super.mPageListener = this.mListener;
-        } else {
-            throw new ClassCastException("You must implement the SelectSpinnerPage.OnSpinnerListener!");
         }
     }
 
@@ -198,9 +198,9 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
     /**
      * Set answer.
      *
-     * @param indexValue
+     * @param indexValue index
      */
-    public void setAnswer(int indexValue) {
+    private void setAnswer(int indexValue) {
         this.answerSelectSpinner.selection(indexValue);
         this.oldIndexAnswerValue = this.answerSelectSpinner.getIndexItemSelected(); // position 0 hint
 
@@ -212,14 +212,14 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
      */
     public static class ConfigPage extends BaseConfigPage<ConfigPage> implements Serializable {
         @ColorInt
-        protected int colorSelectedText;
+        private int colorSelectedText;
         @ColorInt
-        protected int colorBackgroundTint;
+        private int colorBackgroundTint;
         @StringRes
-        protected int hint;
-        protected List<String> items;
-        protected int indexAnswerInit;
-        protected boolean enabledAdNewItem;
+        private int hint;
+        private List<String> items;
+        private int indexAnswerInit;
+        private boolean enabledAdNewItem;
 
         public ConfigPage() {
             this.colorSelectedText = 0;
@@ -243,7 +243,7 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
         /**
          * Set color item selected.
          *
-         * @param colorSelectedText
+         * @param colorSelectedText @{@link ColorInt} resource color.
          * @return ConfigPage
          */
         public SelectSpinnerPage.ConfigPage colorSelectedText(@ColorInt int colorSelectedText) {
@@ -255,7 +255,7 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
          * Set color background tint.
          * The spinner line and the add new item image will receive this color.
          *
-         * @param colorBackgroundTint
+         * @param colorBackgroundTint @{@link ColorInt} resource color.
          * @return ConfigPage
          */
         public SelectSpinnerPage.ConfigPage colorBackgroundTint(@ColorInt int colorBackgroundTint) {
@@ -266,7 +266,7 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
         /**
          * Set hint message.
          *
-         * @param hint
+         * @param hint @{@link ColorInt} resource color.
          * @return ConfigPage
          */
         public SelectSpinnerPage.ConfigPage hint(@ColorInt int hint) {
@@ -277,7 +277,7 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
         /**
          * Set answer init.
          *
-         * @param indexAnswerInit
+         * @param indexAnswerInit @{@link ColorInt} index.
          * @return ConfigPage
          */
         public SelectSpinnerPage.ConfigPage answerInit(int indexAnswerInit) {

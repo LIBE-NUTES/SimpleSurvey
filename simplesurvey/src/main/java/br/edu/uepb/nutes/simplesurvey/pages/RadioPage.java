@@ -66,7 +66,7 @@ public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideB
     /**
      * New RadioPage instance.
      *
-     * @param configPage
+     * @param configPage {@link ConfigPage}
      * @return RadioPage
      */
     private static RadioPage newInstance(ConfigPage configPage) {
@@ -149,10 +149,14 @@ public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideB
 
                 if (checkedId == R.id.left_radioButton && oldAnswer != 0) {
                     setAnswer(false);
-                    mListener.onAnswerRadio(pageNumber, false);
+                    if (mListener != null) {
+                        mListener.onAnswerRadio(pageNumber, false);
+                    }
                 } else if (checkedId == R.id.right_radioButton && oldAnswer != 1) {
                     setAnswer(true);
-                    mListener.onAnswerRadio(pageNumber, true);
+                    if (mListener != null) {
+                        mListener.onAnswerRadio(pageNumber, true);
+                    }
                 }
             }
         });
@@ -185,8 +189,6 @@ public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideB
         if (context instanceof OnRadioListener) {
             mListener = (OnRadioListener) context;
             super.mPageListener = mListener;
-        } else {
-            throw new ClassCastException("You must implement the RadioPage.OnRadioListener!");
         }
     }
 
@@ -203,8 +205,9 @@ public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideB
 
     @Override
     public void setBackgroundColor(int backgroundColor) {
-        if (configPage.colorBackground != 0)
+        if (configPage.colorBackground != 0) {
             getView().setBackgroundColor(configPage.colorBackground);
+        }
     }
 
     @Override
@@ -254,7 +257,7 @@ public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideB
      * Class config page.
      */
     public static class ConfigPage extends BaseConfigPage<ConfigPage> implements Serializable {
-        protected int radioLeftText,
+        private int radioLeftText,
                 radioRightText,
                 radioColorTextNormal,
                 radioColorTextChecked,
@@ -275,7 +278,7 @@ public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideB
         /**
          * Set left radio text.
          *
-         * @param radioLeftText
+         * @param radioLeftText @{@link StringRes} resource text left.
          * @return ConfigPage
          */
         public ConfigPage radioLeftText(@StringRes int radioLeftText) {
@@ -286,7 +289,7 @@ public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideB
         /**
          * Set right radio text.
          *
-         * @param radioRightText
+         * @param radioRightText @{@link StringRes} resource text right.
          * @return ConfigPage
          */
         public ConfigPage radioRightText(@StringRes int radioRightText) {
@@ -297,10 +300,10 @@ public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideB
         /**
          * Set style radio.
          *
-         * @param backgroundLeftRadio
-         * @param backgroundRightRadio
-         * @param textColorRadioNormal
-         * @param textColorRadioChecked
+         * @param backgroundLeftRadio   @{@link DrawableRes} resource the left side.
+         * @param backgroundRightRadio  @{@link DrawableRes} resource the right side.
+         * @param textColorRadioNormal  @{@link ColorInt} resource text color normal.
+         * @param textColorRadioChecked @{@link ColorInt} resource text color checked.
          * @return ConfigPage
          */
         public ConfigPage radioStyle(@DrawableRes int backgroundLeftRadio,
@@ -317,17 +320,12 @@ public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideB
         /**
          * Set answer init.
          *
-         * @param answerInit
+         * @param answerInit boolean answer.
          * @return ConfigPage
          */
         public ConfigPage answerInit(boolean answerInit) {
-            if (answerInit)
-                this.answerInit = 1;
-            else if (!answerInit)
-                this.answerInit = 0;
-            else
-                this.answerInit = -1;
-
+            if (answerInit) this.answerInit = 1;
+            else this.answerInit = 0;
             return this;
         }
 

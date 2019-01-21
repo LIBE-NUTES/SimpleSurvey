@@ -60,7 +60,7 @@ public class InforPage extends BasePage<InforPage.ConfigPage> implements ISlideB
     /**
      * New InforPage instance.
      *
-     * @param configPage
+     * @param configPage {@link ConfigPage}
      * @return InforPage
      */
     private static InforPage newInstance(ConfigPage configPage) {
@@ -80,6 +80,7 @@ public class InforPage extends BasePage<InforPage.ConfigPage> implements ISlideB
         // Retrieving arguments
         if (getArguments() != null && getArguments().size() != 0) {
             configPage = (ConfigPage) getArguments().getSerializable(ARG_CONFIGS_PAGE);
+            if (configPage == null) return;
             super.pageNumber = configPage.pageNumber;
         }
     }
@@ -105,7 +106,7 @@ public class InforPage extends BasePage<InforPage.ConfigPage> implements ISlideB
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (button == null) return;
+        if (button == null || mListener == null) return;
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,8 +143,6 @@ public class InforPage extends BasePage<InforPage.ConfigPage> implements ISlideB
         if (context instanceof OnButtonListener) {
             mListener = (OnButtonListener) context;
             super.mPageListener = mListener;
-        } else {
-            throw new ClassCastException("You must implement the InforPage.OnButtonListener!");
         }
     }
 
@@ -174,7 +173,7 @@ public class InforPage extends BasePage<InforPage.ConfigPage> implements ISlideB
      * Class config page.
      */
     public static class ConfigPage extends BaseConfigPage<ConfigPage> implements Serializable {
-        protected int buttonText,
+        private int buttonText,
                 buttonColorText,
                 buttonBackground;
 
@@ -187,7 +186,7 @@ public class InforPage extends BasePage<InforPage.ConfigPage> implements ISlideB
         /**
          * Set button text.
          *
-         * @param buttonText
+         * @param buttonText @{@link StringRes} resource of text.
          * @return ConfigPage
          */
         public ConfigPage buttonText(@StringRes int buttonText) {
@@ -198,7 +197,7 @@ public class InforPage extends BasePage<InforPage.ConfigPage> implements ISlideB
         /**
          * Set button text color.
          *
-         * @param buttonColorText
+         * @param buttonColorText @{@link ColorInt} resource of text color.
          * @return ConfigPage
          */
         public ConfigPage buttonColorText(@ColorInt int buttonColorText) {
@@ -209,7 +208,7 @@ public class InforPage extends BasePage<InforPage.ConfigPage> implements ISlideB
         /**
          * Set button background.
          *
-         * @param buttonBackground
+         * @param buttonBackground @{@link DrawableRes} resource of the background.
          * @return ConfigPage
          */
         public ConfigPage buttonBackground(@DrawableRes int buttonBackground) {
