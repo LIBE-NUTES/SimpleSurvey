@@ -89,10 +89,10 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
         if (getArguments() != null && getArguments().size() != 0) {
             this.configPage = (ConfigPage) getArguments().getSerializable(ARG_CONFIGS_PAGE);
             if (this.configPage == null) return;
-            super.pageNumber = this.configPage.pageNumber;
+            super.pageNumber = this.configPage.getPageNumber();
 
             KEY_ITEMS_MULTI_SELECT_SPINNER = "answer_page"
-                    .concat(String.valueOf(this.configPage.pageNumber))
+                    .concat(String.valueOf(this.configPage.getPageNumber()))
                     .concat("_")
                     .concat(getClass().getName().toLowerCase());
         }
@@ -170,7 +170,7 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
 
     @Override
     public int getLayout() {
-        return this.configPage.layout != 0 ? this.configPage.layout : R.layout.question_multi_select_spinner;
+        return this.configPage.getLayout();
     }
 
     @Override
@@ -207,13 +207,12 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
 
     @Override
     public int getDefaultBackgroundColor() {
-        return (this.configPage.colorBackground != 0) ? this.configPage.colorBackground : Color.GRAY;
+        return this.configPage.getColorBackground();
     }
 
     @Override
     public void setBackgroundColor(int backgroundColor) {
-        if (this.configPage.colorBackground != 0)
-            getView().setBackgroundColor(this.configPage.colorBackground);
+        if (getView() != null) getView().setBackgroundColor(this.configPage.getColorBackground());
     }
 
     @Override
@@ -243,18 +242,19 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
         @ColorInt
         private int colorSelectedText;
         @ColorInt
-        private  int colorBackgroundTint;
+        private int colorBackgroundTint;
         @StringRes
-        private  int hint;
+        private int hint;
         @StringRes
-        private  int messageEmpty;
+        private int messageEmpty;
         @StringRes
-        private  int titleDialogAddNewItem;
-        private  List<String> items;
-        private  List<Integer> indexAnswerInit;
-        private  boolean enabledAdNewItem;
+        private int titleDialogAddNewItem;
+        private List<String> items;
+        private List<Integer> indexAnswerInit;
+        private boolean enabledAdNewItem;
 
         public ConfigPage() {
+            super.layout(R.layout.question_multi_select_spinner);
             this.colorSelectedText = 0;
             this.colorBackgroundTint = 0;
             this.hint = 0;
@@ -268,7 +268,7 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
          * Set items to the spinner.
          *
          * @param items {@link List < String >}
-         * @return ConfigPage
+         * @return Config
          */
         public MultiSelectSpinnerPage.ConfigPage items(List<String> items) {
             this.items = items;
@@ -279,7 +279,7 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
          * Set color item selected.
          *
          * @param colorSelectedText @{@link ColorInt} resource of text color.
-         * @return ConfigPage
+         * @return Config
          */
         public MultiSelectSpinnerPage.ConfigPage colorSelectedText(@ColorInt int colorSelectedText) {
             this.colorSelectedText = colorSelectedText;
@@ -291,7 +291,7 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
          * The spinner line and the add new item image will receive this color.
          *
          * @param colorBackgroundTint @{@link ColorInt} resource of text color.
-         * @return ConfigPage
+         * @return Config
          */
         public MultiSelectSpinnerPage.ConfigPage colorBackgroundTint(@ColorInt int colorBackgroundTint) {
             this.colorBackgroundTint = colorBackgroundTint;
@@ -302,7 +302,7 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
          * Set hint message.
          *
          * @param hint @{@link StringRes} resource of text.
-         * @return ConfigPage
+         * @return Config
          */
         public MultiSelectSpinnerPage.ConfigPage hint(@StringRes int hint) {
             this.hint = hint;
@@ -313,7 +313,7 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
          * Set message dialog add new item.
          *
          * @param titleDialogAddNewItem @{@link StringRes} resource of text.
-         * @return ConfigPage
+         * @return Config
          */
         public MultiSelectSpinnerPage.ConfigPage titleDialogAddNewItem(@StringRes int titleDialogAddNewItem) {
             this.titleDialogAddNewItem = titleDialogAddNewItem;
@@ -325,7 +325,7 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
          * Message that will be displayed in the selection dialog when there is no item.
          *
          * @param messageEmpty @{@link StringRes} resource of text.
-         * @return ConfigPage
+         * @return Config
          */
         public MultiSelectSpinnerPage.ConfigPage messageEmpty(@StringRes int messageEmpty) {
             this.messageEmpty = messageEmpty;
@@ -336,7 +336,7 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
          * Disable add new item.
          * The button to add new item will be removed from the layout.
          *
-         * @return ConfigPage
+         * @return Config
          */
         public MultiSelectSpinnerPage.ConfigPage disableAddNewItem() {
             this.enabledAdNewItem = false;
@@ -347,7 +347,7 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
          * Set answer init.
          *
          * @param indexAnswerInit {@link List<Integer>} items
-         * @return ConfigPage
+         * @return Config
          */
         public MultiSelectSpinnerPage.ConfigPage answerInit(List<Integer> indexAnswerInit) {
             this.indexAnswerInit = indexAnswerInit;

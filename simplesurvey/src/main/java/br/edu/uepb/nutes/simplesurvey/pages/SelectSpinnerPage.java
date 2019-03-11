@@ -23,7 +23,6 @@
 package br.edu.uepb.nutes.simplesurvey.pages;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
@@ -84,7 +83,7 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
         // Retrieving arguments
         if (getArguments() != null && getArguments().size() != 0) {
             this.configPage = (ConfigPage) getArguments().getSerializable(ARG_CONFIGS_PAGE);
-            super.pageNumber = this.configPage.pageNumber;
+            super.pageNumber = this.configPage.getPageNumber();
 
             // set hint
             configPage.items.add(0, getContext().getResources().getString(this.configPage.hint));
@@ -141,7 +140,7 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
 
     @Override
     public int getLayout() {
-        return this.configPage.layout != 0 ? this.configPage.layout : R.layout.question_select_spinner;
+        return this.configPage.getLayout();
     }
 
     @Override
@@ -177,13 +176,12 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
 
     @Override
     public int getDefaultBackgroundColor() {
-        return (this.configPage.colorBackground != 0) ? this.configPage.colorBackground : Color.GRAY;
+        return this.configPage.getColorBackground();
     }
 
     @Override
     public void setBackgroundColor(int backgroundColor) {
-        if (this.configPage.colorBackground != 0)
-            getView().setBackgroundColor(this.configPage.colorBackground);
+        if (getView() != null) getView().setBackgroundColor(this.configPage.getColorBackground());
     }
 
     @Override
@@ -222,6 +220,7 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
         private boolean enabledAdNewItem;
 
         public ConfigPage() {
+            super.layout(R.layout.question_select_spinner);
             this.colorSelectedText = 0;
             this.colorBackgroundTint = 0;
             this.hint = R.string.survey_select_an_answer;
@@ -233,7 +232,7 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
          * Set items to the spinner.
          *
          * @param items {@link List < String >}
-         * @return ConfigPage
+         * @return Config
          */
         public SelectSpinnerPage.ConfigPage items(List<String> items) {
             this.items = items;
@@ -244,7 +243,7 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
          * Set color item selected.
          *
          * @param colorSelectedText @{@link ColorInt} resource color.
-         * @return ConfigPage
+         * @return Config
          */
         public SelectSpinnerPage.ConfigPage colorSelectedText(@ColorInt int colorSelectedText) {
             this.colorSelectedText = colorSelectedText;
@@ -256,7 +255,7 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
          * The spinner line and the add new item image will receive this color.
          *
          * @param colorBackgroundTint @{@link ColorInt} resource color.
-         * @return ConfigPage
+         * @return Config
          */
         public SelectSpinnerPage.ConfigPage colorBackgroundTint(@ColorInt int colorBackgroundTint) {
             this.colorBackgroundTint = colorBackgroundTint;
@@ -267,7 +266,7 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
          * Set hint message.
          *
          * @param hint @{@link ColorInt} resource color.
-         * @return ConfigPage
+         * @return Config
          */
         public SelectSpinnerPage.ConfigPage hint(@ColorInt int hint) {
             this.hint = hint;
@@ -278,7 +277,7 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
          * Set answer init.
          *
          * @param indexAnswerInit @{@link ColorInt} index.
-         * @return ConfigPage
+         * @return Config
          */
         public SelectSpinnerPage.ConfigPage answerInit(int indexAnswerInit) {
             this.indexAnswerInit = indexAnswerInit;
@@ -289,7 +288,7 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
          * Disable add new item.
          * The button to add new item will be removed from the layout.
          *
-         * @return ConfigPage
+         * @return Config
          */
         public SelectSpinnerPage.ConfigPage disableAddNewItem() {
             this.enabledAdNewItem = false;

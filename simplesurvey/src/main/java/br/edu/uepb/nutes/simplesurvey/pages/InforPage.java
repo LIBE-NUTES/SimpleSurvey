@@ -45,13 +45,13 @@ import br.edu.uepb.nutes.simplesurvey.base.OnPageListener;
  * InforPage implementation.
  * Useful to use as a home screen or thank you screen for participating in the assessment.
  */
-public class InforPage extends BasePage<InforPage.ConfigPage> implements ISlideBackgroundColorHolder {
+public class InforPage extends BasePage<InforPage.Config> implements ISlideBackgroundColorHolder {
     private final String TAG = "InforPage";
 
     private static final String ARG_CONFIGS_PAGE = "arg_configs_page";
 
     private OnButtonListener mListener;
-    private InforPage.ConfigPage configPage;
+    private Config configPage;
     private AppCompatButton button;
 
     public InforPage() {
@@ -60,10 +60,10 @@ public class InforPage extends BasePage<InforPage.ConfigPage> implements ISlideB
     /**
      * New InforPage instance.
      *
-     * @param configPage {@link ConfigPage}
+     * @param configPage {@link Config}
      * @return InforPage
      */
-    private static InforPage newInstance(ConfigPage configPage) {
+    private static InforPage newInstance(Config configPage) {
         InforPage pageFragment = new InforPage();
         Bundle args = new Bundle();
         args.putSerializable(ARG_CONFIGS_PAGE, configPage);
@@ -75,13 +75,12 @@ public class InforPage extends BasePage<InforPage.ConfigPage> implements ISlideB
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        super.blockPage();
 
         // Retrieving arguments
         if (getArguments() != null && getArguments().size() != 0) {
-            configPage = (ConfigPage) getArguments().getSerializable(ARG_CONFIGS_PAGE);
+            configPage = (Config) getArguments().getSerializable(ARG_CONFIGS_PAGE);
             if (configPage == null) return;
-            super.pageNumber = configPage.pageNumber;
+            super.pageNumber = configPage.getPageNumber();
         }
     }
 
@@ -118,11 +117,11 @@ public class InforPage extends BasePage<InforPage.ConfigPage> implements ISlideB
 
     @Override
     public int getLayout() {
-        return configPage.layout != 0 ? configPage.layout : R.layout.page_infor;
+        return configPage.getLayout();
     }
 
     @Override
-    public InforPage.ConfigPage getConfigsPage() {
+    public Config getConfigsPage() {
         return this.configPage;
     }
 
@@ -154,13 +153,13 @@ public class InforPage extends BasePage<InforPage.ConfigPage> implements ISlideB
 
     @Override
     public int getDefaultBackgroundColor() {
-        return (configPage.colorBackground != 0) ? configPage.colorBackground : Color.GRAY;
+        return (configPage.getColorBackground() != 0) ? configPage.getColorBackground() : Color.GRAY;
     }
 
     @Override
     public void setBackgroundColor(int backgroundColor) {
-        if (configPage.colorBackground != 0 && getView() != null) {
-            getView().setBackgroundColor(configPage.colorBackground);
+        if (configPage.getColorBackground() != 0 && getView() != null) {
+            getView().setBackgroundColor(configPage.getColorBackground());
         }
     }
 
@@ -172,12 +171,13 @@ public class InforPage extends BasePage<InforPage.ConfigPage> implements ISlideB
     /**
      * Class config page.
      */
-    public static class ConfigPage extends BaseConfigPage<ConfigPage> implements Serializable {
+    public static class Config extends BaseConfigPage<Config> implements Serializable {
         private int buttonText,
                 buttonColorText,
                 buttonBackground;
 
-        public ConfigPage() {
+        public Config() {
+            super.layout(R.layout.page_infor);
             this.buttonText = 0;
             this.buttonColorText = 0;
             this.buttonBackground = 0;
@@ -187,9 +187,9 @@ public class InforPage extends BasePage<InforPage.ConfigPage> implements ISlideB
          * Set button text.
          *
          * @param buttonText @{@link StringRes} resource of text.
-         * @return ConfigPage
+         * @return Config
          */
-        public ConfigPage buttonText(@StringRes int buttonText) {
+        public Config buttonText(@StringRes int buttonText) {
             this.buttonText = buttonText;
             return this;
         }
@@ -198,9 +198,9 @@ public class InforPage extends BasePage<InforPage.ConfigPage> implements ISlideB
          * Set button text color.
          *
          * @param buttonColorText @{@link ColorInt} resource of text color.
-         * @return ConfigPage
+         * @return Config
          */
-        public ConfigPage buttonColorText(@ColorInt int buttonColorText) {
+        public Config buttonColorText(@ColorInt int buttonColorText) {
             this.buttonColorText = buttonColorText;
             return this;
         }
@@ -209,9 +209,9 @@ public class InforPage extends BasePage<InforPage.ConfigPage> implements ISlideB
          * Set button background.
          *
          * @param buttonBackground @{@link DrawableRes} resource of the background.
-         * @return ConfigPage
+         * @return Config
          */
-        public ConfigPage buttonBackground(@DrawableRes int buttonBackground) {
+        public Config buttonBackground(@DrawableRes int buttonBackground) {
             this.buttonBackground = buttonBackground;
             return this;
         }

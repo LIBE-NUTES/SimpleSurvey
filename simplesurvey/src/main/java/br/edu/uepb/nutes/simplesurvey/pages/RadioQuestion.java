@@ -23,7 +23,6 @@
 package br.edu.uepb.nutes.simplesurvey.pages;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
@@ -44,10 +43,10 @@ import br.edu.uepb.nutes.simplesurvey.base.BasePage;
 import br.edu.uepb.nutes.simplesurvey.base.OnPageListener;
 
 /**
- * RadioPage implementation.
+ * RadioQuestion implementation.
  */
-public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideBackgroundColorHolder {
-    private final String TAG = "RadioPage";
+public class RadioQuestion extends BasePage<RadioQuestion.Config> implements ISlideBackgroundColorHolder {
+    private final String TAG = "RadioQuestion";
 
     private static final String ARG_CONFIGS_PAGE = "arg_configs_page";
     private static final String KEY_OLD_ANSWER_BUNDLE = "old_answer";
@@ -55,22 +54,22 @@ public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideB
     private OnRadioListener mListener;
     private boolean answerValue, actionClearCheck;
     private int oldAnswer;
-    private RadioPage.ConfigPage configPage;
+    private Config configPage;
     private RadioGroup radioGroup;
     private RadioButton radioLeft;
     private RadioButton radioRight;
 
-    public RadioPage() {
+    public RadioQuestion() {
     }
 
     /**
-     * New RadioPage instance.
+     * New RadioQuestion instance.
      *
-     * @param configPage {@link ConfigPage}
-     * @return RadioPage
+     * @param configPage {@link Config}
+     * @return RadioQuestion
      */
-    private static RadioPage newInstance(ConfigPage configPage) {
-        RadioPage pageFragment = new RadioPage();
+    private static RadioQuestion newInstance(Config configPage) {
+        RadioQuestion pageFragment = new RadioQuestion();
         Bundle args = new Bundle();
         args.putSerializable(ARG_CONFIGS_PAGE, configPage);
 
@@ -81,7 +80,6 @@ public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideB
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        super.blockPage();
 
         // Setting default values
         oldAnswer = -1;
@@ -90,8 +88,8 @@ public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideB
 
         // Retrieving arguments
         if (getArguments() != null && getArguments().size() != 0) {
-            configPage = (ConfigPage) getArguments().getSerializable(ARG_CONFIGS_PAGE);
-            super.pageNumber = configPage.pageNumber;
+            configPage = (Config) getArguments().getSerializable(ARG_CONFIGS_PAGE);
+            super.pageNumber = configPage.getPageNumber();
         }
     }
 
@@ -123,6 +121,13 @@ public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideB
             if (configPage.answerInit != -1)
                 setAnswer(configPage.answerInit != 0);
 
+
+            if (configPage.isAnswerRequired()) {
+                super.blockPage();
+            } else {
+                super.unlockPage();
+            }
+
             refreshStyles();
         }
     }
@@ -151,11 +156,13 @@ public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideB
                     setAnswer(false);
                     if (mListener != null) {
                         mListener.onAnswerRadio(pageNumber, false);
+                        if (configPage.isNextQuestionAuto()) nextPage();
                     }
                 } else if (checkedId == R.id.right_radioButton && oldAnswer != 1) {
                     setAnswer(true);
                     if (mListener != null) {
                         mListener.onAnswerRadio(pageNumber, true);
+                        if (configPage.isNextQuestionAuto()) nextPage();
                     }
                 }
             }
@@ -164,11 +171,11 @@ public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideB
 
     @Override
     public int getLayout() {
-        return configPage.layout != 0 ? configPage.layout : R.layout.question_radio;
+        return configPage.getLayout();
     }
 
     @Override
-    public RadioPage.ConfigPage getConfigsPage() {
+    public Config getConfigsPage() {
         return this.configPage;
     }
 
@@ -200,14 +207,12 @@ public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideB
 
     @Override
     public int getDefaultBackgroundColor() {
-        return (configPage.colorBackground != 0) ? configPage.colorBackground : Color.GRAY;
+        return configPage.getColorBackground();
     }
 
     @Override
     public void setBackgroundColor(int backgroundColor) {
-        if (configPage.colorBackground != 0) {
-            getView().setBackgroundColor(configPage.colorBackground);
-        }
+        if (getView() != null) getView().setBackgroundColor(configPage.getColorBackground());
     }
 
     @Override
@@ -219,7 +224,7 @@ public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideB
         refreshStyles();
 
         // Block page
-        super.blockPage();
+//        super.blockPage();
     }
 
     /**
@@ -256,7 +261,7 @@ public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideB
     /**
      * Class config page.
      */
-    public static class ConfigPage extends BaseConfigPage<ConfigPage> implements Serializable {
+    public static class Config extends BaseConfigPage<Config> implements Serializable {
         private int radioLeftText,
                 radioRightText,
                 radioColorTextNormal,
@@ -265,7 +270,8 @@ public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideB
                 radioRightBackground,
                 answerInit;
 
-        public ConfigPage() {
+        public Config() {
+            super.layout(R.layout.question_radio);
             this.radioLeftText = 0;
             this.radioRightText = 0;
             this.radioColorTextNormal = 0;
@@ -279,9 +285,9 @@ public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideB
          * Set left radio text.
          *
          * @param radioLeftText @{@link StringRes} resource text left.
-         * @return ConfigPage
+         * @return Config
          */
-        public ConfigPage radioLeftText(@StringRes int radioLeftText) {
+        public Config radioLeftText(@StringRes int radioLeftText) {
             this.radioLeftText = radioLeftText;
             return this;
         }
@@ -290,9 +296,9 @@ public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideB
          * Set right radio text.
          *
          * @param radioRightText @{@link StringRes} resource text right.
-         * @return ConfigPage
+         * @return Config
          */
-        public ConfigPage radioRightText(@StringRes int radioRightText) {
+        public Config radioRightText(@StringRes int radioRightText) {
             this.radioRightText = radioRightText;
             return this;
         }
@@ -304,12 +310,12 @@ public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideB
          * @param backgroundRightRadio  @{@link DrawableRes} resource the right side.
          * @param textColorRadioNormal  @{@link ColorInt} resource text color normal.
          * @param textColorRadioChecked @{@link ColorInt} resource text color checked.
-         * @return ConfigPage
+         * @return Config
          */
-        public ConfigPage radioStyle(@DrawableRes int backgroundLeftRadio,
-                                     @DrawableRes int backgroundRightRadio,
-                                     @ColorInt int textColorRadioNormal,
-                                     @ColorInt int textColorRadioChecked) {
+        public Config radioStyle(@DrawableRes int backgroundLeftRadio,
+                                 @DrawableRes int backgroundRightRadio,
+                                 @ColorInt int textColorRadioNormal,
+                                 @ColorInt int textColorRadioChecked) {
             this.radioLeftBackground = backgroundLeftRadio;
             this.radioRightBackground = backgroundRightRadio;
             this.radioColorTextNormal = textColorRadioNormal;
@@ -321,17 +327,17 @@ public class RadioPage extends BasePage<RadioPage.ConfigPage> implements ISlideB
          * Set answer init.
          *
          * @param answerInit boolean answer.
-         * @return ConfigPage
+         * @return Config
          */
-        public ConfigPage answerInit(boolean answerInit) {
+        public Config answerInit(boolean answerInit) {
             if (answerInit) this.answerInit = 1;
             else this.answerInit = 0;
             return this;
         }
 
         @Override
-        public RadioPage build() {
-            return RadioPage.newInstance(this);
+        public RadioQuestion build() {
+            return RadioQuestion.newInstance(this);
         }
     }
 

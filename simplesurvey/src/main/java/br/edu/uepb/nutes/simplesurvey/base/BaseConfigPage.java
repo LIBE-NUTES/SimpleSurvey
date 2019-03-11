@@ -22,21 +22,25 @@
  */
 package br.edu.uepb.nutes.simplesurvey.base;
 
+import android.graphics.Color;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 
+import br.edu.uepb.nutes.simplesurvey.R;
+
 /**
  * BaseConfigPage implementation.
+ *
  * @param <T>
  */
 public abstract class BaseConfigPage<T> {
-    protected String titleStr,
+    private String titleStr,
             descriptionStr;
 
-    protected int layout,
+    private int layout,
             title,
             description,
             image,
@@ -44,22 +48,80 @@ public abstract class BaseConfigPage<T> {
             titleColor,
             descriptionColor,
             pageNumber,
-            drawableClose,
-            drawablePause;
+            drawableClose;
 
-    protected boolean zoomDisabled;
+    private boolean zoomDisabled,
+            isAnswerRequired,
+            nextQuestionAuto;
 
     protected BaseConfigPage() {
         this.layout = 0;
         this.title = 0;
         this.description = 0;
         this.image = 0;
-        this.colorBackground = 0;
-        this.titleColor = 0;
-        this.descriptionColor = 0;
-        this.drawableClose = 0;
-        this.drawablePause = 0;
+        this.colorBackground = Color.WHITE;
+        this.titleColor = Color.BLACK;
+        this.descriptionColor = Color.BLACK;
+        this.drawableClose = R.drawable.ic_action_close_light;
         this.zoomDisabled = true;
+        this.isAnswerRequired = false;
+        this.nextQuestionAuto = false;
+    }
+
+    public String getTitleStr() {
+        return titleStr;
+    }
+
+    public String getDescriptionStr() {
+        return descriptionStr;
+    }
+
+    public int getLayout() {
+        return layout;
+    }
+
+    public int getTitle() {
+        return title;
+    }
+
+    public int getDescription() {
+        return description;
+    }
+
+    public int getImage() {
+        return image;
+    }
+
+    public int getColorBackground() {
+        return colorBackground;
+    }
+
+    public int getTitleColor() {
+        return titleColor;
+    }
+
+    public int getDescriptionColor() {
+        return descriptionColor;
+    }
+
+    public int getPageNumber() {
+        return pageNumber;
+    }
+
+    public int getDrawableClose() {
+        return drawableClose;
+    }
+
+    public boolean isZoomDisabled() {
+        return zoomDisabled;
+    }
+
+    public boolean isAnswerRequired() {
+        return isAnswerRequired;
+    }
+
+    public boolean isNextQuestionAuto() {
+        return nextQuestionAuto;
     }
 
     /**
@@ -236,23 +298,32 @@ public abstract class BaseConfigPage<T> {
     }
 
     /**
-     * Set image button pause.
+     * Enable zoom in question image.
      *
-     * @param drawablePause
-     * @return T
+     * @return Config
      */
-    public T buttonPause(int drawablePause) {
-        this.drawablePause = drawablePause;
+    public T enableZoomImage() {
+        this.zoomDisabled = false;
         return (T) this;
     }
 
     /**
-     * Enable zoom in question image.
+     * Enable question required.
      *
-     * @return ConfigPage
+     * @return Config
      */
-    public T enableZoomImage() {
-        this.zoomDisabled = false;
+    public T answerRequired() {
+        this.isAnswerRequired = true;
+        return (T) this;
+    }
+
+    /**
+     * Activate next page/question automatically after a valid response.
+     *
+     * @return Config
+     */
+    public T enableNextQuestionAuto() {
+        this.nextQuestionAuto = true;
         return (T) this;
     }
 

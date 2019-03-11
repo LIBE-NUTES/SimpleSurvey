@@ -27,12 +27,12 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.github.chrisbanes.photoview.PhotoView;
@@ -82,37 +82,37 @@ public abstract class BasePage<T extends BaseConfigPage> extends Fragment implem
         this.boxInput = view.findViewById(R.id.box_input);
 
         if (boxTitle != null && titleTextView != null) {
-            if (getConfigsPage().title != 0) {
-                titleTextView.setText(getConfigsPage().title);
-            } else if (getConfigsPage().titleStr != null && !getConfigsPage().titleStr.isEmpty()) {
-                titleTextView.setText(getConfigsPage().titleStr);
+            if (getConfigsPage().getTitle() != 0) {
+                titleTextView.setText(getConfigsPage().getTitle());
+            } else if (getConfigsPage().getTitleStr() != null && !getConfigsPage().getTitleStr().isEmpty()) {
+                titleTextView.setText(getConfigsPage().getTitleStr());
             } else {
                 boxTitle.setVisibility(View.GONE);
             }
 
-            if (getConfigsPage().titleColor != 0) {
-                titleTextView.setTextColor(getConfigsPage().titleColor);
+            if (getConfigsPage().getTitleColor() != 0) {
+                titleTextView.setTextColor(getConfigsPage().getTitleColor());
             }
         }
 
         if (boxDescription != null && descTextView != null) {
-            if (getConfigsPage().description != 0) {
-                descTextView.setText(getConfigsPage().description);
-            } else if (getConfigsPage().descriptionStr != null
-                    && !getConfigsPage().descriptionStr.isEmpty()) {
-                descTextView.setText(getConfigsPage().descriptionStr);
+            if (getConfigsPage().getDescription() != 0) {
+                descTextView.setText(getConfigsPage().getDescription());
+            } else if (getConfigsPage().getDescriptionStr() != null
+                    && !getConfigsPage().getDescriptionStr().isEmpty()) {
+                descTextView.setText(getConfigsPage().getDescriptionStr());
             } else {
                 boxDescription.setVisibility(View.GONE);
             }
 
-            if (getConfigsPage().descriptionColor != 0) {
-                descTextView.setTextColor(getConfigsPage().descriptionColor);
+            if (getConfigsPage().getDescriptionColor() != 0) {
+                descTextView.setTextColor(getConfigsPage().getDescriptionColor());
             }
         }
 
         if (closeImageButton != null) {
-            if (getConfigsPage().drawableClose != 0) {
-                closeImageButton.setImageResource(getConfigsPage().drawableClose);
+            if (getConfigsPage().getDrawableClose() != 0) {
+                closeImageButton.setImageResource(getConfigsPage().getDrawableClose());
                 closeImageButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -125,11 +125,11 @@ public abstract class BasePage<T extends BaseConfigPage> extends Fragment implem
         }
 
         if (boxImage != null && questionImageView != null) {
-            if (getConfigsPage().image != 0) {
-                questionImageView.setImageResource(getConfigsPage().image);
+            if (getConfigsPage().getImage() != 0) {
+                questionImageView.setImageResource(getConfigsPage().getImage());
 
                 // enable/disable zoom
-                questionImageView.setZoomable(!getConfigsPage().zoomDisabled);
+                questionImageView.setZoomable(!getConfigsPage().isZoomDisabled());
             } else boxImage.setVisibility(View.GONE);
         }
 
@@ -166,6 +166,10 @@ public abstract class BasePage<T extends BaseConfigPage> extends Fragment implem
     public void unlockPage() {
         this.isBlocked = false;
         getAppIntroInstance().setNextPageSwipeLock(this.isBlocked);
+        // To hide unnecessary buttons, mysteriously,
+        // the buttons are activated when a page is unlocked.
+        getAppIntroInstance().showDoneButton(false);
+        getAppIntroInstance().showSkipButton(false);
     }
 
     /**
@@ -262,5 +266,4 @@ public abstract class BasePage<T extends BaseConfigPage> extends Fragment implem
 //        return session.removeString(key);
         return false;
     }
-
 }

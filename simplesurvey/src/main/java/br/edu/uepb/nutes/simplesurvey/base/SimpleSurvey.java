@@ -66,6 +66,15 @@ public abstract class SimpleSurvey extends AppIntro {
         this.initView();
     }
 
+    /**
+     * Add question.
+     *
+     * @param question {@link Fragment}
+     */
+    public void addQuestion(Fragment question) {
+        addSlide(question);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

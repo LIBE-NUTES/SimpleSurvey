@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Simple Survey</string>
+    <string name="masc">Masculino</string>
+    <string name="femi">Feminino</string>
 </resources>
