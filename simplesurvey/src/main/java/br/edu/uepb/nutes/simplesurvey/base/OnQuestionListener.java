@@ -23,8 +23,8 @@
 package br.edu.uepb.nutes.simplesurvey.base;
 
 /**
- * Interface OnPageListener.
+ * Interface OnQuestionListener.
  */
-public interface OnPageListener {
+public interface OnQuestionListener {
     void onClosePage();
 }

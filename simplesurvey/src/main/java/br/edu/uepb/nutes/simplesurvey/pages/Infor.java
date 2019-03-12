@@ -37,16 +37,16 @@ import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 import java.io.Serializable;
 
 import br.edu.uepb.nutes.simplesurvey.R;
-import br.edu.uepb.nutes.simplesurvey.base.BaseConfigPage;
-import br.edu.uepb.nutes.simplesurvey.base.BasePage;
-import br.edu.uepb.nutes.simplesurvey.base.OnPageListener;
+import br.edu.uepb.nutes.simplesurvey.base.BaseConfigQuestion;
+import br.edu.uepb.nutes.simplesurvey.base.BaseQuestion;
+import br.edu.uepb.nutes.simplesurvey.base.OnQuestionListener;
 
 /**
- * InforPage implementation.
+ * Infor implementation.
  * Useful to use as a home screen or thank you screen for participating in the assessment.
  */
-public class InforPage extends BasePage<InforPage.Config> implements ISlideBackgroundColorHolder {
-    private final String TAG = "InforPage";
+public class Infor extends BaseQuestion<Infor.Config> implements ISlideBackgroundColorHolder {
+    private final String TAG = "Infor";
 
     private static final String ARG_CONFIGS_PAGE = "arg_configs_page";
 
@@ -54,17 +54,17 @@ public class InforPage extends BasePage<InforPage.Config> implements ISlideBackg
     private Config configPage;
     private AppCompatButton button;
 
-    public InforPage() {
+    public Infor() {
     }
 
     /**
-     * New InforPage instance.
+     * New Infor instance.
      *
      * @param configPage {@link Config}
-     * @return InforPage
+     * @return Infor
      */
-    private static InforPage newInstance(Config configPage) {
-        InforPage pageFragment = new InforPage();
+    private static Infor newInstance(Config configPage) {
+        Infor pageFragment = new Infor();
         Bundle args = new Bundle();
         args.putSerializable(ARG_CONFIGS_PAGE, configPage);
 
@@ -80,7 +80,7 @@ public class InforPage extends BasePage<InforPage.Config> implements ISlideBackg
         if (getArguments() != null && getArguments().size() != 0) {
             configPage = (Config) getArguments().getSerializable(ARG_CONFIGS_PAGE);
             if (configPage == null) return;
-            super.pageNumber = configPage.getPageNumber();
+            super.setPageNumber(configPage.getPageNumber());
         }
     }
 
@@ -110,7 +110,7 @@ public class InforPage extends BasePage<InforPage.Config> implements ISlideBackg
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onAnswerButton(pageNumber);
+                mListener.onAnswerButton(getQuestionNumber());
             }
         });
     }
@@ -121,7 +121,7 @@ public class InforPage extends BasePage<InforPage.Config> implements ISlideBackg
     }
 
     @Override
-    public Config getConfigsPage() {
+    public Config getConfigsQuestion() {
         return this.configPage;
     }
 
@@ -141,7 +141,7 @@ public class InforPage extends BasePage<InforPage.Config> implements ISlideBackg
         super.onAttach(context);
         if (context instanceof OnButtonListener) {
             mListener = (OnButtonListener) context;
-            super.mPageListener = mListener;
+            super.setListener(mListener);
         }
     }
 
@@ -171,7 +171,7 @@ public class InforPage extends BasePage<InforPage.Config> implements ISlideBackg
     /**
      * Class config page.
      */
-    public static class Config extends BaseConfigPage<Config> implements Serializable {
+    public static class Config extends BaseConfigQuestion<Config> implements Serializable {
         private int buttonText,
                 buttonColorText,
                 buttonBackground;
@@ -217,15 +217,15 @@ public class InforPage extends BasePage<InforPage.Config> implements ISlideBackg
         }
 
         @Override
-        public InforPage build() {
-            return InforPage.newInstance(this);
+        public Infor build() {
+            return Infor.newInstance(this);
         }
     }
 
     /**
      * Interface OnRadioListener.
      */
-    public interface OnButtonListener extends OnPageListener {
+    public interface OnButtonListener extends OnQuestionListener {
         void onAnswerButton(int page);
     }
 }

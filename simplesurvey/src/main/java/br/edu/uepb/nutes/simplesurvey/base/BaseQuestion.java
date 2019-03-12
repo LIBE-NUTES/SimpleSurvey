@@ -27,7 +27,6 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,16 +44,16 @@ import java.util.List;
 import br.edu.uepb.nutes.simplesurvey.R;
 
 /**
- * BasePage implementation.
+ * BaseQuestion implementation.
  *
  * @param <T>
  */
-public abstract class BasePage<T extends BaseConfigPage> extends Fragment implements IBasePage<T> {
-    protected boolean isBlocked;
-    protected int pageNumber;
-    protected OnPageListener mPageListener;
-
+public abstract class BaseQuestion<T extends BaseConfigQuestion> extends Fragment implements IBaseQuestion<T> {
     private final String SEPARATOR_ITEMS = "#";
+
+    private boolean isBlocked;
+    private int pageNumber;
+    private OnQuestionListener mPageListener;
 
     public TextView titleTextView;
     public TextView descTextView;
@@ -64,6 +63,10 @@ public abstract class BasePage<T extends BaseConfigPage> extends Fragment implem
     public LinearLayout boxDescription;
     public LinearLayout boxImage;
     public LinearLayout boxInput;
+
+    public BaseQuestion() {
+
+    }
 
     @Nullable
     @Override
@@ -82,37 +85,37 @@ public abstract class BasePage<T extends BaseConfigPage> extends Fragment implem
         this.boxInput = view.findViewById(R.id.box_input);
 
         if (boxTitle != null && titleTextView != null) {
-            if (getConfigsPage().getTitle() != 0) {
-                titleTextView.setText(getConfigsPage().getTitle());
-            } else if (getConfigsPage().getTitleStr() != null && !getConfigsPage().getTitleStr().isEmpty()) {
-                titleTextView.setText(getConfigsPage().getTitleStr());
+            if (getConfigsQuestion().getTitle() != 0) {
+                titleTextView.setText(getConfigsQuestion().getTitle());
+            } else if (getConfigsQuestion().getTitleStr() != null && !getConfigsQuestion().getTitleStr().isEmpty()) {
+                titleTextView.setText(getConfigsQuestion().getTitleStr());
             } else {
                 boxTitle.setVisibility(View.GONE);
             }
 
-            if (getConfigsPage().getTitleColor() != 0) {
-                titleTextView.setTextColor(getConfigsPage().getTitleColor());
+            if (getConfigsQuestion().getTitleColor() != 0) {
+                titleTextView.setTextColor(getConfigsQuestion().getTitleColor());
             }
         }
 
         if (boxDescription != null && descTextView != null) {
-            if (getConfigsPage().getDescription() != 0) {
-                descTextView.setText(getConfigsPage().getDescription());
-            } else if (getConfigsPage().getDescriptionStr() != null
-                    && !getConfigsPage().getDescriptionStr().isEmpty()) {
-                descTextView.setText(getConfigsPage().getDescriptionStr());
+            if (getConfigsQuestion().getDescription() != 0) {
+                descTextView.setText(getConfigsQuestion().getDescription());
+            } else if (getConfigsQuestion().getDescriptionStr() != null
+                    && !getConfigsQuestion().getDescriptionStr().isEmpty()) {
+                descTextView.setText(getConfigsQuestion().getDescriptionStr());
             } else {
                 boxDescription.setVisibility(View.GONE);
             }
 
-            if (getConfigsPage().getDescriptionColor() != 0) {
-                descTextView.setTextColor(getConfigsPage().getDescriptionColor());
+            if (getConfigsQuestion().getDescriptionColor() != 0) {
+                descTextView.setTextColor(getConfigsQuestion().getDescriptionColor());
             }
         }
 
         if (closeImageButton != null) {
-            if (getConfigsPage().getDrawableClose() != 0) {
-                closeImageButton.setImageResource(getConfigsPage().getDrawableClose());
+            if (getConfigsQuestion().getDrawableClose() != 0) {
+                closeImageButton.setImageResource(getConfigsQuestion().getDrawableClose());
                 closeImageButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -125,11 +128,11 @@ public abstract class BasePage<T extends BaseConfigPage> extends Fragment implem
         }
 
         if (boxImage != null && questionImageView != null) {
-            if (getConfigsPage().getImage() != 0) {
-                questionImageView.setImageResource(getConfigsPage().getImage());
+            if (getConfigsQuestion().getImage() != 0) {
+                questionImageView.setImageResource(getConfigsQuestion().getImage());
 
                 // enable/disable zoom
-                questionImageView.setZoomable(!getConfigsPage().isZoomDisabled());
+                questionImageView.setZoomable(!getConfigsQuestion().isZoomDisabled());
             } else boxImage.setVisibility(View.GONE);
         }
 
@@ -157,18 +160,19 @@ public abstract class BasePage<T extends BaseConfigPage> extends Fragment implem
     }
 
     @Override
-    public void blockPage() {
+    public void blockQuestion() {
         this.isBlocked = true;
         getAppIntroInstance().setNextPageSwipeLock(this.isBlocked);
     }
 
     @Override
-    public void unlockPage() {
+    public void unlockQuestion() {
         this.isBlocked = false;
         getAppIntroInstance().setNextPageSwipeLock(this.isBlocked);
+
         // To hide unnecessary buttons, mysteriously,
         // the buttons are activated when a page is unlocked.
-        getAppIntroInstance().showDoneButton(false);
+        getAppIntroInstance().setProgressButtonEnabled(false);
         getAppIntroInstance().showSkipButton(false);
     }
 
@@ -176,8 +180,8 @@ public abstract class BasePage<T extends BaseConfigPage> extends Fragment implem
      * Next page.
      */
     @Override
-    public void nextPage() {
-        unlockPage();
+    public void nextQuestion() {
+        unlockQuestion();
         new Handler().post(new Runnable() {
             @Override
             public void run() {
@@ -202,8 +206,16 @@ public abstract class BasePage<T extends BaseConfigPage> extends Fragment implem
      * @return int
      */
     @Override
-    public int getPageNumber() {
+    public int getQuestionNumber() {
         return pageNumber;
+    }
+
+    public void setPageNumber(int pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public void setListener(OnQuestionListener mPageListener) {
+        this.mPageListener = mPageListener;
     }
 
     /**

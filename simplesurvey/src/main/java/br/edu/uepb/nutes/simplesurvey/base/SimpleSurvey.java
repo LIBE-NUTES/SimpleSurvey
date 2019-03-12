@@ -24,27 +24,36 @@ package br.edu.uepb.nutes.simplesurvey.base;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 
 import com.github.paolorotolo.appintro.AppIntro;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import br.edu.uepb.nutes.simplesurvey.R;
 
 public abstract class SimpleSurvey extends AppIntro {
     private final String TAG = "SimpleSurvey";
-    protected IBasePage currentPage;
-    protected Snackbar snackbarMessageBlockedPage;
-    protected final int PAGE_END = -1;
+
+    private IBaseQuestion currentQuestion, oldQuestion;
+    private Snackbar snackbarMessageBlockedPage;
+    private final int PAGE_END = -1;
+    private Set<Integer> unlockedQuestions;
+    private String messageQuestionBlocked;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        unlockedQuestions = new HashSet<>();
+        messageQuestionBlocked = getString(R.string.message_blocked_page);
 
         getSupportActionBar().hide();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -97,27 +106,27 @@ public abstract class SimpleSurvey extends AppIntro {
         if (snackbarMessageBlockedPage != null)
             snackbarMessageBlockedPage.dismiss();
 
-        if (newFragment instanceof IBasePage) {
-            currentPage = (IBasePage) newFragment;
+        if (newFragment instanceof IBaseQuestion) {
+            currentQuestion = (IBaseQuestion) newFragment;
             Log.d(TAG, "onSlideChanged() - isBlocked: "
-                    + currentPage.isBlocked() + " |  page: " + currentPage.getPageNumber());
+                    + currentQuestion.isBlocked() + " |  page: " + currentQuestion.getQuestionNumber());
 
-            if (currentPage.getPageNumber() == PAGE_END) return;
+            if (currentQuestion.getQuestionNumber() == PAGE_END) return;
 
-            setNextPageSwipeLock(currentPage.isBlocked());
+            setNextPageSwipeLock(currentQuestion.isBlocked());
 
             // Capture event onSwipeLeft
-            currentPage.getView().setOnTouchListener(new OnSwipePageTouchListener(this) {
+            currentQuestion.getView().setOnTouchListener(new OnSwipeQuestionTouchListener(this) {
                 @Override
                 public void onSwipeLeft() {
                     super.onSwipeLeft();
-                    if (currentPage.isBlocked()) showMessageBlocked();
+                    if (currentQuestion.isBlocked()) showMessageBlocked();
                 }
 
                 @Override
                 public void onSwipeRight() {
                     super.onSwipeRight();
-                    setNextPageSwipeLock(currentPage.isBlocked());
+//                    setNextPageSwipeLock(currentQuestion.isBlocked());
                 }
             });
         }
@@ -130,11 +139,9 @@ public abstract class SimpleSurvey extends AppIntro {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                /**
-                 * Create snackbar
-                 */
-                snackbarMessageBlockedPage = Snackbar.make(currentPage.getView(),
-                        R.string.message_blocked_page,
+                // Create snackbar
+                snackbarMessageBlockedPage = Snackbar.make(currentQuestion.getView(),
+                        messageQuestionBlocked,
                         Snackbar.LENGTH_LONG);
                 snackbarMessageBlockedPage.setAction(R.string.text_ok,
                         new View.OnClickListener() {
@@ -147,6 +154,26 @@ public abstract class SimpleSurvey extends AppIntro {
                 snackbarMessageBlockedPage.show();
             }
         });
+    }
+
+    /**
+     * Set blocked message page/question.
+     * Default value: Answer the current question to go to next...
+     *
+     * @param message int
+     */
+    public void setMessageBlocked(@StringRes int message) {
+        this.messageQuestionBlocked = getString(message);
+    }
+
+    /**
+     * Set blocked message page/question.
+     * Default value: Answer the current question to go to next...
+     *
+     * @param message {@link String}
+     */
+    public void setMessageBlocked(@NonNull String message) {
+        this.messageQuestionBlocked = message;
     }
 
     /**

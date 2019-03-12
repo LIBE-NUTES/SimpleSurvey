@@ -32,11 +32,11 @@ import android.support.v4.app.Fragment;
 import br.edu.uepb.nutes.simplesurvey.R;
 
 /**
- * BaseConfigPage implementation.
+ * BaseConfigQuestion implementation.
  *
  * @param <T>
  */
-public abstract class BaseConfigPage<T> {
+public abstract class BaseConfigQuestion<T> {
     private String titleStr,
             descriptionStr;
 
@@ -51,10 +51,9 @@ public abstract class BaseConfigPage<T> {
             drawableClose;
 
     private boolean zoomDisabled,
-            isAnswerRequired,
             nextQuestionAuto;
 
-    protected BaseConfigPage() {
+    protected BaseConfigQuestion() {
         this.layout = 0;
         this.title = 0;
         this.description = 0;
@@ -64,7 +63,6 @@ public abstract class BaseConfigPage<T> {
         this.descriptionColor = Color.BLACK;
         this.drawableClose = R.drawable.ic_action_close_light;
         this.zoomDisabled = true;
-        this.isAnswerRequired = false;
         this.nextQuestionAuto = false;
     }
 
@@ -114,10 +112,6 @@ public abstract class BaseConfigPage<T> {
 
     public boolean isZoomDisabled() {
         return zoomDisabled;
-    }
-
-    public boolean isAnswerRequired() {
-        return isAnswerRequired;
     }
 
     public boolean isNextQuestionAuto() {
@@ -308,21 +302,11 @@ public abstract class BaseConfigPage<T> {
     }
 
     /**
-     * Enable question required.
-     *
-     * @return Config
-     */
-    public T answerRequired() {
-        this.isAnswerRequired = true;
-        return (T) this;
-    }
-
-    /**
      * Activate next page/question automatically after a valid response.
      *
      * @return Config
      */
-    public T enableNextQuestionAuto() {
+    public T nextQuestionAuto() {
         this.nextQuestionAuto = true;
         return (T) this;
     }

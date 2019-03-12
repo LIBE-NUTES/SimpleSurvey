@@ -23,7 +23,6 @@
 package br.edu.uepb.nutes.simplesurvey.pages;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
@@ -38,37 +37,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.uepb.nutes.simplesurvey.R;
-import br.edu.uepb.nutes.simplesurvey.base.BaseConfigPage;
-import br.edu.uepb.nutes.simplesurvey.base.BasePage;
-import br.edu.uepb.nutes.simplesurvey.base.OnPageListener;
+import br.edu.uepb.nutes.simplesurvey.base.BaseConfigQuestion;
+import br.edu.uepb.nutes.simplesurvey.base.BaseQuestion;
+import br.edu.uepb.nutes.simplesurvey.base.OnQuestionListener;
 import br.edu.uepb.nutes.simplesurvey.ui.MultiSelectSpinner;
 
 /**
- * MultiSelectSpinnerPage implementation.
+ * MultipleChoice implementation.
  */
-public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.ConfigPage>
+public class MultipleChoice extends BaseQuestion<MultipleChoice.ConfigPage>
         implements ISlideBackgroundColorHolder {
-    private final String TAG = "MultiSelectSpinnerPage";
+    private final String TAG = "MultipleChoice";
     private String KEY_ITEMS_MULTI_SELECT_SPINNER;
 
     private static final String ARG_CONFIGS_PAGE = "arg_configs_page";
 
     private OnMultiSelectSpinnerListener mListener;
     private List<Integer> oldIndexAnswerValue;
-    private MultiSelectSpinnerPage.ConfigPage configPage;
+    private MultipleChoice.ConfigPage configPage;
     private MultiSelectSpinner answerMultiSelectSpinner;
 
-    public MultiSelectSpinnerPage() {
+    public MultipleChoice() {
     }
 
     /**
-     * New MultiSelectSpinnerPage instance.
+     * New MultipleChoice instance.
      *
      * @param configPage {@link ConfigPage}
-     * @return MultiSelectSpinnerPage
+     * @return MultipleChoice
      */
-    private static MultiSelectSpinnerPage newInstance(ConfigPage configPage) {
-        MultiSelectSpinnerPage pageFragment = new MultiSelectSpinnerPage();
+    private static MultipleChoice newInstance(ConfigPage configPage) {
+        MultipleChoice pageFragment = new MultipleChoice();
         Bundle args = new Bundle();
         args.putSerializable(ARG_CONFIGS_PAGE, configPage);
 
@@ -79,17 +78,17 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        super.blockPage();
+        super.blockQuestion();
 
         // Setting default values
-        super.isBlocked = true;
+//        super.isBlocked = true;
         oldIndexAnswerValue = new ArrayList<>();
 
         // Retrieving arguments
         if (getArguments() != null && getArguments().size() != 0) {
             this.configPage = (ConfigPage) getArguments().getSerializable(ARG_CONFIGS_PAGE);
             if (this.configPage == null) return;
-            super.pageNumber = this.configPage.getPageNumber();
+            super.setPageNumber(this.configPage.getPageNumber());
 
             KEY_ITEMS_MULTI_SELECT_SPINNER = "answer_page"
                     .concat(String.valueOf(this.configPage.getPageNumber()))
@@ -146,18 +145,18 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
                                                     @NonNull List<Integer> indexItems) {
                         if (!indexItems.isEmpty() && !indexItems.equals(oldIndexAnswerValue)) {
                             oldIndexAnswerValue = indexItems;
-                            MultiSelectSpinnerPage.super.unlockPage();
+                            MultipleChoice.super.unlockQuestion();
                             if (mListener != null) {
-                                mListener.onMultiSelectSpinner(pageNumber, items, indexItems);
+                                mListener.onMultiSelectSpinner(getQuestionNumber(), items, indexItems);
                             }
                         } else {
-                            MultiSelectSpinnerPage.super.blockPage();
+                            MultipleChoice.super.blockQuestion();
                         }
                     }
 
                     @Override
                     public void onAddNewItemSuccess(@NonNull String item, @NonNull int indexItem) {
-                        MultiSelectSpinnerPage.super.saveItemExtraSharedPreferences(
+                        MultipleChoice.super.saveItemExtraSharedPreferences(
                                 KEY_ITEMS_MULTI_SELECT_SPINNER, item);
                     }
 
@@ -174,7 +173,7 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
     }
 
     @Override
-    public MultiSelectSpinnerPage.ConfigPage getConfigsPage() {
+    public MultipleChoice.ConfigPage getConfigsQuestion() {
         return this.configPage;
     }
 
@@ -195,7 +194,7 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
         super.onAttach(context);
         if (context instanceof OnMultiSelectSpinnerListener) {
             mListener = (OnMultiSelectSpinnerListener) context;
-            super.mPageListener = mListener;
+            super.setListener(mListener);
         }
     }
 
@@ -221,7 +220,7 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
         this.answerMultiSelectSpinner.clear();
 
         // Block page
-        super.blockPage();
+        super.blockQuestion();
     }
 
     /**
@@ -232,13 +231,13 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
     private void setAnswer(List<Integer> indexItems) {
         this.oldIndexAnswerValue = indexItems;
         this.answerMultiSelectSpinner.selection(indexItems);
-        super.unlockPage();
+        super.unlockQuestion();
     }
 
     /**
      * Class config page.
      */
-    public static class ConfigPage extends BaseConfigPage<ConfigPage> implements Serializable {
+    public static class ConfigPage extends BaseConfigQuestion<ConfigPage> implements Serializable {
         @ColorInt
         private int colorSelectedText;
         @ColorInt
@@ -270,7 +269,7 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
          * @param items {@link List < String >}
          * @return Config
          */
-        public MultiSelectSpinnerPage.ConfigPage items(List<String> items) {
+        public MultipleChoice.ConfigPage items(List<String> items) {
             this.items = items;
             return this;
         }
@@ -281,7 +280,7 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
          * @param colorSelectedText @{@link ColorInt} resource of text color.
          * @return Config
          */
-        public MultiSelectSpinnerPage.ConfigPage colorSelectedText(@ColorInt int colorSelectedText) {
+        public MultipleChoice.ConfigPage colorSelectedText(@ColorInt int colorSelectedText) {
             this.colorSelectedText = colorSelectedText;
             return this;
         }
@@ -293,7 +292,7 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
          * @param colorBackgroundTint @{@link ColorInt} resource of text color.
          * @return Config
          */
-        public MultiSelectSpinnerPage.ConfigPage colorBackgroundTint(@ColorInt int colorBackgroundTint) {
+        public MultipleChoice.ConfigPage colorBackgroundTint(@ColorInt int colorBackgroundTint) {
             this.colorBackgroundTint = colorBackgroundTint;
             return this;
         }
@@ -304,7 +303,7 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
          * @param hint @{@link StringRes} resource of text.
          * @return Config
          */
-        public MultiSelectSpinnerPage.ConfigPage hint(@StringRes int hint) {
+        public MultipleChoice.ConfigPage hint(@StringRes int hint) {
             this.hint = hint;
             return this;
         }
@@ -315,7 +314,7 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
          * @param titleDialogAddNewItem @{@link StringRes} resource of text.
          * @return Config
          */
-        public MultiSelectSpinnerPage.ConfigPage titleDialogAddNewItem(@StringRes int titleDialogAddNewItem) {
+        public MultipleChoice.ConfigPage titleDialogAddNewItem(@StringRes int titleDialogAddNewItem) {
             this.titleDialogAddNewItem = titleDialogAddNewItem;
             return this;
         }
@@ -327,7 +326,7 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
          * @param messageEmpty @{@link StringRes} resource of text.
          * @return Config
          */
-        public MultiSelectSpinnerPage.ConfigPage messageEmpty(@StringRes int messageEmpty) {
+        public MultipleChoice.ConfigPage messageEmpty(@StringRes int messageEmpty) {
             this.messageEmpty = messageEmpty;
             return this;
         }
@@ -338,7 +337,7 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
          *
          * @return Config
          */
-        public MultiSelectSpinnerPage.ConfigPage disableAddNewItem() {
+        public MultipleChoice.ConfigPage disableAddNewItem() {
             this.enabledAdNewItem = false;
             return this;
         }
@@ -349,21 +348,21 @@ public class MultiSelectSpinnerPage extends BasePage<MultiSelectSpinnerPage.Conf
          * @param indexAnswerInit {@link List<Integer>} items
          * @return Config
          */
-        public MultiSelectSpinnerPage.ConfigPage answerInit(List<Integer> indexAnswerInit) {
+        public MultipleChoice.ConfigPage answerInit(List<Integer> indexAnswerInit) {
             this.indexAnswerInit = indexAnswerInit;
             return this;
         }
 
         @Override
-        public MultiSelectSpinnerPage build() {
-            return MultiSelectSpinnerPage.newInstance(this);
+        public MultipleChoice build() {
+            return MultipleChoice.newInstance(this);
         }
     }
 
     /**
      * Interface OnMultiSelectSpinnerListener.
      */
-    public interface OnMultiSelectSpinnerListener extends OnPageListener {
+    public interface OnMultiSelectSpinnerListener extends OnQuestionListener {
         void onMultiSelectSpinner(int page, List<String> values, List<Integer> indexValues);
     }
 }

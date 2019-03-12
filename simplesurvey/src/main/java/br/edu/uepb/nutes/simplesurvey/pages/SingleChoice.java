@@ -35,35 +35,35 @@ import java.io.Serializable;
 import java.util.List;
 
 import br.edu.uepb.nutes.simplesurvey.R;
-import br.edu.uepb.nutes.simplesurvey.base.BaseConfigPage;
-import br.edu.uepb.nutes.simplesurvey.base.BasePage;
-import br.edu.uepb.nutes.simplesurvey.base.OnPageListener;
+import br.edu.uepb.nutes.simplesurvey.base.BaseConfigQuestion;
+import br.edu.uepb.nutes.simplesurvey.base.BaseQuestion;
+import br.edu.uepb.nutes.simplesurvey.base.OnQuestionListener;
 import br.edu.uepb.nutes.simplesurvey.ui.SelectSpinner;
 
 /**
- * SelectSpinnerPage implementation.
+ * SingleChoice implementation.
  */
-public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> implements ISlideBackgroundColorHolder {
-    private final String TAG = "SelectSpinnerPage";
+public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements ISlideBackgroundColorHolder {
+    private final String TAG = "SingleChoice";
 
     protected static final String ARG_CONFIGS_PAGE = "arg_configs_page";
 
     private OnSpinnerListener mListener;
     private int oldIndexAnswerValue;
-    private SelectSpinnerPage.ConfigPage configPage;
+    private Config configPage;
     private SelectSpinner answerSelectSpinner;
 
-    public SelectSpinnerPage() {
+    public SingleChoice() {
     }
 
     /**
-     * New SelectSpinnerPage instance.
+     * New SingleChoice instance.
      *
      * @param configPage
-     * @return SelectSpinnerPage
+     * @return SingleChoice
      */
-    private static SelectSpinnerPage newInstance(ConfigPage configPage) {
-        SelectSpinnerPage pageFragment = new SelectSpinnerPage();
+    private static SingleChoice newInstance(Config configPage) {
+        SingleChoice pageFragment = new SingleChoice();
         Bundle args = new Bundle();
         args.putSerializable(ARG_CONFIGS_PAGE, configPage);
 
@@ -74,16 +74,12 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        super.blockPage();
-
-        // Setting default values
-        super.isBlocked = true;
         this.oldIndexAnswerValue = -1;
 
         // Retrieving arguments
         if (getArguments() != null && getArguments().size() != 0) {
-            this.configPage = (ConfigPage) getArguments().getSerializable(ARG_CONFIGS_PAGE);
-            super.pageNumber = this.configPage.getPageNumber();
+            this.configPage = (Config) getArguments().getSerializable(ARG_CONFIGS_PAGE);
+            super.setPageNumber(this.configPage.getPageNumber());
 
             // set hint
             configPage.items.add(0, getContext().getResources().getString(this.configPage.hint));
@@ -119,9 +115,9 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
             public void onItemSelected(String item, int indexItem) {
                 if (indexItem != oldIndexAnswerValue) {
                     oldIndexAnswerValue = indexItem;
-                    SelectSpinnerPage.super.unlockPage();
+                    unlockQuestion();
                     if (mListener != null) {
-                        mListener.onAnswerSpinner(SelectSpinnerPage.super.pageNumber, item, indexItem);
+                        mListener.onAnswerSpinner(getQuestionNumber(), item, indexItem);
                     }
                 }
             }
@@ -144,7 +140,7 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
     }
 
     @Override
-    public SelectSpinnerPage.ConfigPage getConfigsPage() {
+    public Config getConfigsQuestion() {
         return this.configPage;
     }
 
@@ -164,7 +160,7 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
         super.onAttach(context);
         if (context instanceof OnSpinnerListener) {
             this.mListener = (OnSpinnerListener) context;
-            super.mPageListener = this.mListener;
+            super.setListener(this.mListener);
         }
     }
 
@@ -190,7 +186,7 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
         this.answerSelectSpinner.clear();
 
         // Block page
-        super.blockPage();
+        blockQuestion();
     }
 
     /**
@@ -202,13 +198,13 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
         this.answerSelectSpinner.selection(indexValue);
         this.oldIndexAnswerValue = this.answerSelectSpinner.getIndexItemSelected(); // position 0 hint
 
-        super.unlockPage();
+        unlockQuestion();
     }
 
     /**
      * Class config page.
      */
-    public static class ConfigPage extends BaseConfigPage<ConfigPage> implements Serializable {
+    public static class Config extends BaseConfigQuestion<Config> implements Serializable {
         @ColorInt
         private int colorSelectedText;
         @ColorInt
@@ -219,7 +215,7 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
         private int indexAnswerInit;
         private boolean enabledAdNewItem;
 
-        public ConfigPage() {
+        public Config() {
             super.layout(R.layout.question_select_spinner);
             this.colorSelectedText = 0;
             this.colorBackgroundTint = 0;
@@ -234,7 +230,7 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
          * @param items {@link List < String >}
          * @return Config
          */
-        public SelectSpinnerPage.ConfigPage items(List<String> items) {
+        public Config items(List<String> items) {
             this.items = items;
             return this;
         }
@@ -245,7 +241,7 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
          * @param colorSelectedText @{@link ColorInt} resource color.
          * @return Config
          */
-        public SelectSpinnerPage.ConfigPage colorSelectedText(@ColorInt int colorSelectedText) {
+        public Config colorSelectedText(@ColorInt int colorSelectedText) {
             this.colorSelectedText = colorSelectedText;
             return this;
         }
@@ -257,7 +253,7 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
          * @param colorBackgroundTint @{@link ColorInt} resource color.
          * @return Config
          */
-        public SelectSpinnerPage.ConfigPage colorBackgroundTint(@ColorInt int colorBackgroundTint) {
+        public Config colorBackgroundTint(@ColorInt int colorBackgroundTint) {
             this.colorBackgroundTint = colorBackgroundTint;
             return this;
         }
@@ -268,7 +264,7 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
          * @param hint @{@link ColorInt} resource color.
          * @return Config
          */
-        public SelectSpinnerPage.ConfigPage hint(@ColorInt int hint) {
+        public Config hint(@ColorInt int hint) {
             this.hint = hint;
             return this;
         }
@@ -279,7 +275,7 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
          * @param indexAnswerInit @{@link ColorInt} index.
          * @return Config
          */
-        public SelectSpinnerPage.ConfigPage answerInit(int indexAnswerInit) {
+        public Config answerInit(int indexAnswerInit) {
             this.indexAnswerInit = indexAnswerInit;
             return this;
         }
@@ -290,21 +286,21 @@ public class SelectSpinnerPage extends BasePage<SelectSpinnerPage.ConfigPage> im
          *
          * @return Config
          */
-        public SelectSpinnerPage.ConfigPage disableAddNewItem() {
+        public Config disableAddNewItem() {
             this.enabledAdNewItem = false;
             return this;
         }
 
         @Override
-        public SelectSpinnerPage build() {
-            return SelectSpinnerPage.newInstance(this);
+        public SingleChoice build() {
+            return SingleChoice.newInstance(this);
         }
     }
 
     /**
      * Interface OnSpinnerListener.
      */
-    public interface OnSpinnerListener extends OnPageListener {
+    public interface OnSpinnerListener extends OnQuestionListener {
         void onAnswerSpinner(int page, String value, int indexValue);
     }
 }

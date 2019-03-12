@@ -38,15 +38,15 @@ import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 import java.io.Serializable;
 
 import br.edu.uepb.nutes.simplesurvey.R;
-import br.edu.uepb.nutes.simplesurvey.base.BaseConfigPage;
-import br.edu.uepb.nutes.simplesurvey.base.BasePage;
-import br.edu.uepb.nutes.simplesurvey.base.OnPageListener;
+import br.edu.uepb.nutes.simplesurvey.base.BaseConfigQuestion;
+import br.edu.uepb.nutes.simplesurvey.base.BaseQuestion;
+import br.edu.uepb.nutes.simplesurvey.base.OnQuestionListener;
 
 /**
- * RadioQuestion implementation.
+ * DichotomicChoice implementation.
  */
-public class RadioQuestion extends BasePage<RadioQuestion.Config> implements ISlideBackgroundColorHolder {
-    private final String TAG = "RadioQuestion";
+public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> implements ISlideBackgroundColorHolder {
+    private final String TAG = "DichotomicChoice";
 
     private static final String ARG_CONFIGS_PAGE = "arg_configs_page";
     private static final String KEY_OLD_ANSWER_BUNDLE = "old_answer";
@@ -59,17 +59,17 @@ public class RadioQuestion extends BasePage<RadioQuestion.Config> implements ISl
     private RadioButton radioLeft;
     private RadioButton radioRight;
 
-    public RadioQuestion() {
+    public DichotomicChoice() {
     }
 
     /**
-     * New RadioQuestion instance.
+     * New DichotomicChoice instance.
      *
      * @param configPage {@link Config}
-     * @return RadioQuestion
+     * @return DichotomicChoice
      */
-    private static RadioQuestion newInstance(Config configPage) {
-        RadioQuestion pageFragment = new RadioQuestion();
+    private static DichotomicChoice builder(Config configPage) {
+        DichotomicChoice pageFragment = new DichotomicChoice();
         Bundle args = new Bundle();
         args.putSerializable(ARG_CONFIGS_PAGE, configPage);
 
@@ -80,6 +80,7 @@ public class RadioQuestion extends BasePage<RadioQuestion.Config> implements ISl
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        super.blockQuestion();
 
         // Setting default values
         oldAnswer = -1;
@@ -89,7 +90,7 @@ public class RadioQuestion extends BasePage<RadioQuestion.Config> implements ISl
         // Retrieving arguments
         if (getArguments() != null && getArguments().size() != 0) {
             configPage = (Config) getArguments().getSerializable(ARG_CONFIGS_PAGE);
-            super.pageNumber = configPage.getPageNumber();
+            super.setPageNumber(configPage.getPageNumber());
         }
     }
 
@@ -116,17 +117,8 @@ public class RadioQuestion extends BasePage<RadioQuestion.Config> implements ISl
                 radioLeft.setTextColor(configPage.radioColorTextNormal);
                 radioRight.setTextColor(configPage.radioColorTextNormal);
             }
-
             // init answer
-            if (configPage.answerInit != -1)
-                setAnswer(configPage.answerInit != 0);
-
-
-            if (configPage.isAnswerRequired()) {
-                super.blockPage();
-            } else {
-                super.unlockPage();
-            }
+            if (configPage.answerInit != -1) setAnswer(configPage.answerInit != 0);
 
             refreshStyles();
         }
@@ -141,6 +133,7 @@ public class RadioQuestion extends BasePage<RadioQuestion.Config> implements ISl
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         if (radioGroup == null) return;
 
         if (savedInstanceState != null) {
@@ -155,14 +148,14 @@ public class RadioQuestion extends BasePage<RadioQuestion.Config> implements ISl
                 if (checkedId == R.id.left_radioButton && oldAnswer != 0) {
                     setAnswer(false);
                     if (mListener != null) {
-                        mListener.onAnswerRadio(pageNumber, false);
-                        if (configPage.isNextQuestionAuto()) nextPage();
+                        mListener.onAnswerRadio(getQuestionNumber(), false);
+                        if (configPage.isNextQuestionAuto()) nextQuestion();
                     }
                 } else if (checkedId == R.id.right_radioButton && oldAnswer != 1) {
                     setAnswer(true);
                     if (mListener != null) {
-                        mListener.onAnswerRadio(pageNumber, true);
-                        if (configPage.isNextQuestionAuto()) nextPage();
+                        mListener.onAnswerRadio(getQuestionNumber(), true);
+                        if (configPage.isNextQuestionAuto()) nextQuestion();
                     }
                 }
             }
@@ -175,7 +168,7 @@ public class RadioQuestion extends BasePage<RadioQuestion.Config> implements ISl
     }
 
     @Override
-    public Config getConfigsPage() {
+    public Config getConfigsQuestion() {
         return this.configPage;
     }
 
@@ -195,7 +188,7 @@ public class RadioQuestion extends BasePage<RadioQuestion.Config> implements ISl
         super.onAttach(context);
         if (context instanceof OnRadioListener) {
             mListener = (OnRadioListener) context;
-            super.mPageListener = mListener;
+            super.setListener(mListener);
         }
     }
 
@@ -224,7 +217,7 @@ public class RadioQuestion extends BasePage<RadioQuestion.Config> implements ISl
         refreshStyles();
 
         // Block page
-//        super.blockPage();
+        super.blockQuestion();
     }
 
     /**
@@ -233,7 +226,7 @@ public class RadioQuestion extends BasePage<RadioQuestion.Config> implements ISl
      * @param value boolean
      */
     private void setAnswer(boolean value) {
-        super.unlockPage();
+        super.unlockQuestion();
         answerValue = value;
         oldAnswer = !value ? 0 : 1;
 
@@ -261,7 +254,7 @@ public class RadioQuestion extends BasePage<RadioQuestion.Config> implements ISl
     /**
      * Class config page.
      */
-    public static class Config extends BaseConfigPage<Config> implements Serializable {
+    public static class Config extends BaseConfigQuestion<Config> implements Serializable {
         private int radioLeftText,
                 radioRightText,
                 radioColorTextNormal,
@@ -336,15 +329,15 @@ public class RadioQuestion extends BasePage<RadioQuestion.Config> implements ISl
         }
 
         @Override
-        public RadioQuestion build() {
-            return RadioQuestion.newInstance(this);
+        public DichotomicChoice build() {
+            return DichotomicChoice.builder(this);
         }
     }
 
     /**
      * Interface OnRadioListener.
      */
-    public interface OnRadioListener extends OnPageListener {
+    public interface OnRadioListener extends OnQuestionListener {
         void onAnswerRadio(int page, boolean value);
     }
 }

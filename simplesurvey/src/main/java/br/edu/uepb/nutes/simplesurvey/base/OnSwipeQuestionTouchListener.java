@@ -28,12 +28,12 @@ import android.view.MotionEvent;
 import android.view.View;
 
 /**
- * OnSwipePageTouchListener implementation.
+ * OnSwipeQuestionTouchListener implementation.
  */
-public class OnSwipePageTouchListener implements View.OnTouchListener {
+public class OnSwipeQuestionTouchListener implements View.OnTouchListener {
     private final GestureDetector gestureDetector;
 
-    public OnSwipePageTouchListener(Context context) {
+    public OnSwipeQuestionTouchListener(Context context) {
         gestureDetector = new GestureDetector(context, new GestureListener());
     }
 

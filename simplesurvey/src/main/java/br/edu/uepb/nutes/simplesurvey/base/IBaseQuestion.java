@@ -24,12 +24,12 @@ package br.edu.uepb.nutes.simplesurvey.base;
 
 import android.view.View;
 
-public interface IBasePage<T> {
+public interface IBaseQuestion<T> {
     View getView();
 
-    void nextPage();
+    void nextQuestion();
 
-    int getPageNumber();
+    int getQuestionNumber();
 
     boolean isBlocked();
 
@@ -37,13 +37,13 @@ public interface IBasePage<T> {
 
     void initView(View v);
 
-    void blockPage();
+    void blockQuestion();
 
-    void unlockPage();
+    void unlockQuestion();
 
     int getLayout();
 
-    T getConfigsPage();
+    T getConfigsQuestion();
 
     View getComponentAnswer();
 }

@@ -3,11 +3,11 @@ package br.edu.uepb.nutes.simplesurvey;
 import android.support.v4.content.ContextCompat;
 
 import br.edu.uepb.nutes.simplesurvey.base.SimpleSurvey;
-import br.edu.uepb.nutes.simplesurvey.pages.InforPage;
-import br.edu.uepb.nutes.simplesurvey.pages.RadioQuestion;
+import br.edu.uepb.nutes.simplesurvey.pages.DichotomicChoice;
+import br.edu.uepb.nutes.simplesurvey.pages.Infor;
 
-public class SimpleSurvey1 extends SimpleSurvey implements RadioQuestion.OnRadioListener,
-        InforPage.OnButtonListener {
+public class SimpleSurvey1 extends SimpleSurvey implements DichotomicChoice.OnRadioListener,
+        Infor.OnButtonListener {
 
     @Override
     protected void initView() {
@@ -15,31 +15,47 @@ public class SimpleSurvey1 extends SimpleSurvey implements RadioQuestion.OnRadio
     }
 
     private void addPages() {
+        setMessageBlocked("Ops! responda para poder ir para próxima perguta...");
 
         // page 1
-        addQuestion(new RadioQuestion.Config()
+        addQuestion(new DichotomicChoice.Config()
                 .title("Title of the question")
                 .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?")
                 .radioLeftText(R.string.masc)
                 .radioRightText(R.string.femi)
-                .enableNextQuestionAuto()
+                .nextQuestionAuto()
                 .image(R.drawable.placeholder)
-                .answerRequired()
+                .enableZoomImage()
                 .pageNumber(1)
                 .build());
 
-        addQuestion(new RadioQuestion.Config()
-                .title("Simple Survey")
+        addQuestion(new DichotomicChoice.Config()
+                .title("Simple Survey 1")
                 .description("Simple survey from @NUTES")
                 .colorBackground(ContextCompat.getColor(this, R.color.colorCyan))
-                .answerRequired()
-                .pageNumber(1)
+                .pageNumber(2)
                 .build());
 
-        addQuestion(new InforPage.Config()
+        addQuestion(new DichotomicChoice.Config()
+                .title("Simple Survey 2")
+                .description("Simple survey from @NUTES")
+                .pageNumber(3)
+                .nextQuestionAuto()
+                .build());
+
+        addQuestion(new DichotomicChoice.Config()
+                .title("Simple Survey 3")
+                .description("Simple survey from @NUTES")
+                .colorBackground(ContextCompat.getColor(this, R.color.colorBlueGrey))
+                .pageNumber(4)
+                .build());
+
+
+        addQuestion(new Infor.Config()
                 .title("Lorem Ipsum")
                 .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry." +
                         " Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,")
+                .pageNumber(4)
                 .build());
     }
 
