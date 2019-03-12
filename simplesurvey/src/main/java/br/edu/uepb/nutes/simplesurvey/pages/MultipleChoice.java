@@ -24,16 +24,19 @@ package br.edu.uepb.nutes.simplesurvey.pages;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.util.Log;
 import android.view.View;
 
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import br.edu.uepb.nutes.simplesurvey.R;
@@ -45,16 +48,15 @@ import br.edu.uepb.nutes.simplesurvey.ui.MultiSelectSpinner;
 /**
  * MultipleChoice implementation.
  */
-public class MultipleChoice extends BaseQuestion<MultipleChoice.ConfigPage>
+public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
         implements ISlideBackgroundColorHolder {
-    private final String TAG = "MultipleChoice";
     private String KEY_ITEMS_MULTI_SELECT_SPINNER;
 
     private static final String ARG_CONFIGS_PAGE = "arg_configs_page";
 
-    private OnMultiSelectSpinnerListener mListener;
+    private OnMultipleListener mListener;
     private List<Integer> oldIndexAnswerValue;
-    private MultipleChoice.ConfigPage configPage;
+    private Config configPage;
     private MultiSelectSpinner answerMultiSelectSpinner;
 
     public MultipleChoice() {
@@ -63,13 +65,13 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.ConfigPage>
     /**
      * New MultipleChoice instance.
      *
-     * @param configPage {@link ConfigPage}
+     * @param configPage {@link Config}
      * @return MultipleChoice
      */
-    private static MultipleChoice newInstance(ConfigPage configPage) {
+    private static MultipleChoice builder(Config configPage) {
         MultipleChoice pageFragment = new MultipleChoice();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_CONFIGS_PAGE, configPage);
+        args.putParcelable(ARG_CONFIGS_PAGE, configPage);
 
         pageFragment.setArguments(args);
         return pageFragment;
@@ -81,12 +83,11 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.ConfigPage>
         super.blockQuestion();
 
         // Setting default values
-//        super.isBlocked = true;
         oldIndexAnswerValue = new ArrayList<>();
 
         // Retrieving arguments
         if (getArguments() != null && getArguments().size() != 0) {
-            this.configPage = (ConfigPage) getArguments().getSerializable(ARG_CONFIGS_PAGE);
+            this.configPage = getArguments().getParcelable(ARG_CONFIGS_PAGE);
             if (this.configPage == null) return;
             super.setPageNumber(this.configPage.getPageNumber());
 
@@ -143,14 +144,16 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.ConfigPage>
                     @Override
                     public void onMultiItemSelected(@NonNull List<String> items,
                                                     @NonNull List<Integer> indexItems) {
-                        if (!indexItems.isEmpty() && !indexItems.equals(oldIndexAnswerValue)) {
+                        if (!indexItems.isEmpty()) {
                             oldIndexAnswerValue = indexItems;
-                            MultipleChoice.super.unlockQuestion();
+                            unlockQuestion();
                             if (mListener != null) {
-                                mListener.onMultiSelectSpinner(getQuestionNumber(), items, indexItems);
+                                mListener.onAnswerMultiple(getQuestionNumber(), items, indexItems);
+                                Log.w("SPINNER", Arrays.toString(items.toArray()));
                             }
+                            if (configPage.isNextQuestionAuto()) nextQuestion();
                         } else {
-                            MultipleChoice.super.blockQuestion();
+                            blockQuestion();
                         }
                     }
 
@@ -173,7 +176,7 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.ConfigPage>
     }
 
     @Override
-    public MultipleChoice.ConfigPage getConfigsQuestion() {
+    public Config getConfigsQuestion() {
         return this.configPage;
     }
 
@@ -192,8 +195,8 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.ConfigPage>
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnMultiSelectSpinnerListener) {
-            mListener = (OnMultiSelectSpinnerListener) context;
+        if (context instanceof OnMultipleListener) {
+            mListener = (OnMultipleListener) context;
             super.setListener(mListener);
         }
     }
@@ -237,7 +240,7 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.ConfigPage>
     /**
      * Class config page.
      */
-    public static class ConfigPage extends BaseConfigQuestion<ConfigPage> implements Serializable {
+    public static class Config extends BaseConfigQuestion<MultipleChoice.Config> implements Parcelable {
         @ColorInt
         private int colorSelectedText;
         @ColorInt
@@ -252,7 +255,7 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.ConfigPage>
         private List<Integer> indexAnswerInit;
         private boolean enabledAdNewItem;
 
-        public ConfigPage() {
+        public Config() {
             super.layout(R.layout.question_multi_select_spinner);
             this.colorSelectedText = 0;
             this.colorBackgroundTint = 0;
@@ -263,13 +266,51 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.ConfigPage>
             this.enabledAdNewItem = true;
         }
 
+        protected Config(Parcel in) {
+            colorSelectedText = in.readInt();
+            colorBackgroundTint = in.readInt();
+            hint = in.readInt();
+            messageEmpty = in.readInt();
+            titleDialogAddNewItem = in.readInt();
+            items = in.createStringArrayList();
+            enabledAdNewItem = in.readByte() != 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(colorSelectedText);
+            dest.writeInt(colorBackgroundTint);
+            dest.writeInt(hint);
+            dest.writeInt(messageEmpty);
+            dest.writeInt(titleDialogAddNewItem);
+            dest.writeStringList(items);
+            dest.writeByte((byte) (enabledAdNewItem ? 1 : 0));
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        public static final Creator<Config> CREATOR = new Creator<Config>() {
+            @Override
+            public Config createFromParcel(Parcel in) {
+                return new Config(in);
+            }
+
+            @Override
+            public Config[] newArray(int size) {
+                return new Config[size];
+            }
+        };
+
         /**
          * Set items to the spinner.
          *
          * @param items {@link List < String >}
          * @return Config
          */
-        public MultipleChoice.ConfigPage items(List<String> items) {
+        public Config items(List<String> items) {
             this.items = items;
             return this;
         }
@@ -280,7 +321,7 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.ConfigPage>
          * @param colorSelectedText @{@link ColorInt} resource of text color.
          * @return Config
          */
-        public MultipleChoice.ConfigPage colorSelectedText(@ColorInt int colorSelectedText) {
+        public Config colorSelectedText(@ColorInt int colorSelectedText) {
             this.colorSelectedText = colorSelectedText;
             return this;
         }
@@ -292,7 +333,7 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.ConfigPage>
          * @param colorBackgroundTint @{@link ColorInt} resource of text color.
          * @return Config
          */
-        public MultipleChoice.ConfigPage colorBackgroundTint(@ColorInt int colorBackgroundTint) {
+        public Config colorBackgroundTint(@ColorInt int colorBackgroundTint) {
             this.colorBackgroundTint = colorBackgroundTint;
             return this;
         }
@@ -303,7 +344,7 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.ConfigPage>
          * @param hint @{@link StringRes} resource of text.
          * @return Config
          */
-        public MultipleChoice.ConfigPage hint(@StringRes int hint) {
+        public Config hint(@StringRes int hint) {
             this.hint = hint;
             return this;
         }
@@ -314,7 +355,7 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.ConfigPage>
          * @param titleDialogAddNewItem @{@link StringRes} resource of text.
          * @return Config
          */
-        public MultipleChoice.ConfigPage titleDialogAddNewItem(@StringRes int titleDialogAddNewItem) {
+        public Config titleDialogAddNewItem(@StringRes int titleDialogAddNewItem) {
             this.titleDialogAddNewItem = titleDialogAddNewItem;
             return this;
         }
@@ -326,7 +367,7 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.ConfigPage>
          * @param messageEmpty @{@link StringRes} resource of text.
          * @return Config
          */
-        public MultipleChoice.ConfigPage messageEmpty(@StringRes int messageEmpty) {
+        public Config messageEmpty(@StringRes int messageEmpty) {
             this.messageEmpty = messageEmpty;
             return this;
         }
@@ -337,7 +378,7 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.ConfigPage>
          *
          * @return Config
          */
-        public MultipleChoice.ConfigPage disableAddNewItem() {
+        public Config disableAddNewItem() {
             this.enabledAdNewItem = false;
             return this;
         }
@@ -348,21 +389,21 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.ConfigPage>
          * @param indexAnswerInit {@link List<Integer>} items
          * @return Config
          */
-        public MultipleChoice.ConfigPage answerInit(List<Integer> indexAnswerInit) {
+        public Config answerInit(List<Integer> indexAnswerInit) {
             this.indexAnswerInit = indexAnswerInit;
             return this;
         }
 
         @Override
         public MultipleChoice build() {
-            return MultipleChoice.newInstance(this);
+            return MultipleChoice.builder(this);
         }
     }
 
     /**
-     * Interface OnMultiSelectSpinnerListener.
+     * Interface OnMultipleListener.
      */
-    public interface OnMultiSelectSpinnerListener extends OnQuestionListener {
-        void onMultiSelectSpinner(int page, List<String> values, List<Integer> indexValues);
+    public interface OnMultipleListener extends OnQuestionListener {
+        void onAnswerMultiple(int page, List<String> values, List<Integer> indexValues);
     }
 }

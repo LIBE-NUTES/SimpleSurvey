@@ -51,7 +51,8 @@ public abstract class BaseConfigQuestion<T> {
             drawableClose;
 
     private boolean zoomDisabled,
-            nextQuestionAuto;
+            nextQuestionAuto,
+            isRequired;
 
     protected BaseConfigQuestion() {
         this.layout = 0;
@@ -64,6 +65,7 @@ public abstract class BaseConfigQuestion<T> {
         this.drawableClose = R.drawable.ic_action_close_light;
         this.zoomDisabled = true;
         this.nextQuestionAuto = false;
+        this.isRequired = true;
     }
 
     public String getTitleStr() {
@@ -116,6 +118,10 @@ public abstract class BaseConfigQuestion<T> {
 
     public boolean isNextQuestionAuto() {
         return nextQuestionAuto;
+    }
+
+    public boolean isRequired() {
+        return isRequired;
     }
 
     /**
@@ -310,6 +316,16 @@ public abstract class BaseConfigQuestion<T> {
         this.nextQuestionAuto = true;
         return (T) this;
     }
+
+//    /**
+//     * Enable answer required.
+//     *
+//     * @return Config
+//     */
+//    public T answerRequired() {
+//        this.isRequired = true;
+//        return (T) this;
+//    }
 
     public abstract Fragment build();
 }

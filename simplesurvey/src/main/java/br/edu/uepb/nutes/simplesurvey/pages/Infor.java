@@ -25,6 +25,8 @@ package br.edu.uepb.nutes.simplesurvey.pages;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
@@ -33,8 +35,6 @@ import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
-
-import java.io.Serializable;
 
 import br.edu.uepb.nutes.simplesurvey.R;
 import br.edu.uepb.nutes.simplesurvey.base.BaseConfigQuestion;
@@ -46,11 +46,9 @@ import br.edu.uepb.nutes.simplesurvey.base.OnQuestionListener;
  * Useful to use as a home screen or thank you screen for participating in the assessment.
  */
 public class Infor extends BaseQuestion<Infor.Config> implements ISlideBackgroundColorHolder {
-    private final String TAG = "Infor";
-
     private static final String ARG_CONFIGS_PAGE = "arg_configs_page";
 
-    private OnButtonListener mListener;
+    private OnInfoListener mListener;
     private Config configPage;
     private AppCompatButton button;
 
@@ -66,7 +64,7 @@ public class Infor extends BaseQuestion<Infor.Config> implements ISlideBackgroun
     private static Infor newInstance(Config configPage) {
         Infor pageFragment = new Infor();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_CONFIGS_PAGE, configPage);
+        args.putParcelable(ARG_CONFIGS_PAGE, configPage);
 
         pageFragment.setArguments(args);
         return pageFragment;
@@ -78,7 +76,7 @@ public class Infor extends BaseQuestion<Infor.Config> implements ISlideBackgroun
 
         // Retrieving arguments
         if (getArguments() != null && getArguments().size() != 0) {
-            configPage = (Config) getArguments().getSerializable(ARG_CONFIGS_PAGE);
+            configPage = getArguments().getParcelable(ARG_CONFIGS_PAGE);
             if (configPage == null) return;
             super.setPageNumber(configPage.getPageNumber());
         }
@@ -110,7 +108,7 @@ public class Infor extends BaseQuestion<Infor.Config> implements ISlideBackgroun
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onAnswerButton(getQuestionNumber());
+                mListener.onAnswerInfo(getQuestionNumber());
             }
         });
     }
@@ -139,8 +137,8 @@ public class Infor extends BaseQuestion<Infor.Config> implements ISlideBackgroun
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnButtonListener) {
-            mListener = (OnButtonListener) context;
+        if (context instanceof OnInfoListener) {
+            mListener = (OnInfoListener) context;
             super.setListener(mListener);
         }
     }
@@ -171,7 +169,7 @@ public class Infor extends BaseQuestion<Infor.Config> implements ISlideBackgroun
     /**
      * Class config page.
      */
-    public static class Config extends BaseConfigQuestion<Config> implements Serializable {
+    public static class Config extends BaseConfigQuestion<Infor.Config> implements Parcelable {
         private int buttonText,
                 buttonColorText,
                 buttonBackground;
@@ -182,6 +180,24 @@ public class Infor extends BaseQuestion<Infor.Config> implements ISlideBackgroun
             this.buttonColorText = 0;
             this.buttonBackground = 0;
         }
+
+        protected Config(Parcel in) {
+            buttonText = in.readInt();
+            buttonColorText = in.readInt();
+            buttonBackground = in.readInt();
+        }
+
+        public static final Creator<Config> CREATOR = new Creator<Config>() {
+            @Override
+            public Config createFromParcel(Parcel in) {
+                return new Config(in);
+            }
+
+            @Override
+            public Config[] newArray(int size) {
+                return new Config[size];
+            }
+        };
 
         /**
          * Set button text.
@@ -220,12 +236,24 @@ public class Infor extends BaseQuestion<Infor.Config> implements ISlideBackgroun
         public Infor build() {
             return Infor.newInstance(this);
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(buttonText);
+            dest.writeInt(buttonColorText);
+            dest.writeInt(buttonBackground);
+        }
     }
 
     /**
-     * Interface OnRadioListener.
+     * Interface OnDichotomicListener.
      */
-    public interface OnButtonListener extends OnQuestionListener {
-        void onAnswerButton(int page);
+    public interface OnInfoListener extends OnQuestionListener {
+        void onAnswerInfo(int page);
     }
 }

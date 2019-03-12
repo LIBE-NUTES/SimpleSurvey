@@ -24,6 +24,7 @@ package br.edu.uepb.nutes.simplesurvey.base;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -35,33 +36,29 @@ import android.view.WindowManager;
 
 import com.github.paolorotolo.appintro.AppIntro;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import br.edu.uepb.nutes.simplesurvey.R;
 
+/**
+ * Simple Survey implementation.
+ * Extend AppInto class by {https://github.com/AppIntro/AppIntro}
+ */
 public abstract class SimpleSurvey extends AppIntro {
     private final String TAG = "SimpleSurvey";
 
-    private IBaseQuestion currentQuestion, oldQuestion;
+    private IBaseQuestion currentQuestion;
     private Snackbar snackbarMessageBlockedPage;
-    private final int PAGE_END = -1;
-    private Set<Integer> unlockedQuestions;
     private String messageQuestionBlocked;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        unlockedQuestions = new HashSet<>();
         messageQuestionBlocked = getString(R.string.message_blocked_page);
 
         getSupportActionBar().hide();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        /**
-         * Config pages.
-         */
+        // Config pages.
         setColorTransitionsEnabled(true);
         setFadeAnimation();
         showSeparator(false);
@@ -82,6 +79,32 @@ public abstract class SimpleSurvey extends AppIntro {
      */
     public void addQuestion(Fragment question) {
         addSlide(question);
+    }
+
+    /**
+     * Opens the next page/question.
+     */
+    public void nextQuestion() {
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                getPager().goToNextSlide();
+            }
+        });
+    }
+
+    /**
+     * Opens page/question according to index
+     *
+     * @param index int
+     */
+    public void goToQuestion(final int index) {
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                getPager().setCurrentItem(index);
+            }
+        });
     }
 
     @Override
@@ -111,10 +134,7 @@ public abstract class SimpleSurvey extends AppIntro {
             Log.d(TAG, "onSlideChanged() - isBlocked: "
                     + currentQuestion.isBlocked() + " |  page: " + currentQuestion.getQuestionNumber());
 
-            if (currentQuestion.getQuestionNumber() == PAGE_END) return;
-
             setNextPageSwipeLock(currentQuestion.isBlocked());
-
             // Capture event onSwipeLeft
             currentQuestion.getView().setOnTouchListener(new OnSwipeQuestionTouchListener(this) {
                 @Override

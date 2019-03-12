@@ -65,7 +65,6 @@ public abstract class BaseQuestion<T extends BaseConfigQuestion> extends Fragmen
     public LinearLayout boxInput;
 
     public BaseQuestion() {
-
     }
 
     @Nullable

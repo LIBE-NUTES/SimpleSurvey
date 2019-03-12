@@ -24,6 +24,8 @@ package br.edu.uepb.nutes.simplesurvey.pages;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
@@ -35,8 +37,6 @@ import android.widget.RadioGroup;
 
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 
-import java.io.Serializable;
-
 import br.edu.uepb.nutes.simplesurvey.R;
 import br.edu.uepb.nutes.simplesurvey.base.BaseConfigQuestion;
 import br.edu.uepb.nutes.simplesurvey.base.BaseQuestion;
@@ -46,13 +46,11 @@ import br.edu.uepb.nutes.simplesurvey.base.OnQuestionListener;
  * DichotomicChoice implementation.
  */
 public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> implements ISlideBackgroundColorHolder {
-    private final String TAG = "DichotomicChoice";
-
     private static final String ARG_CONFIGS_PAGE = "arg_configs_page";
     private static final String KEY_OLD_ANSWER_BUNDLE = "old_answer";
 
-    private OnRadioListener mListener;
-    private boolean answerValue, actionClearCheck;
+    private OnDichotomicListener mListener;
+    private boolean actionClearCheck;
     private int oldAnswer;
     private Config configPage;
     private RadioGroup radioGroup;
@@ -71,7 +69,7 @@ public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> impl
     private static DichotomicChoice builder(Config configPage) {
         DichotomicChoice pageFragment = new DichotomicChoice();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_CONFIGS_PAGE, configPage);
+        args.putParcelable(ARG_CONFIGS_PAGE, configPage);
 
         pageFragment.setArguments(args);
         return pageFragment;
@@ -84,12 +82,11 @@ public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> impl
 
         // Setting default values
         oldAnswer = -1;
-        answerValue = false;
         actionClearCheck = false;
 
         // Retrieving arguments
         if (getArguments() != null && getArguments().size() != 0) {
-            configPage = (Config) getArguments().getSerializable(ARG_CONFIGS_PAGE);
+            configPage = getArguments().getParcelable(ARG_CONFIGS_PAGE);
             super.setPageNumber(configPage.getPageNumber());
         }
     }
@@ -148,13 +145,13 @@ public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> impl
                 if (checkedId == R.id.left_radioButton && oldAnswer != 0) {
                     setAnswer(false);
                     if (mListener != null) {
-                        mListener.onAnswerRadio(getQuestionNumber(), false);
+                        mListener.onAnswerDichotomic(getQuestionNumber(), false);
                         if (configPage.isNextQuestionAuto()) nextQuestion();
                     }
                 } else if (checkedId == R.id.right_radioButton && oldAnswer != 1) {
                     setAnswer(true);
                     if (mListener != null) {
-                        mListener.onAnswerRadio(getQuestionNumber(), true);
+                        mListener.onAnswerDichotomic(getQuestionNumber(), true);
                         if (configPage.isNextQuestionAuto()) nextQuestion();
                     }
                 }
@@ -186,8 +183,8 @@ public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> impl
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnRadioListener) {
-            mListener = (OnRadioListener) context;
+        if (context instanceof OnDichotomicListener) {
+            mListener = (OnDichotomicListener) context;
             super.setListener(mListener);
         }
     }
@@ -227,7 +224,6 @@ public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> impl
      */
     private void setAnswer(boolean value) {
         super.unlockQuestion();
-        answerValue = value;
         oldAnswer = !value ? 0 : 1;
 
         if (value) radioRight.setChecked(true);
@@ -254,7 +250,7 @@ public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> impl
     /**
      * Class config page.
      */
-    public static class Config extends BaseConfigQuestion<Config> implements Serializable {
+    public static class Config extends BaseConfigQuestion<DichotomicChoice.Config> implements Parcelable {
         private int radioLeftText,
                 radioRightText,
                 radioColorTextNormal,
@@ -273,6 +269,28 @@ public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> impl
             this.radioRightBackground = 0;
             this.answerInit = -1;
         }
+
+        protected Config(Parcel in) {
+            radioLeftText = in.readInt();
+            radioRightText = in.readInt();
+            radioColorTextNormal = in.readInt();
+            radioColorTextChecked = in.readInt();
+            radioLeftBackground = in.readInt();
+            radioRightBackground = in.readInt();
+            answerInit = in.readInt();
+        }
+
+        public static final Creator<Config> CREATOR = new Creator<Config>() {
+            @Override
+            public Config createFromParcel(Parcel in) {
+                return new Config(in);
+            }
+
+            @Override
+            public Config[] newArray(int size) {
+                return new Config[size];
+            }
+        };
 
         /**
          * Set left radio text.
@@ -332,12 +350,28 @@ public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> impl
         public DichotomicChoice build() {
             return DichotomicChoice.builder(this);
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(radioLeftText);
+            dest.writeInt(radioRightText);
+            dest.writeInt(radioColorTextNormal);
+            dest.writeInt(radioColorTextChecked);
+            dest.writeInt(radioLeftBackground);
+            dest.writeInt(radioRightBackground);
+            dest.writeInt(answerInit);
+        }
     }
 
     /**
-     * Interface OnRadioListener.
+     * Interface OnDichotomicListener.
      */
-    public interface OnRadioListener extends OnQuestionListener {
-        void onAnswerRadio(int page, boolean value);
+    public interface OnDichotomicListener extends OnQuestionListener {
+        void onAnswerDichotomic(int page, boolean value);
     }
 }

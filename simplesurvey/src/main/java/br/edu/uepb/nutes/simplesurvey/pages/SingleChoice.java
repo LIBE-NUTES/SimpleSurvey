@@ -24,6 +24,8 @@ package br.edu.uepb.nutes.simplesurvey.pages;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -44,11 +46,9 @@ import br.edu.uepb.nutes.simplesurvey.ui.SelectSpinner;
  * SingleChoice implementation.
  */
 public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements ISlideBackgroundColorHolder {
-    private final String TAG = "SingleChoice";
-
     protected static final String ARG_CONFIGS_PAGE = "arg_configs_page";
 
-    private OnSpinnerListener mListener;
+    private OnSingleListener mListener;
     private int oldIndexAnswerValue;
     private Config configPage;
     private SelectSpinner answerSelectSpinner;
@@ -62,10 +62,10 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
      * @param configPage
      * @return SingleChoice
      */
-    private static SingleChoice newInstance(Config configPage) {
+    private static SingleChoice builder(Config configPage) {
         SingleChoice pageFragment = new SingleChoice();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_CONFIGS_PAGE, configPage);
+        args.putParcelable(ARG_CONFIGS_PAGE, configPage);
 
         pageFragment.setArguments(args);
         return pageFragment;
@@ -74,11 +74,12 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        super.blockQuestion();
         this.oldIndexAnswerValue = -1;
 
         // Retrieving arguments
         if (getArguments() != null && getArguments().size() != 0) {
-            this.configPage = (Config) getArguments().getSerializable(ARG_CONFIGS_PAGE);
+            this.configPage = getArguments().getParcelable(ARG_CONFIGS_PAGE);
             super.setPageNumber(this.configPage.getPageNumber());
 
             // set hint
@@ -116,8 +117,9 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
                 if (indexItem != oldIndexAnswerValue) {
                     oldIndexAnswerValue = indexItem;
                     unlockQuestion();
+                    if (configPage.isNextQuestionAuto()) nextQuestion();
                     if (mListener != null) {
-                        mListener.onAnswerSpinner(getQuestionNumber(), item, indexItem);
+                        mListener.onAnswerSingle(getQuestionNumber(), item, indexItem);
                     }
                 }
             }
@@ -158,8 +160,8 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnSpinnerListener) {
-            this.mListener = (OnSpinnerListener) context;
+        if (context instanceof OnSingleListener) {
+            this.mListener = (OnSingleListener) context;
             super.setListener(this.mListener);
         }
     }
@@ -186,7 +188,7 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
         this.answerSelectSpinner.clear();
 
         // Block page
-        blockQuestion();
+        super.blockQuestion();
     }
 
     /**
@@ -198,13 +200,13 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
         this.answerSelectSpinner.selection(indexValue);
         this.oldIndexAnswerValue = this.answerSelectSpinner.getIndexItemSelected(); // position 0 hint
 
-        unlockQuestion();
+        super.unlockQuestion();
     }
 
     /**
      * Class config page.
      */
-    public static class Config extends BaseConfigQuestion<Config> implements Serializable {
+    public static class Config extends BaseConfigQuestion<SingleChoice.Config> implements Parcelable {
         @ColorInt
         private int colorSelectedText;
         @ColorInt
@@ -223,6 +225,27 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
             this.indexAnswerInit = -1;
             this.enabledAdNewItem = true;
         }
+
+        protected Config(Parcel in) {
+            colorSelectedText = in.readInt();
+            colorBackgroundTint = in.readInt();
+            hint = in.readInt();
+            items = in.createStringArrayList();
+            indexAnswerInit = in.readInt();
+            enabledAdNewItem = in.readByte() != 0;
+        }
+
+        public static final Creator<Config> CREATOR = new Creator<Config>() {
+            @Override
+            public Config createFromParcel(Parcel in) {
+                return new Config(in);
+            }
+
+            @Override
+            public Config[] newArray(int size) {
+                return new Config[size];
+            }
+        };
 
         /**
          * Set items to the spinner.
@@ -293,14 +316,29 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
 
         @Override
         public SingleChoice build() {
-            return SingleChoice.newInstance(this);
+            return SingleChoice.builder(this);
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(colorSelectedText);
+            dest.writeInt(colorBackgroundTint);
+            dest.writeInt(hint);
+            dest.writeStringList(items);
+            dest.writeInt(indexAnswerInit);
+            dest.writeByte((byte) (enabledAdNewItem ? 1 : 0));
         }
     }
 
     /**
-     * Interface OnSpinnerListener.
+     * Interface OnSingleListener.
      */
-    public interface OnSpinnerListener extends OnQuestionListener {
-        void onAnswerSpinner(int page, String value, int indexValue);
+    public interface OnSingleListener extends OnQuestionListener {
+        void onAnswerSingle(int page, String value, int indexValue);
     }
 }
