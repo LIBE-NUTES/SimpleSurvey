@@ -31,8 +31,8 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.view.View;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
@@ -54,8 +54,8 @@ public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> impl
     private int oldAnswer;
     private Config configPage;
     private RadioGroup radioGroup;
-    private RadioButton radioLeft;
-    private RadioButton radioRight;
+    private AppCompatRadioButton radioLeft;
+    private AppCompatRadioButton radioRight;
 
     public DichotomicChoice() {
     }

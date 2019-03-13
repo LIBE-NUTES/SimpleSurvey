@@ -37,6 +37,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.TextViewCompat;
+import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.InputType;
 import android.util.AttributeSet;
@@ -71,7 +72,7 @@ public class SelectSpinner extends LinearLayout {
 
     protected CustomSpinnerAdapter mAdapter;
     protected LinearLayout boxButton;
-    protected ImageButton mButton;
+    protected AppCompatImageButton mButton;
 
     protected String hint;
     protected String titleDialogAddNewItem;
@@ -130,9 +131,9 @@ public class SelectSpinner extends LinearLayout {
      * get instance elements.
      */
     private void assignUiElements() {
-        this.mSpinner = (AppCompatSpinner) findViewById(R.id.custom_select_spinner);
-        this.boxButton = (LinearLayout) findViewById(R.id.custom_box_add_item);
-        this.mButton = (ImageButton) findViewById(R.id.custom_add_item_imageButton);
+        this.mSpinner = findViewById(R.id.custom_select_spinner);
+        this.boxButton = findViewById(R.id.custom_box_add_item);
+        this.mButton = findViewById(R.id.custom_add_item_imageButton);
     }
 
     /**

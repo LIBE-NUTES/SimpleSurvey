@@ -127,9 +127,7 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
     @Override
     public void onAnswerInfo(int page) {
         Log.w(LOG_TAG, "onAnswerInfo() | PAGE: " + page);
-        if (page == 0) { // first page
-            nextQuestion();
-        } else if (page == -1) { // end page
+        if (page == -1) { // end page
             finish();
         }
     }

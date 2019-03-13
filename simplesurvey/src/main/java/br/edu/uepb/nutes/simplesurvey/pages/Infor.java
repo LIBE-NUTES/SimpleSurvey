@@ -109,6 +109,7 @@ public class Infor extends BaseQuestion<Infor.Config> implements ISlideBackgroun
             @Override
             public void onClick(View v) {
                 mListener.onAnswerInfo(getQuestionNumber());
+                if (configPage.isNextQuestionAuto()) nextQuestion();
             }
         });
     }

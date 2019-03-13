@@ -27,12 +27,12 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatImageButton;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.github.chrisbanes.photoview.PhotoView;
 import com.github.paolorotolo.appintro.AppIntro;
@@ -55,10 +55,10 @@ public abstract class BaseQuestion<T extends BaseConfigQuestion> extends Fragmen
     private int pageNumber;
     private OnQuestionListener mPageListener;
 
-    public TextView titleTextView;
-    public TextView descTextView;
+    public AppCompatTextView titleTextView;
+    public AppCompatTextView descTextView;
     public PhotoView questionImageView;
-    public ImageButton closeImageButton;
+    public AppCompatImageButton closeImageButton;
     public LinearLayout boxTitle;
     public LinearLayout boxDescription;
     public LinearLayout boxImage;

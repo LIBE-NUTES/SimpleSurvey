@@ -36,6 +36,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.InputType;
 import android.util.AttributeSet;
@@ -71,7 +72,7 @@ public class MultiSelectSpinner extends LinearLayout implements DialogInterface.
     private List<Boolean> itemsSelected;
     private CustomMultiSpinnerAdapter mAdapter;
     private LinearLayout boxButton;
-    private ImageButton mButton;
+    private AppCompatImageButton mButton;
 
     protected String hint;
     protected String messageEmpty;
