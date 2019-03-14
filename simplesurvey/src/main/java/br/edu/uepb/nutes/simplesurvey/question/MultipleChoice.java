@@ -305,12 +305,12 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
         };
 
         /**
-         * Set items to the spinner.
+         * Set inputItems to the spinner.
          *
          * @param items {@link List < String >}
          * @return Config
          */
-        public Config items(List<String> items) {
+        public Config inputItems(List<String> items) {
             this.items = items;
             return this;
         }
@@ -321,7 +321,7 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
          * @param colorSelectedText @{@link ColorInt} resource of text color.
          * @return Config
          */
-        public Config colorSelectedText(@ColorInt int colorSelectedText) {
+        public Config inputColorSelectedText(@ColorInt int colorSelectedText) {
             this.colorSelectedText = colorSelectedText;
             return this;
         }
@@ -333,18 +333,18 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
          * @param colorBackgroundTint @{@link ColorInt} resource of text color.
          * @return Config
          */
-        public Config colorBackgroundTint(@ColorInt int colorBackgroundTint) {
+        public Config inputColorBackgroundTint(@ColorInt int colorBackgroundTint) {
             this.colorBackgroundTint = colorBackgroundTint;
             return this;
         }
 
         /**
-         * Set hint message.
+         * Set inputHint message.
          *
          * @param hint @{@link StringRes} resource of text.
          * @return Config
          */
-        public Config hint(@StringRes int hint) {
+        public Config inputHint(@StringRes int hint) {
             this.hint = hint;
             return this;
         }
@@ -355,7 +355,7 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
          * @param titleDialogAddNewItem @{@link StringRes} resource of text.
          * @return Config
          */
-        public Config titleDialogAddNewItem(@StringRes int titleDialogAddNewItem) {
+        public Config inputTitleDialogAddNewItem(@StringRes int titleDialogAddNewItem) {
             this.titleDialogAddNewItem = titleDialogAddNewItem;
             return this;
         }
@@ -367,7 +367,7 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
          * @param messageEmpty @{@link StringRes} resource of text.
          * @return Config
          */
-        public Config messageEmpty(@StringRes int messageEmpty) {
+        public Config inputMessageEmpty(@StringRes int messageEmpty) {
             this.messageEmpty = messageEmpty;
             return this;
         }
@@ -378,7 +378,7 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
          *
          * @return Config
          */
-        public Config disableAddNewItem() {
+        public Config inputDisableAddNewItem() {
             this.enabledAdNewItem = false;
             return this;
         }
@@ -386,7 +386,7 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
         /**
          * Set answer init.
          *
-         * @param indexAnswerInit {@link List<Integer>} items
+         * @param indexAnswerInit {@link List<Integer>} inputItems
          * @return Config
          */
         public Config answerInit(List<Integer> indexAnswerInit) {

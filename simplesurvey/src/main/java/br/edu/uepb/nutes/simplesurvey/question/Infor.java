@@ -206,7 +206,7 @@ public class Infor extends BaseQuestion<Infor.Config> implements ISlideBackgroun
          * @param buttonText @{@link StringRes} resource of text.
          * @return Config
          */
-        public Config buttonText(@StringRes int buttonText) {
+        public Config inputText(@StringRes int buttonText) {
             this.buttonText = buttonText;
             return this;
         }

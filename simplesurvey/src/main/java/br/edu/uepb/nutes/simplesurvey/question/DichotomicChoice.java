@@ -295,42 +295,42 @@ public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> impl
         /**
          * Set left radio text.
          *
-         * @param radioLeftText @{@link StringRes} resource text left.
+         * @param inputLeftText @{@link StringRes} resource text left.
          * @return Config
          */
-        public Config radioLeftText(@StringRes int radioLeftText) {
-            this.radioLeftText = radioLeftText;
+        public Config inputLeftText(@StringRes int inputLeftText) {
+            this.radioLeftText = inputLeftText;
             return this;
         }
 
         /**
          * Set right radio text.
          *
-         * @param radioRightText @{@link StringRes} resource text right.
+         * @param inputRightText @{@link StringRes} resource text right.
          * @return Config
          */
-        public Config radioRightText(@StringRes int radioRightText) {
-            this.radioRightText = radioRightText;
+        public Config inputRightText(@StringRes int inputRightText) {
+            this.radioRightText = inputRightText;
             return this;
         }
 
         /**
          * Set style radio.
          *
-         * @param backgroundLeftRadio   @{@link DrawableRes} resource the left side.
-         * @param backgroundRightRadio  @{@link DrawableRes} resource the right side.
-         * @param textColorRadioNormal  @{@link ColorInt} resource text color normal.
-         * @param textColorRadioChecked @{@link ColorInt} resource text color checked.
+         * @param backgroundLeftInput   @{@link DrawableRes} resource the left side.
+         * @param backgroundRightInput  @{@link DrawableRes} resource the right side.
+         * @param textColorInputNormal  @{@link ColorInt} resource text color normal.
+         * @param textColorInputChecked @{@link ColorInt} resource text color checked.
          * @return Config
          */
-        public Config radioStyle(@DrawableRes int backgroundLeftRadio,
-                                 @DrawableRes int backgroundRightRadio,
-                                 @ColorInt int textColorRadioNormal,
-                                 @ColorInt int textColorRadioChecked) {
-            this.radioLeftBackground = backgroundLeftRadio;
-            this.radioRightBackground = backgroundRightRadio;
-            this.radioColorTextNormal = textColorRadioNormal;
-            this.radioColorTextChecked = textColorRadioChecked;
+        public Config inputStyle(@DrawableRes int backgroundLeftInput,
+                                 @DrawableRes int backgroundRightInput,
+                                 @ColorInt int textColorInputNormal,
+                                 @ColorInt int textColorInputChecked) {
+            this.radioLeftBackground = backgroundLeftInput;
+            this.radioRightBackground = backgroundRightInput;
+            this.radioColorTextNormal = textColorInputNormal;
+            this.radioColorTextChecked = textColorInputChecked;
             return this;
         }
 

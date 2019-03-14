@@ -218,7 +218,7 @@ public abstract class BaseQuestion<T extends BaseConfigQuestion> extends Fragmen
     }
 
     /**
-     * Retrieve extra items saved in sharedPreferences.
+     * Retrieve extra inputItems saved in sharedPreferences.
      *
      * @param key {@link String}
      * @return List<String>
@@ -230,7 +230,7 @@ public abstract class BaseQuestion<T extends BaseConfigQuestion> extends Fragmen
     }
 
     /**
-     * Save extra items in sharedPreferences.
+     * Save extra inputItems in sharedPreferences.
      * Items are saved as {@link String} separated by {@link #SEPARATOR_ITEMS}
      *
      * @param key  {@link String}
@@ -246,7 +246,7 @@ public abstract class BaseQuestion<T extends BaseConfigQuestion> extends Fragmen
     }
 
     /**
-     * Remove all items in sharedPreferences.
+     * Remove all inputItems in sharedPreferences.
      *
      * @param key  {@link String}
      * @param item {@link String}
@@ -259,8 +259,8 @@ public abstract class BaseQuestion<T extends BaseConfigQuestion> extends Fragmen
         if (_temp.equals(getItemsExtraSharedPreferences(key))) return;
 
         /**
-         * Clean items.
-         * Save items without the item removed.
+         * Clean inputItems.
+         * Save inputItems without the item removed.
          */
         cleanItemsExtraSharedPreferences(key);
         for (String s : _temp)
@@ -268,7 +268,7 @@ public abstract class BaseQuestion<T extends BaseConfigQuestion> extends Fragmen
     }
 
     /**
-     * Remove all items in sharedPreferences.
+     * Remove all inputItems in sharedPreferences.
      *
      * @param key {@link String}
      * @return boolean

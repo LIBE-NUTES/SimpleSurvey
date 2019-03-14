@@ -282,7 +282,7 @@ public class SelectSpinner extends LinearLayout {
     }
 
     /**
-     * Add hint in the list of items.
+     * Add hint in the list of inputItems.
      */
     private void addHintInItems() {
         if (this.items == null || this.hint == null) return;

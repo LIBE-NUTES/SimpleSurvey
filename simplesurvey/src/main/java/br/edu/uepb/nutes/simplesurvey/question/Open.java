@@ -237,18 +237,22 @@ public class Open extends BaseQuestion<Open.Config> implements ISlideBackgroundC
         }
 
         protected Config(Parcel in) {
+            background = in.readInt();
             colorText = in.readInt();
             colorBackgroundTint = in.readInt();
             hint = in.readInt();
             answerInit = in.readString();
+            inputType = in.readInt();
         }
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(background);
             dest.writeInt(colorText);
             dest.writeInt(colorBackgroundTint);
             dest.writeInt(hint);
             dest.writeString(answerInit);
+            dest.writeInt(inputType);
         }
 
         @Override
@@ -274,7 +278,7 @@ public class Open extends BaseQuestion<Open.Config> implements ISlideBackgroundC
          * @param background @{@link ColorInt} resource background.
          * @return Config
          */
-        public Config textBoxBackground(@DrawableRes int background) {
+        public Config inputBackground(@DrawableRes int background) {
             this.background = background;
             return this;
         }
@@ -285,11 +289,10 @@ public class Open extends BaseQuestion<Open.Config> implements ISlideBackgroundC
          * @param colorText @{@link ColorInt} color text.
          * @return Config
          */
-        public Config textBoxColorText(@ColorInt int colorText) {
+        public Config inputColorText(@ColorInt int colorText) {
             this.colorText = colorText;
             return this;
         }
-
 
         /**
          * Set color background tint.
@@ -298,18 +301,18 @@ public class Open extends BaseQuestion<Open.Config> implements ISlideBackgroundC
          * @param colorBackgroundTint @{@link ColorInt} resource color.
          * @return Config
          */
-        public Config textBoxColorBackgroundTint(@ColorInt int colorBackgroundTint) {
+        public Config inputColorBackgroundTint(@ColorInt int colorBackgroundTint) {
             this.colorBackgroundTint = colorBackgroundTint;
             return this;
         }
 
         /**
-         * Set hint message.
+         * Set inputHint message.
          *
          * @param hint @{@link ColorInt} resource color.
          * @return Config
          */
-        public Config textBoxHint(@ColorInt int hint) {
+        public Config inputHint(@ColorInt int hint) {
             this.hint = hint;
             return this;
         }
@@ -321,7 +324,7 @@ public class Open extends BaseQuestion<Open.Config> implements ISlideBackgroundC
          * @param inputType Input type.
          * @return Config
          */
-        public Config textBoxInputType(int inputType) {
+        public Config inputType(int inputType) {
             this.inputType = inputType;
             return this;
         }

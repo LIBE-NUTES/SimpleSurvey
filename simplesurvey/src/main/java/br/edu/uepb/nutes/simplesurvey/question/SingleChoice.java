@@ -81,7 +81,7 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
             this.configPage = getArguments().getParcelable(ARG_CONFIGS_PAGE);
             super.setPageNumber(this.configPage.getPageNumber());
 
-            // set hint
+            // set inputHint
             configPage.items.add(0, getContext().getResources().getString(this.configPage.hint));
         }
     }
@@ -197,7 +197,7 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
      */
     private void setAnswer(int indexValue) {
         this.answerSelectSpinner.selection(indexValue);
-        this.oldIndexAnswerValue = this.answerSelectSpinner.getIndexItemSelected(); // position 0 hint
+        this.oldIndexAnswerValue = this.answerSelectSpinner.getIndexItemSelected(); // position 0 inputHint
 
         super.unlockQuestion();
     }
@@ -246,13 +246,33 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
             }
         };
 
+        @Override
+        public SingleChoice build() {
+            return SingleChoice.builder(this);
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(colorSelectedText);
+            dest.writeInt(colorBackgroundTint);
+            dest.writeInt(hint);
+            dest.writeStringList(items);
+            dest.writeInt(indexAnswerInit);
+            dest.writeByte((byte) (enabledAdNewItem ? 1 : 0));
+        }
+
         /**
-         * Set items to the spinner.
+         * Set inputItems to the spinner.
          *
          * @param items {@link List < String >}
          * @return Config
          */
-        public Config items(List<String> items) {
+        public Config inputItems(List<String> items) {
             this.items = items;
             return this;
         }
@@ -263,7 +283,7 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
          * @param colorSelectedText @{@link ColorInt} resource color.
          * @return Config
          */
-        public Config colorSelectedText(@ColorInt int colorSelectedText) {
+        public Config inputColorSelectedText(@ColorInt int colorSelectedText) {
             this.colorSelectedText = colorSelectedText;
             return this;
         }
@@ -275,18 +295,18 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
          * @param colorBackgroundTint @{@link ColorInt} resource color.
          * @return Config
          */
-        public Config colorBackgroundTint(@ColorInt int colorBackgroundTint) {
+        public Config inputColorBackgroundTint(@ColorInt int colorBackgroundTint) {
             this.colorBackgroundTint = colorBackgroundTint;
             return this;
         }
 
         /**
-         * Set hint message.
+         * Set inputHint message.
          *
          * @param hint @{@link ColorInt} resource color.
          * @return Config
          */
-        public Config hint(@ColorInt int hint) {
+        public Config inputHint(@ColorInt int hint) {
             this.hint = hint;
             return this;
         }
@@ -308,29 +328,9 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
          *
          * @return Config
          */
-        public Config disableAddNewItem() {
+        public Config inputDisableAddNewItem() {
             this.enabledAdNewItem = false;
             return this;
-        }
-
-        @Override
-        public SingleChoice build() {
-            return SingleChoice.builder(this);
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeInt(colorSelectedText);
-            dest.writeInt(colorBackgroundTint);
-            dest.writeInt(hint);
-            dest.writeStringList(items);
-            dest.writeInt(indexAnswerInit);
-            dest.writeByte((byte) (enabledAdNewItem ? 1 : 0));
         }
     }
 

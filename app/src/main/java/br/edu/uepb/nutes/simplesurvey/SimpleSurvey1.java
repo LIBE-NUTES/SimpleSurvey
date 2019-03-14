@@ -55,9 +55,9 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .colorBackground(ContextCompat.getColor(this, R.color.colorDeepPurple))
                 .image(R.drawable.placeholder)
                 .buttonClose(R.drawable.ic_action_close_dark)
-                .textBoxColorBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
-                .textBoxColorText(Color.WHITE)
-                .textBoxInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME | InputType.TYPE_TEXT_FLAG_CAP_WORDS)
+                .inputColorBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
+                .inputColorText(Color.WHITE)
+                .inputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME | InputType.TYPE_TEXT_FLAG_CAP_WORDS)
                 .nextQuestionAuto()
                 .pageNumber(1)
                 .build());
@@ -66,9 +66,9 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .title("Title of the question 2", Color.WHITE)
                 .colorBackground(ContextCompat.getColor(this, R.color.colorDeepPurple))
                 .buttonClose(R.drawable.ic_action_close_dark)
-                .textBoxBackground(R.drawable.edittext_border_style)
-                .textBoxColorText(Color.WHITE)
-                .textBoxInputType(InputType.TYPE_CLASS_NUMBER)
+                .inputBackground(R.drawable.edittext_border_style)
+                .inputColorText(Color.WHITE)
+                .inputType(InputType.TYPE_CLASS_NUMBER)
                 .pageNumber(2)
                 .build());
 
@@ -77,12 +77,13 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?",
                         Color.WHITE)
                 .colorBackground(ContextCompat.getColor(this, R.color.colorGreen))
-                .radioStyle(R.drawable.radio_sample1_lef, R.drawable.radio_sample1_right, Color.WHITE, Color.WHITE)
-                .radioLeftText(R.string.masc)
-                .radioRightText(R.string.femi)
-                .image(R.drawable.placeholder)
                 .buttonClose(R.drawable.ic_action_close_dark)
+                .image(R.drawable.placeholder)
                 .enableZoomImage()
+                .inputStyle(R.drawable.radio_sample1_lef, R.drawable.radio_sample1_right,
+                        Color.WHITE, Color.WHITE)
+                .inputLeftText(R.string.masc)
+                .inputRightText(R.string.femi)
                 .pageNumber(3)
                 .build());
 
@@ -91,17 +92,17 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?",
                         Color.WHITE)
                 .colorBackground(ContextCompat.getColor(this, R.color.colorCyan))
-                .colorBackgroundTint(Color.WHITE)
-                .colorSelectedText(Color.WHITE)
-                .items(new ArrayList<String>() {{
+                .image(R.drawable.placeholder)
+                .buttonClose(R.drawable.ic_action_close_dark)
+                .inputColorBackgroundTint(Color.WHITE)
+                .inputColorSelectedText(Color.WHITE)
+                .inputItems(new ArrayList<String>() {{
                     add("Item 1");
                     add("Item 2");
                     add("Item 3");
                     add("Item 4");
                 }})
-                .image(R.drawable.placeholder)
-                .buttonClose(R.drawable.ic_action_close_dark)
-                .disableAddNewItem()
+                .inputDisableAddNewItem()
                 .nextQuestionAuto()
                 .pageNumber(4)
                 .build());
@@ -117,16 +118,16 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .title("Simple Survey 6", Color.WHITE)
                 .description("Simple survey from @NUTES", Color.WHITE)
                 .colorBackground(ContextCompat.getColor(this, R.color.colorDeepPurple))
-                .items(new ArrayList<String>() {{
+                .buttonClose(R.drawable.ic_action_close_dark)
+                .inputItems(new ArrayList<String>() {{
                     add("Item 1");
                     add("Item 2");
                     add("Item 3");
                     add("Item 4");
                 }})
-                .buttonClose(R.drawable.ic_action_close_dark)
+                .inputColorBackgroundTint(Color.WHITE)
+                .inputColorSelectedText(Color.WHITE)
                 .nextQuestionAuto()
-                .colorBackgroundTint(Color.WHITE)
-                .colorSelectedText(Color.WHITE)
                 .pageNumber(5)
                 .build());
 

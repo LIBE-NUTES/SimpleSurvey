@@ -177,7 +177,7 @@ public class MultiSelectSpinner extends LinearLayout implements DialogInterface.
     }
 
     /**
-     * Open AlertDialog with the items to choose.
+     * Open AlertDialog with the inputItems to choose.
      *
      * @return true
      */
@@ -263,7 +263,7 @@ public class MultiSelectSpinner extends LinearLayout implements DialogInterface.
     }
 
     /**
-     * Init list items default selecteds;
+     * Init list inputItems default selecteds;
      */
     private void initListSelectedItems() {
         this.itemsSelected = new ArrayList<>(this.items.size() + 1); // + 1 hint
@@ -343,7 +343,7 @@ public class MultiSelectSpinner extends LinearLayout implements DialogInterface.
     }
 
     /**
-     * Selects items according to values from list passed as parameter
+     * Selects inputItems according to values from list passed as parameter
      *
      * @param selection {@link List}
      */
@@ -355,15 +355,15 @@ public class MultiSelectSpinner extends LinearLayout implements DialogInterface.
             int index = this.items.indexOf(sel);
             if (index > -1 && index < this.items.size())
                 this.itemsSelected.set(index, true);
-//            for (int j = 0; j < this.items.size(); ++j) {
-//                if (this.items.get(j).equals(sel))
+//            for (int j = 0; j < this.inputItems.size(); ++j) {
+//                if (this.inputItems.get(j).equals(sel))
 //                    this.itemsSelected.set(j, true);
 //            }
         }
     }
 
     /**
-     * Build string items selected.
+     * Build string inputItems selected.
      *
      * @return {@link String}
      */
@@ -432,7 +432,7 @@ public class MultiSelectSpinner extends LinearLayout implements DialogInterface.
     }
 
     /**
-     * Selects items according to values from list passed as parameter
+     * Selects inputItems according to values from list passed as parameter
      *
      * @param selections {@link List}
      */
@@ -450,7 +450,7 @@ public class MultiSelectSpinner extends LinearLayout implements DialogInterface.
     }
 
     /**
-     * Select array items in list.
+     * Select array inputItems in list.
      *
      * @param selectedIndicies
      */
@@ -477,7 +477,7 @@ public class MultiSelectSpinner extends LinearLayout implements DialogInterface.
     }
 
     /**
-     * Get {@link List < String >} items selected.
+     * Get {@link List < String >} inputItems selected.
      *
      * @return List {@link List < String >}
      */
@@ -493,7 +493,7 @@ public class MultiSelectSpinner extends LinearLayout implements DialogInterface.
 
 
     /**
-     * Get indexes of selected items.
+     * Get indexes of selected inputItems.
      *
      * @return {@link List < Integer >}
      */
