@@ -170,7 +170,6 @@ public abstract class SimpleSurvey extends AppIntro {
                                 snackbarMessageBlockedPage.dismiss();
                             }
                         });
-
                 snackbarMessageBlockedPage.show();
             }
         });

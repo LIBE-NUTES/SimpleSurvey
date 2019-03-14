@@ -20,7 +20,7 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package br.edu.uepb.nutes.simplesurvey.pages;
+package br.edu.uepb.nutes.simplesurvey.question;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -33,7 +33,6 @@ import android.view.View;
 
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 
-import java.io.Serializable;
 import java.util.List;
 
 import br.edu.uepb.nutes.simplesurvey.R;
