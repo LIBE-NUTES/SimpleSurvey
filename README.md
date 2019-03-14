@@ -1,3 +1,4 @@
+
 # Simple Survey
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/MIT)
 
@@ -11,6 +12,7 @@ This library has as main dependency the library [AppIntro](https://github.com/Ap
 	- Dichotomic choice (e.g. example YES/NO)
 	- Single choice
 	- Multiple choose
+	- Open question
 - Presentation page
 - Question blocked until response is obtained.
 
