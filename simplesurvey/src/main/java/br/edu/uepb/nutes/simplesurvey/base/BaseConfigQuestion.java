@@ -24,6 +24,7 @@ package br.edu.uepb.nutes.simplesurvey.base;
 
 import android.graphics.Color;
 import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.StringRes;
@@ -37,27 +38,24 @@ import br.edu.uepb.nutes.simplesurvey.R;
  * @param <T>
  */
 public abstract class BaseConfigQuestion<T> {
-    private String titleStr,
-            descriptionStr;
-
-    private int layout,
-            title,
-            description,
-            image,
-            colorBackground,
-            titleColor,
-            descriptionColor,
-            pageNumber,
-            drawableClose;
-
-    private boolean zoomDisabled,
-            nextQuestionAuto,
-            isRequired;
+    @LayoutRes
+    private int layout;
+    @StringRes
+    private int title, description;
+    @DrawableRes
+    private int image, drawableClose;
+    @ColorRes
+    private int colorBackground, titleColor, descriptionColor;
+    private boolean zoomDisabled, nextQuestionAuto, isRequired;
+    private String titleStr, descriptionStr;
+    private int pageNumber, titleTextSize, descriptionTextSize;
 
     protected BaseConfigQuestion() {
         this.layout = 0;
         this.title = 0;
+        this.titleTextSize = 0;
         this.description = 0;
+        this.descriptionTextSize = 0;
         this.image = 0;
         this.colorBackground = Color.WHITE;
         this.titleColor = Color.BLACK;
@@ -66,14 +64,6 @@ public abstract class BaseConfigQuestion<T> {
         this.zoomDisabled = true;
         this.nextQuestionAuto = false;
         this.isRequired = true;
-    }
-
-    public String getTitleStr() {
-        return titleStr;
-    }
-
-    public String getDescriptionStr() {
-        return descriptionStr;
     }
 
     public int getLayout() {
@@ -92,6 +82,10 @@ public abstract class BaseConfigQuestion<T> {
         return image;
     }
 
+    public int getDrawableClose() {
+        return drawableClose;
+    }
+
     public int getColorBackground() {
         return colorBackground;
     }
@@ -104,14 +98,6 @@ public abstract class BaseConfigQuestion<T> {
         return descriptionColor;
     }
 
-    public int getPageNumber() {
-        return pageNumber;
-    }
-
-    public int getDrawableClose() {
-        return drawableClose;
-    }
-
     public boolean isZoomDisabled() {
         return zoomDisabled;
     }
@@ -122,6 +108,26 @@ public abstract class BaseConfigQuestion<T> {
 
     public boolean isRequired() {
         return isRequired;
+    }
+
+    public String getTitleStr() {
+        return titleStr;
+    }
+
+    public String getDescriptionStr() {
+        return descriptionStr;
+    }
+
+    public int getPageNumber() {
+        return pageNumber;
+    }
+
+    public int getTitleTextSize() {
+        return titleTextSize;
+    }
+
+    public int getDescriptionTextSize() {
+        return descriptionTextSize;
     }
 
     /**
@@ -228,6 +234,17 @@ public abstract class BaseConfigQuestion<T> {
     public T description(String description, @ColorInt int descriptionColor) {
         this.descriptionStr = description;
         this.descriptionColor = descriptionColor;
+        return (T) this;
+    }
+
+    /**
+     * Set description font size.
+     *
+     * @param size font size.
+     * @return T
+     */
+    public T descriptionTextSize(int size) {
+        this.descriptionTextSize = size;
         return (T) this;
     }
 
