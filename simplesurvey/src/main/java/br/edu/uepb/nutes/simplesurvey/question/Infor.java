@@ -93,6 +93,9 @@ public class Infor extends BaseQuestion<Infor.Config> implements ISlideBackgroun
 
         if (this.configPage.buttonText != 0) {
             this.button.setText(this.configPage.buttonText);
+        } else if (this.configPage.buttonTextStr != null &&
+                !this.configPage.buttonTextStr.isEmpty()) {
+            this.button.setText(this.configPage.buttonTextStr);
         }
 
         if (configPage.buttonColorText != 0) {
@@ -174,6 +177,7 @@ public class Infor extends BaseQuestion<Infor.Config> implements ISlideBackgroun
         private int buttonText,
                 buttonColorText,
                 buttonBackground;
+        private String buttonTextStr;
 
         public Config() {
             super.layout(R.layout.page_infor);
@@ -203,7 +207,7 @@ public class Infor extends BaseQuestion<Infor.Config> implements ISlideBackgroun
         /**
          * Set button text.
          *
-         * @param buttonText @{@link StringRes} resource of text.
+         * @param buttonText {@link StringRes} resource of text.
          * @return Config
          */
         public Config inputText(@StringRes int buttonText) {
@@ -212,9 +216,20 @@ public class Infor extends BaseQuestion<Infor.Config> implements ISlideBackgroun
         }
 
         /**
+         * Set button text.
+         *
+         * @param buttonText {@link String} resource of text.
+         * @return Config
+         */
+        public Config inputText(String buttonText) {
+            this.buttonTextStr = buttonText;
+            return this;
+        }
+
+        /**
          * Set button text color.
          *
-         * @param buttonColorText @{@link ColorInt} resource of text color.
+         * @param buttonColorText {@link ColorInt} resource of text color.
          * @return Config
          */
         public Config buttonColorText(@ColorInt int buttonColorText) {
@@ -225,7 +240,7 @@ public class Infor extends BaseQuestion<Infor.Config> implements ISlideBackgroun
         /**
          * Set button background.
          *
-         * @param buttonBackground @{@link DrawableRes} resource of the background.
+         * @param buttonBackground {@link DrawableRes} resource of the background.
          * @return Config
          */
         public Config buttonBackground(@DrawableRes int buttonBackground) {
@@ -252,7 +267,7 @@ public class Infor extends BaseQuestion<Infor.Config> implements ISlideBackgroun
     }
 
     /**
-     * Interface OnDichotomicListener.
+     * Interface OnInfoListener.
      */
     public interface OnInfoListener extends OnQuestionListener {
         void onAnswerInfo(int page);

@@ -83,35 +83,7 @@ public abstract class BaseQuestion<T extends BaseConfigQuestion> extends Fragmen
         this.boxImage = view.findViewById(R.id.box_image);
         this.boxInput = view.findViewById(R.id.box_input);
 
-        if (boxTitle != null && titleTextView != null) {
-            if (getConfigsQuestion().getTitle() != 0) {
-                titleTextView.setText(getConfigsQuestion().getTitle());
-            } else if (getConfigsQuestion().getTitleStr() != null && !getConfigsQuestion().getTitleStr().isEmpty()) {
-                titleTextView.setText(getConfigsQuestion().getTitleStr());
-            } else {
-                boxTitle.setVisibility(View.GONE);
-            }
-
-            if (getConfigsQuestion().getTitleColor() != 0) {
-                titleTextView.setTextColor(getConfigsQuestion().getTitleColor());
-            }
-        }
-
-        if (boxDescription != null && descTextView != null) {
-            if (getConfigsQuestion().getDescription() != 0) {
-                descTextView.setText(getConfigsQuestion().getDescription());
-            } else if (getConfigsQuestion().getDescriptionStr() != null
-                    && !getConfigsQuestion().getDescriptionStr().isEmpty()) {
-                descTextView.setText(getConfigsQuestion().getDescriptionStr());
-            } else {
-                boxDescription.setVisibility(View.GONE);
-            }
-
-            if (getConfigsQuestion().getDescriptionColor() != 0) {
-                descTextView.setTextColor(getConfigsQuestion().getDescriptionColor());
-            }
-        }
-
+        // CLOSE BUTTON
         if (closeImageButton != null) {
             if (getConfigsQuestion().getDrawableClose() != 0) {
                 closeImageButton.setImageResource(getConfigsQuestion().getDrawableClose());
@@ -126,15 +98,44 @@ public abstract class BaseQuestion<T extends BaseConfigQuestion> extends Fragmen
             }
         }
 
+        // TITLE
+        if (boxTitle != null && titleTextView != null) {
+            if (getConfigsQuestion().getTitle() != 0) {
+                titleTextView.setText(getConfigsQuestion().getTitle());
+            } else if (getConfigsQuestion().getTitleStr() != null) {
+                titleTextView.setText(getConfigsQuestion().getTitleStr());
+            } else {
+                boxTitle.setVisibility(View.GONE);
+            }
+
+            if (getConfigsQuestion().getTitleColor() != 0) {
+                titleTextView.setTextColor(getConfigsQuestion().getTitleColor());
+            }
+        }
+
+        // DESCRIPTION
+        if (boxDescription != null && descTextView != null) {
+            if (getConfigsQuestion().getDescription() != 0) {
+                descTextView.setText(getConfigsQuestion().getDescription());
+            } else if (getConfigsQuestion().getDescriptionStr() != null) {
+                descTextView.setText(getConfigsQuestion().getDescriptionStr());
+            } else {
+                boxDescription.setVisibility(View.GONE);
+            }
+
+            if (getConfigsQuestion().getDescriptionColor() != 0) {
+                descTextView.setTextColor(getConfigsQuestion().getDescriptionColor());
+            }
+        }
+
+        // IMAGE
         if (boxImage != null && questionImageView != null) {
             if (getConfigsQuestion().getImage() != 0) {
                 questionImageView.setImageResource(getConfigsQuestion().getImage());
-
                 // enable/disable zoom
                 questionImageView.setZoomable(!getConfigsQuestion().isZoomDisabled());
             } else boxImage.setVisibility(View.GONE);
         }
-
         initView(view);
 
         return view;
