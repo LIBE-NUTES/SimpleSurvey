@@ -100,9 +100,17 @@ public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> impl
         if (radioGroup != null) {
             if (configPage.radioLeftText != 0)
                 radioLeft.setText(configPage.radioLeftText);
+            else if (this.configPage.radioLeftTextStr != null &&
+                    !this.configPage.radioLeftTextStr.isEmpty()) {
+                radioLeft.setText(configPage.radioLeftTextStr);
+            }
 
             if (configPage.radioRightText != 0)
                 radioRight.setText(configPage.radioRightText);
+            else if (this.configPage.radioRightTextStr != null &&
+                    !this.configPage.radioRightTextStr.isEmpty()) {
+                radioLeft.setText(configPage.radioRightTextStr);
+            }
 
             if (configPage.radioLeftBackground != 0)
                 radioLeft.setBackgroundResource(configPage.radioLeftBackground);
@@ -258,6 +266,8 @@ public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> impl
                 radioLeftBackground,
                 radioRightBackground,
                 answerInit;
+        private String radioLeftTextStr,
+                radioRightTextStr;
 
         public Config() {
             super.layout(R.layout.question_radio);
@@ -278,6 +288,26 @@ public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> impl
             radioLeftBackground = in.readInt();
             radioRightBackground = in.readInt();
             answerInit = in.readInt();
+            radioLeftTextStr = in.readString();
+            radioRightTextStr = in.readString();
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(radioLeftText);
+            dest.writeInt(radioRightText);
+            dest.writeInt(radioColorTextNormal);
+            dest.writeInt(radioColorTextChecked);
+            dest.writeInt(radioLeftBackground);
+            dest.writeInt(radioRightBackground);
+            dest.writeInt(answerInit);
+            dest.writeString(radioLeftTextStr);
+            dest.writeString(radioRightTextStr);
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
         }
 
         public static final Creator<Config> CREATOR = new Creator<Config>() {
@@ -295,7 +325,7 @@ public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> impl
         /**
          * Set left radio text.
          *
-         * @param inputLeftText @{@link StringRes} resource text left.
+         * @param inputLeftText {@link StringRes} resource text left.
          * @return Config
          */
         public Config inputLeftText(@StringRes int inputLeftText) {
@@ -306,7 +336,7 @@ public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> impl
         /**
          * Set right radio text.
          *
-         * @param inputRightText @{@link StringRes} resource text right.
+         * @param inputRightText {@link StringRes} resource text right.
          * @return Config
          */
         public Config inputRightText(@StringRes int inputRightText) {
@@ -315,12 +345,34 @@ public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> impl
         }
 
         /**
+         * Set left radio text.
+         *
+         * @param inputLeftText {@link String} text left.
+         * @return Config
+         */
+        public Config inputLeftText(String inputLeftText) {
+            this.radioLeftTextStr = inputLeftText;
+            return this;
+        }
+
+        /**
+         * Set right radio text.
+         *
+         * @param inputRightText {@link String} text right.
+         * @return Config
+         */
+        public Config inputRightText(String inputRightText) {
+            this.radioRightTextStr = inputRightText;
+            return this;
+        }
+
+        /**
          * Set style radio.
          *
-         * @param backgroundLeftInput   @{@link DrawableRes} resource the left side.
-         * @param backgroundRightInput  @{@link DrawableRes} resource the right side.
-         * @param textColorInputNormal  @{@link ColorInt} resource text color normal.
-         * @param textColorInputChecked @{@link ColorInt} resource text color checked.
+         * @param backgroundLeftInput   {@link DrawableRes} resource the left side.
+         * @param backgroundRightInput  {@link DrawableRes} resource the right side.
+         * @param textColorInputNormal  {@link ColorInt} resource text color normal.
+         * @param textColorInputChecked {@link ColorInt} resource text color checked.
          * @return Config
          */
         public Config inputStyle(@DrawableRes int backgroundLeftInput,
@@ -349,22 +401,6 @@ public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> impl
         @Override
         public DichotomicChoice build() {
             return DichotomicChoice.builder(this);
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeInt(radioLeftText);
-            dest.writeInt(radioRightText);
-            dest.writeInt(radioColorTextNormal);
-            dest.writeInt(radioColorTextChecked);
-            dest.writeInt(radioLeftBackground);
-            dest.writeInt(radioRightBackground);
-            dest.writeInt(answerInit);
         }
     }
 

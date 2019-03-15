@@ -93,10 +93,16 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
         this.answerSelectSpinner.setItems(this.configPage.items);
         this.answerSelectSpinner.setEnabledAddNewItem(this.configPage.enabledAdNewItem);
 
-        if (this.configPage.hint != 0)
-            this.answerSelectSpinner.setHint(getContext().getResources().getString(this.configPage.hint));
+        if (configPage.hintStr != null && !configPage.hintStr.isEmpty()) {
+            this.answerSelectSpinner.setHint(configPage.hintStr);
+        } else if (this.configPage.hint != 0) {
+            this.answerSelectSpinner.setHint(getContext()
+                    .getResources().getString(this.configPage.hint));
+        }
+
         if (this.configPage.colorSelectedText != 0)
             this.answerSelectSpinner.setColorSelectedText(this.configPage.colorSelectedText);
+
         if (configPage.colorBackgroundTint != 0)
             this.answerSelectSpinner.setColorBackgroundTint(this.configPage.colorBackgroundTint);
 
@@ -207,14 +213,13 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
      */
     public static class Config extends BaseConfigQuestion<SingleChoice.Config> implements Parcelable {
         @ColorInt
-        private int colorSelectedText;
-        @ColorInt
-        private int colorBackgroundTint;
+        private int colorSelectedText, colorBackgroundTint;
         @StringRes
         private int hint;
         private List<String> items;
         private int indexAnswerInit;
         private boolean enabledAdNewItem;
+        private String hintStr;
 
         public Config() {
             super.layout(R.layout.question_select_spinner);
@@ -232,6 +237,23 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
             items = in.createStringArrayList();
             indexAnswerInit = in.readInt();
             enabledAdNewItem = in.readByte() != 0;
+            hintStr = in.readString();
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(colorSelectedText);
+            dest.writeInt(colorBackgroundTint);
+            dest.writeInt(hint);
+            dest.writeStringList(items);
+            dest.writeInt(indexAnswerInit);
+            dest.writeByte((byte) (enabledAdNewItem ? 1 : 0));
+            dest.writeString(hintStr);
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
         }
 
         public static final Creator<Config> CREATOR = new Creator<Config>() {
@@ -245,26 +267,6 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
                 return new Config[size];
             }
         };
-
-        @Override
-        public SingleChoice build() {
-            return SingleChoice.builder(this);
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeInt(colorSelectedText);
-            dest.writeInt(colorBackgroundTint);
-            dest.writeInt(hint);
-            dest.writeStringList(items);
-            dest.writeInt(indexAnswerInit);
-            dest.writeByte((byte) (enabledAdNewItem ? 1 : 0));
-        }
 
         /**
          * Set inputItems to the spinner.
@@ -303,11 +305,22 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
         /**
          * Set inputHint message.
          *
-         * @param hint @{@link ColorInt} resource color.
+         * @param hint @{@link StringRes} resource color.
          * @return Config
          */
-        public Config inputHint(@ColorInt int hint) {
+        public Config inputHint(@StringRes int hint) {
             this.hint = hint;
+            return this;
+        }
+
+        /**
+         * Set hint message.
+         *
+         * @param hint {@String}
+         * @return Config
+         */
+        public Config inputHint(String hint) {
+            this.hintStr = hint;
             return this;
         }
 
@@ -331,6 +344,11 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
         public Config inputDisableAddNewItem() {
             this.enabledAdNewItem = false;
             return this;
+        }
+
+        @Override
+        public SingleChoice build() {
+            return SingleChoice.builder(this);
         }
     }
 

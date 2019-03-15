@@ -94,6 +94,12 @@ public class Open extends BaseQuestion<Open.Config> implements ISlideBackgroundC
         if (textBox != null) {
             textBox.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
+            if (configPage.hintStr != null && !configPage.hintStr.isEmpty()) {
+                textBox.setHint(configPage.hintStr);
+            } else if (configPage.hint != 0) {
+                textBox.setHint(configPage.hint);
+            }
+
             if (configPage.inputType != 0)
                 textBox.setInputType(configPage.inputType);
 
@@ -112,9 +118,6 @@ public class Open extends BaseQuestion<Open.Config> implements ISlideBackgroundC
                 textBox.setTextColor(configPage.colorText);
                 textBox.setHintTextColor(configPage.colorText);
             }
-
-            if (configPage.hint != 0)
-                textBox.setHint(configPage.hint);
         }
     }
 
@@ -223,7 +226,7 @@ public class Open extends BaseQuestion<Open.Config> implements ISlideBackgroundC
         int colorText, colorBackgroundTint;
         @StringRes
         private int hint;
-        private String answerInit;
+        private String answerInit, hintStr;
         private int inputType;
 
         public Config() {
@@ -243,6 +246,7 @@ public class Open extends BaseQuestion<Open.Config> implements ISlideBackgroundC
             hint = in.readInt();
             answerInit = in.readString();
             inputType = in.readInt();
+            hintStr = in.readString();
         }
 
         @Override
@@ -253,6 +257,7 @@ public class Open extends BaseQuestion<Open.Config> implements ISlideBackgroundC
             dest.writeInt(hint);
             dest.writeString(answerInit);
             dest.writeInt(inputType);
+            dest.writeString(hintStr);
         }
 
         @Override
@@ -275,7 +280,7 @@ public class Open extends BaseQuestion<Open.Config> implements ISlideBackgroundC
         /**
          * Set background style.
          *
-         * @param background @{@link ColorInt} resource background.
+         * @param background {@link ColorInt} resource background.
          * @return Config
          */
         public Config inputBackground(@DrawableRes int background) {
@@ -286,7 +291,7 @@ public class Open extends BaseQuestion<Open.Config> implements ISlideBackgroundC
         /**
          * Set color text.
          *
-         * @param colorText @{@link ColorInt} color text.
+         * @param colorText {@link ColorInt} color text.
          * @return Config
          */
         public Config inputColorText(@ColorInt int colorText) {
@@ -298,7 +303,7 @@ public class Open extends BaseQuestion<Open.Config> implements ISlideBackgroundC
          * Set color background tint.
          * Corresponds to the bottom horizontal line.
          *
-         * @param colorBackgroundTint @{@link ColorInt} resource color.
+         * @param colorBackgroundTint {@link ColorInt} resource color.
          * @return Config
          */
         public Config inputColorBackgroundTint(@ColorInt int colorBackgroundTint) {
@@ -309,11 +314,22 @@ public class Open extends BaseQuestion<Open.Config> implements ISlideBackgroundC
         /**
          * Set inputHint message.
          *
-         * @param hint @{@link ColorInt} resource color.
+         * @param hint {@link StringRes} resource color.
          * @return Config
          */
-        public Config inputHint(@ColorInt int hint) {
+        public Config inputHint(@StringRes int hint) {
             this.hint = hint;
+            return this;
+        }
+
+        /**
+         * Set hint message.
+         *
+         * @param hint {@String}
+         * @return Config
+         */
+        public Config inputHint(String hint) {
+            this.hintStr = hint;
             return this;
         }
 
@@ -332,7 +348,7 @@ public class Open extends BaseQuestion<Open.Config> implements ISlideBackgroundC
         /**
          * Set answer init.
          *
-         * @param answerInit @{@link String} answer.
+         * @param answerInit {@link String} answer.
          * @return Config
          */
         public Config answerInit(String answerInit) {

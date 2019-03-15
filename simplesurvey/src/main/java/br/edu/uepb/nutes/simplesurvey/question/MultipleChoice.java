@@ -105,17 +105,28 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
         this.answerMultiSelectSpinner.setItems(this.configPage.items);
         this.answerMultiSelectSpinner.setEnabledAddNewItem(this.configPage.enabledAdNewItem);
 
-        if (this.configPage.hint != 0) {
-            this.answerMultiSelectSpinner.setHint(
-                    getContext().getResources().getString(this.configPage.hint));
+
+        if (this.configPage.hintStr != null &&
+                !this.configPage.hintStr.isEmpty()) {
+            this.answerMultiSelectSpinner.setHint(this.configPage.hintStr);
+        } else if (this.configPage.hint != 0) {
+            this.answerMultiSelectSpinner.setHint(getContext()
+                    .getResources().getString(this.configPage.hint));
         }
 
-        if (this.configPage.messageEmpty != 0) {
+        if (this.configPage.messageEmptyStr != null &&
+                !this.configPage.messageEmptyStr.isEmpty()) {
+            this.answerMultiSelectSpinner.setMessageEmpty(this.configPage.messageEmptyStr);
+        } else if (this.configPage.messageEmpty != 0) {
             this.answerMultiSelectSpinner.setMessageEmpty(
                     getContext().getResources().getString(this.configPage.messageEmpty));
         }
 
-        if (this.configPage.titleDialogAddNewItem != 0) {
+        if (this.configPage.titleDialogAddNewItemStr != null &&
+                !this.configPage.titleDialogAddNewItemStr.isEmpty()) {
+            this.answerMultiSelectSpinner.setTitleDialogAddNewItem(this.configPage
+                    .titleDialogAddNewItemStr);
+        } else if (this.configPage.titleDialogAddNewItem != 0) {
             this.answerMultiSelectSpinner.setTitleDialogAddNewItem(getContext().getResources()
                     .getString(this.configPage.titleDialogAddNewItem));
         }
@@ -242,26 +253,21 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
      */
     public static class Config extends BaseConfigQuestion<MultipleChoice.Config> implements Parcelable {
         @ColorInt
-        private int colorSelectedText;
-        @ColorInt
-        private int colorBackgroundTint;
+        private int colorSelectedText, colorBackgroundTint;
         @StringRes
-        private int hint;
-        @StringRes
-        private int messageEmpty;
-        @StringRes
-        private int titleDialogAddNewItem;
+        private int hint, messageEmpty, titleDialogAddNewItem;
         private List<String> items;
         private List<Integer> indexAnswerInit;
         private boolean enabledAdNewItem;
+        private String hintStr, messageEmptyStr, titleDialogAddNewItemStr;
 
         public Config() {
             super.layout(R.layout.question_multi_select_spinner);
             this.colorSelectedText = 0;
             this.colorBackgroundTint = 0;
-            this.hint = 0;
-            this.messageEmpty = 0;
-            this.titleDialogAddNewItem = 0;
+            this.hint = R.string.survey_select_the_answers;
+            this.messageEmpty = R.string.survey_please_add_new_item;
+            this.titleDialogAddNewItem = R.string.survey_add_new_item;
             this.indexAnswerInit = new ArrayList<>();
             this.enabledAdNewItem = true;
         }
@@ -274,6 +280,9 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
             titleDialogAddNewItem = in.readInt();
             items = in.createStringArrayList();
             enabledAdNewItem = in.readByte() != 0;
+            hintStr = in.readString();
+            messageEmptyStr = in.readString();
+            titleDialogAddNewItemStr = in.readString();
         }
 
         @Override
@@ -285,6 +294,9 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
             dest.writeInt(titleDialogAddNewItem);
             dest.writeStringList(items);
             dest.writeByte((byte) (enabledAdNewItem ? 1 : 0));
+            dest.writeString(hintStr);
+            dest.writeString(messageEmptyStr);
+            dest.writeString(titleDialogAddNewItemStr);
         }
 
         @Override
@@ -318,7 +330,7 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
         /**
          * Set color item selected.
          *
-         * @param colorSelectedText @{@link ColorInt} resource of text color.
+         * @param colorSelectedText {@link ColorInt} resource of text color.
          * @return Config
          */
         public Config inputColorSelectedText(@ColorInt int colorSelectedText) {
@@ -330,7 +342,7 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
          * Set color background tint.
          * The spinner line and the add new item image will receive this color.
          *
-         * @param colorBackgroundTint @{@link ColorInt} resource of text color.
+         * @param colorBackgroundTint {@link ColorInt} resource of text color.
          * @return Config
          */
         public Config inputColorBackgroundTint(@ColorInt int colorBackgroundTint) {
@@ -339,9 +351,9 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
         }
 
         /**
-         * Set inputHint message.
+         * Set hint message.
          *
-         * @param hint @{@link StringRes} resource of text.
+         * @param hint {@link StringRes} resource of text.
          * @return Config
          */
         public Config inputHint(@StringRes int hint) {
@@ -350,9 +362,20 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
         }
 
         /**
+         * Set hint message.
+         *
+         * @param hint {@String}
+         * @return Config
+         */
+        public Config inputHint(String hint) {
+            this.hintStr = hint;
+            return this;
+        }
+
+        /**
          * Set message dialog add new item.
          *
-         * @param titleDialogAddNewItem @{@link StringRes} resource of text.
+         * @param titleDialogAddNewItem {@link StringRes} resource of text.
          * @return Config
          */
         public Config inputTitleDialogAddNewItem(@StringRes int titleDialogAddNewItem) {
@@ -361,14 +384,37 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
         }
 
         /**
+         * Set message dialog add new item.
+         *
+         * @param titleDialogAddNewItem {@link String}
+         * @return Config
+         */
+        public Config inputTitleDialogAddNewItem(String titleDialogAddNewItem) {
+            this.titleDialogAddNewItemStr = titleDialogAddNewItem;
+            return this;
+        }
+
+        /**
          * Set message empty.
          * Message that will be displayed in the selection dialog when there is no item.
          *
-         * @param messageEmpty @{@link StringRes} resource of text.
+         * @param messageEmpty {@link StringRes} resource of text.
          * @return Config
          */
         public Config inputMessageEmpty(@StringRes int messageEmpty) {
             this.messageEmpty = messageEmpty;
+            return this;
+        }
+
+        /**
+         * Set message empty.
+         * Message that will be displayed in the selection dialog when there is no item.
+         *
+         * @param messageEmpty {@link String}
+         * @return Config
+         */
+        public Config inputMessageEmpty(String messageEmpty) {
+            this.messageEmptyStr = messageEmpty;
             return this;
         }
 

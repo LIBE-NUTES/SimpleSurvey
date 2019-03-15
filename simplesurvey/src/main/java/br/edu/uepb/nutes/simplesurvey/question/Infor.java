@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -174,9 +175,12 @@ public class Infor extends BaseQuestion<Infor.Config> implements ISlideBackgroun
      * Class config page.
      */
     public static class Config extends BaseConfigQuestion<Infor.Config> implements Parcelable {
-        private int buttonText,
-                buttonColorText,
-                buttonBackground;
+        @StringRes
+        private int buttonText;
+        @ColorRes
+        private int buttonColorText;
+        @DrawableRes
+        private int buttonBackground;
         private String buttonTextStr;
 
         public Config() {
@@ -190,6 +194,20 @@ public class Infor extends BaseQuestion<Infor.Config> implements ISlideBackgroun
             buttonText = in.readInt();
             buttonColorText = in.readInt();
             buttonBackground = in.readInt();
+            buttonTextStr = in.readString();
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(buttonText);
+            dest.writeInt(buttonColorText);
+            dest.writeInt(buttonBackground);
+            dest.writeString(buttonTextStr);
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
         }
 
         public static final Creator<Config> CREATOR = new Creator<Config>() {
@@ -251,18 +269,6 @@ public class Infor extends BaseQuestion<Infor.Config> implements ISlideBackgroun
         @Override
         public Infor build() {
             return Infor.newInstance(this);
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeInt(buttonText);
-            dest.writeInt(buttonColorText);
-            dest.writeInt(buttonBackground);
         }
     }
 
