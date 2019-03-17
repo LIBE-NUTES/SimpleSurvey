@@ -230,7 +230,7 @@ public class Open extends BaseQuestion<Open.Config> implements ISlideBackgroundC
         private int inputType;
 
         public Config() {
-            super.layout(R.layout.question_text_box);
+            super.layout(R.layout.question_open_layout);
             this.background = 0;
             this.colorBackgroundTint = 0;
             this.colorBackgroundTint = 0;

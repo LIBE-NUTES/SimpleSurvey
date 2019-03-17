@@ -270,7 +270,7 @@ public class Dichotomic extends BaseQuestion<Dichotomic.Config> implements ISlid
                 radioRightTextStr;
 
         public Config() {
-            super.layout(R.layout.question_radio);
+            super.layout(R.layout.question_dichotomic_layout);
             this.radioLeftText = 0;
             this.radioRightText = 0;
             this.radioColorTextNormal = 0;

@@ -222,7 +222,7 @@ public class Single extends BaseQuestion<Single.Config> implements ISlideBackgro
         private String hintStr;
 
         public Config() {
-            super.layout(R.layout.question_select_spinner);
+            super.layout(R.layout.question_single_layout);
             this.colorSelectedText = 0;
             this.colorBackgroundTint = 0;
             this.hint = R.string.survey_select_an_answer;

@@ -184,7 +184,7 @@ public class Infor extends BaseQuestion<Infor.Config> implements ISlideBackgroun
         private String buttonTextStr;
 
         public Config() {
-            super.layout(R.layout.page_infor);
+            super.layout(R.layout.infor_layout);
             this.buttonText = 0;
             this.buttonColorText = 0;
             this.buttonBackground = 0;

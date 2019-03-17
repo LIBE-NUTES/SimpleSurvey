@@ -262,7 +262,7 @@ public class Multiple extends BaseQuestion<Multiple.Config>
         private String hintStr, messageEmptyStr, titleDialogAddNewItemStr;
 
         public Config() {
-            super.layout(R.layout.question_multi_select_spinner);
+            super.layout(R.layout.question_multiple_layout);
             this.colorSelectedText = 0;
             this.colorBackgroundTint = 0;
             this.hint = R.string.survey_select_the_answers;
