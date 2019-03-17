@@ -111,6 +111,10 @@ public abstract class BaseQuestion<T extends BaseConfigQuestion> extends Fragmen
             if (getConfigsQuestion().getTitleColor() != 0) {
                 titleTextView.setTextColor(getConfigsQuestion().getTitleColor());
             }
+
+            if (getConfigsQuestion().getTitleTextSize() != 0) {
+                titleTextView.setTextSize((float) getConfigsQuestion().getTitleTextSize());
+            }
         }
 
         // DESCRIPTION
@@ -125,6 +129,10 @@ public abstract class BaseQuestion<T extends BaseConfigQuestion> extends Fragmen
 
             if (getConfigsQuestion().getDescriptionColor() != 0) {
                 descTextView.setTextColor(getConfigsQuestion().getDescriptionColor());
+            }
+
+            if (getConfigsQuestion().getDescriptionTextSize() != 0) {
+                descTextView.setTextSize((float) getConfigsQuestion().getDescriptionTextSize());
             }
         }
 

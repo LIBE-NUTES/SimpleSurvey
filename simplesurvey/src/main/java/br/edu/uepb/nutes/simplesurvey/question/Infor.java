@@ -225,44 +225,44 @@ public class Infor extends BaseQuestion<Infor.Config> implements ISlideBackgroun
         /**
          * Set button text.
          *
-         * @param buttonText {@link StringRes} resource of text.
+         * @param text {@link StringRes} resource of text.
          * @return Config
          */
-        public Config inputText(@StringRes int buttonText) {
-            this.buttonText = buttonText;
+        public Config inputText(@StringRes int text) {
+            this.buttonText = text;
             return this;
         }
 
         /**
          * Set button text.
          *
-         * @param buttonText {@link String} resource of text.
+         * @param text {@link String} resource of text.
          * @return Config
          */
-        public Config inputText(String buttonText) {
-            this.buttonTextStr = buttonText;
+        public Config inputText(String text) {
+            this.buttonTextStr = text;
             return this;
         }
 
         /**
          * Set button text color.
          *
-         * @param buttonColorText {@link ColorInt} resource of text color.
+         * @param color {@link ColorInt} resource of text color.
          * @return Config
          */
-        public Config buttonColorText(@ColorInt int buttonColorText) {
-            this.buttonColorText = buttonColorText;
+        public Config buttonColorText(@ColorInt int color) {
+            this.buttonColorText = color;
             return this;
         }
 
         /**
          * Set button background.
          *
-         * @param buttonBackground {@link DrawableRes} resource of the background.
+         * @param drawable {@link DrawableRes} resource of the background.
          * @return Config
          */
-        public Config buttonBackground(@DrawableRes int buttonBackground) {
-            this.buttonBackground = buttonBackground;
+        public Config buttonBackground(@DrawableRes int drawable) {
+            this.buttonBackground = drawable;
             return this;
         }
 

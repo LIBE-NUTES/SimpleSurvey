@@ -282,11 +282,11 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
         /**
          * Set color item selected.
          *
-         * @param colorSelectedText @{@link ColorInt} resource color.
+         * @param color @{@link ColorInt} resource color.
          * @return Config
          */
-        public Config inputColorSelectedText(@ColorInt int colorSelectedText) {
-            this.colorSelectedText = colorSelectedText;
+        public Config inputColorSelectedText(@ColorInt int color) {
+            this.colorSelectedText = color;
             return this;
         }
 
@@ -294,44 +294,44 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
          * Set color background tint.
          * The spinner line and the add new item image will receive this color.
          *
-         * @param colorBackgroundTint @{@link ColorInt} resource color.
+         * @param color @{@link ColorInt} resource color.
          * @return Config
          */
-        public Config inputColorBackgroundTint(@ColorInt int colorBackgroundTint) {
-            this.colorBackgroundTint = colorBackgroundTint;
+        public Config inputColorBackgroundTint(@ColorInt int color) {
+            this.colorBackgroundTint = color;
             return this;
         }
 
         /**
          * Set inputHint message.
          *
-         * @param hint @{@link StringRes} resource color.
+         * @param message @{@link StringRes} resource color.
          * @return Config
          */
-        public Config inputHint(@StringRes int hint) {
-            this.hint = hint;
+        public Config inputHint(@StringRes int message) {
+            this.hint = message;
             return this;
         }
 
         /**
          * Set hint message.
          *
-         * @param hint {@String}
+         * @param message {@String} Message hint
          * @return Config
          */
-        public Config inputHint(String hint) {
-            this.hintStr = hint;
+        public Config inputHint(String message) {
+            this.hintStr = message;
             return this;
         }
 
         /**
          * Set answer init.
          *
-         * @param indexAnswerInit @{@link ColorInt} index.
+         * @param answer
          * @return Config
          */
-        public Config answerInit(int indexAnswerInit) {
-            this.indexAnswerInit = indexAnswerInit;
+        public Config answerInit(int answer) {
+            this.indexAnswerInit = answer;
             return this;
         }
 

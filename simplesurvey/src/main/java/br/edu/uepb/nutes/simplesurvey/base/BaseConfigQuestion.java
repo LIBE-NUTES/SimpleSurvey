@@ -144,103 +144,132 @@ public abstract class BaseConfigQuestion<T> {
     /**
      * Set title.
      *
-     * @param title int
+     * @param text int
      * @return T
      */
-    public T title(@StringRes int title) {
-        this.title = title;
+    public T title(@StringRes int text) {
+        this.title = text;
         return (T) this;
     }
 
     /**
      * Set title.
      *
-     * @param title {@link String}
+     * @param text {@link String}
      * @return T
      */
-    public T title(String title) {
-        this.titleStr = title;
+    public T title(String text) {
+        this.titleStr = text;
         return (T) this;
     }
 
     /**
      * Set description.
      *
-     * @param description int
+     * @param text int
      * @return T
      */
-    public T description(@StringRes int description) {
-        this.description = description;
+    public T description(@StringRes int text) {
+        this.description = text;
         return (T) this;
     }
 
     /**
      * Set description.
      *
-     * @param description {@link String}
+     * @param text {@link String}
      * @return T
      */
-    public T description(String description) {
-        this.descriptionStr = description;
+    public T description(String text) {
+        this.descriptionStr = text;
         return (T) this;
     }
 
     /**
      * Set title and color.
      *
-     * @param title
-     * @param titleColor
+     * @param text Title resource
+     * @param color Title color
      * @return T
      */
-    public T title(@StringRes int title, @ColorInt int titleColor) {
-        this.title = title;
-        this.titleColor = titleColor;
+    public T title(@StringRes int text, @ColorInt int color) {
+        this.title = text;
+        this.titleColor = color;
         return (T) this;
     }
 
     /**
      * Set title and color.
      *
-     * @param title      {@link String}
-     * @param titleColor int
+     * @param text Title resource
+     * @param color Title color
+     * @param size  Title size in sp
      * @return T
      */
-    public T title(String title, @ColorInt int titleColor) {
-        this.titleStr = title;
-        this.titleColor = titleColor;
+    public T title(@StringRes int text, @ColorInt int color, int size) {
+        this.title = text;
+        this.titleColor = color;
+        this.titleTextSize = size;
+        return (T) this;
+    }
+
+    /**
+     * Set title and color.
+     *
+     * @param text      {@link String}
+     * @param color int
+     * @return T
+     */
+    public T title(String text, @ColorInt int color) {
+        this.titleStr = text;
+        this.titleColor = color;
+        return (T) this;
+    }
+
+    /**
+     * Set title size in sp.
+     *
+     * @param size int Font size in sp
+     * @return T
+     */
+    public T titleTextSize(int size) {
+        this.titleTextSize = size;
+        return (T) this;
+    }
+
+
+    /**
+     * Set description, color and text size.
+     *
+     * @param text Description text
+     * @param color Description color
+     * @param size Description size in sp
+     * @return T
+     */
+    public T description(@StringRes int text, @ColorInt int color, int size) {
+        this.description = text;
+        this.descriptionColor = color;
+        this.descriptionTextSize = size;
         return (T) this;
     }
 
     /**
      * Set description and color.
      *
-     * @param description
-     * @param descriptionColor
+     * @param text      {@link String}
+     * @param color int
      * @return T
      */
-    public T description(@StringRes int description, @ColorInt int descriptionColor) {
-        this.description = description;
-        this.descriptionColor = descriptionColor;
+    public T description(String text, @ColorInt int color) {
+        this.descriptionStr = text;
+        this.descriptionColor = color;
         return (T) this;
     }
 
     /**
-     * Set description and color.
+     * Set description font size in sp.
      *
-     * @param description      {@link String}
-     * @param descriptionColor int
-     * @return T
-     */
-    public T description(String description, @ColorInt int descriptionColor) {
-        this.descriptionStr = description;
-        this.descriptionColor = descriptionColor;
-        return (T) this;
-    }
-
-    /**
-     * Set description font size.
-     *
-     * @param size font size.
+     * @param size Font size in sp.
      * @return T
      */
     public T descriptionTextSize(int size) {
@@ -251,66 +280,66 @@ public abstract class BaseConfigQuestion<T> {
     /**
      * Set image image.
      *
-     * @param image
+     * @param drawable
      * @return T
      */
-    public T image(@DrawableRes int image) {
-        this.image = image;
+    public T image(@DrawableRes int drawable) {
+        this.image = drawable;
         return (T) this;
     }
 
     /**
      * Set background color
      *
-     * @param colorBackground
+     * @param color
      * @return T
      */
-    public T colorBackground(@ColorInt int colorBackground) {
-        this.colorBackground = colorBackground;
+    public T colorBackground(@ColorInt int color) {
+        this.colorBackground = color;
         return (T) this;
     }
 
     /**
      * Set title color.
      *
-     * @param titleColor
+     * @param color
      * @return T
      */
-    public T titleColor(@ColorInt int titleColor) {
-        this.titleColor = titleColor;
+    public T titleColor(@ColorInt int color) {
+        this.titleColor = color;
         return (T) this;
     }
 
     /**
      * Set description color.
      *
-     * @param descriptionColor
+     * @param color
      * @return T
      */
-    public T descriptionColor(@ColorInt int descriptionColor) {
-        this.descriptionColor = descriptionColor;
+    public T descriptionColor(@ColorInt int color) {
+        this.descriptionColor = color;
         return (T) this;
     }
 
     /**
      * Set page number.
      *
-     * @param pageNumber
+     * @param number
      * @return T
      */
-    public T pageNumber(int pageNumber) {
-        this.pageNumber = pageNumber;
+    public T pageNumber(int number) {
+        this.pageNumber = number;
         return (T) this;
     }
 
     /**
      * Set image button close.
      *
-     * @param drawableClose
+     * @param drawable
      * @return T
      */
-    public T buttonClose(int drawableClose) {
-        this.drawableClose = drawableClose;
+    public T buttonClose(int drawable) {
+        this.drawableClose = drawable;
         return (T) this;
     }
 

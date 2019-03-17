@@ -330,11 +330,11 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
         /**
          * Set color item selected.
          *
-         * @param colorSelectedText {@link ColorInt} resource of text color.
+         * @param color {@link ColorInt} resource of text color.
          * @return Config
          */
-        public Config inputColorSelectedText(@ColorInt int colorSelectedText) {
-            this.colorSelectedText = colorSelectedText;
+        public Config inputColorSelectedText(@ColorInt int color) {
+            this.colorSelectedText = color;
             return this;
         }
 
@@ -342,55 +342,55 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
          * Set color background tint.
          * The spinner line and the add new item image will receive this color.
          *
-         * @param colorBackgroundTint {@link ColorInt} resource of text color.
+         * @param color {@link ColorInt} resource of text color.
          * @return Config
          */
-        public Config inputColorBackgroundTint(@ColorInt int colorBackgroundTint) {
-            this.colorBackgroundTint = colorBackgroundTint;
+        public Config inputColorBackgroundTint(@ColorInt int color) {
+            this.colorBackgroundTint = color;
             return this;
         }
 
         /**
          * Set hint message.
          *
-         * @param hint {@link StringRes} resource of text.
+         * @param message {@link StringRes} resource of text.
          * @return Config
          */
-        public Config inputHint(@StringRes int hint) {
-            this.hint = hint;
+        public Config inputHint(@StringRes int message) {
+            this.hint = message;
             return this;
         }
 
         /**
          * Set hint message.
          *
-         * @param hint {@String}
+         * @param message {@String}
          * @return Config
          */
-        public Config inputHint(String hint) {
-            this.hintStr = hint;
+        public Config inputHint(String message) {
+            this.hintStr = message;
             return this;
         }
 
         /**
          * Set message dialog add new item.
          *
-         * @param titleDialogAddNewItem {@link StringRes} resource of text.
+         * @param text {@link StringRes} resource of text.
          * @return Config
          */
-        public Config inputTitleDialogAddNewItem(@StringRes int titleDialogAddNewItem) {
-            this.titleDialogAddNewItem = titleDialogAddNewItem;
+        public Config inputTitleDialogAddNewItem(@StringRes int text) {
+            this.titleDialogAddNewItem = text;
             return this;
         }
 
         /**
          * Set message dialog add new item.
          *
-         * @param titleDialogAddNewItem {@link String}
+         * @param text {@link String}
          * @return Config
          */
-        public Config inputTitleDialogAddNewItem(String titleDialogAddNewItem) {
-            this.titleDialogAddNewItemStr = titleDialogAddNewItem;
+        public Config inputTitleDialogAddNewItem(String text) {
+            this.titleDialogAddNewItemStr = text;
             return this;
         }
 
@@ -398,11 +398,11 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
          * Set message empty.
          * Message that will be displayed in the selection dialog when there is no item.
          *
-         * @param messageEmpty {@link StringRes} resource of text.
+         * @param message {@link StringRes} resource of text.
          * @return Config
          */
-        public Config inputMessageEmpty(@StringRes int messageEmpty) {
-            this.messageEmpty = messageEmpty;
+        public Config inputMessageEmpty(@StringRes int message) {
+            this.messageEmpty = message;
             return this;
         }
 
@@ -410,11 +410,11 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
          * Set message empty.
          * Message that will be displayed in the selection dialog when there is no item.
          *
-         * @param messageEmpty {@link String}
+         * @param message {@link String}
          * @return Config
          */
-        public Config inputMessageEmpty(String messageEmpty) {
-            this.messageEmptyStr = messageEmpty;
+        public Config inputMessageEmpty(String message) {
+            this.messageEmptyStr = message;
             return this;
         }
 
@@ -432,11 +432,11 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
         /**
          * Set answer init.
          *
-         * @param indexAnswerInit {@link List<Integer>} inputItems
+         * @param answers {@link List<Integer>} inputItems
          * @return Config
          */
-        public Config answerInit(List<Integer> indexAnswerInit) {
-            this.indexAnswerInit = indexAnswerInit;
+        public Config answerInit(List<Integer> answers) {
+            this.indexAnswerInit = answers;
             return this;
         }
 

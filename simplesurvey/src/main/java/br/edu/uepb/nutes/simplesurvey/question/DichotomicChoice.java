@@ -325,44 +325,44 @@ public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> impl
         /**
          * Set left radio text.
          *
-         * @param inputLeftText {@link StringRes} resource text left.
+         * @param text {@link StringRes} resource text left.
          * @return Config
          */
-        public Config inputLeftText(@StringRes int inputLeftText) {
-            this.radioLeftText = inputLeftText;
+        public Config inputLeftText(@StringRes int text) {
+            this.radioLeftText = text;
             return this;
         }
 
         /**
          * Set right radio text.
          *
-         * @param inputRightText {@link StringRes} resource text right.
+         * @param text {@link StringRes} resource text right.
          * @return Config
          */
-        public Config inputRightText(@StringRes int inputRightText) {
-            this.radioRightText = inputRightText;
+        public Config inputRightText(@StringRes int text) {
+            this.radioRightText = text;
             return this;
         }
 
         /**
          * Set left radio text.
          *
-         * @param inputLeftText {@link String} text left.
+         * @param text {@link String} text left.
          * @return Config
          */
-        public Config inputLeftText(String inputLeftText) {
-            this.radioLeftTextStr = inputLeftText;
+        public Config inputLeftText(String text) {
+            this.radioLeftTextStr = text;
             return this;
         }
 
         /**
          * Set right radio text.
          *
-         * @param inputRightText {@link String} text right.
+         * @param text {@link String} text right.
          * @return Config
          */
-        public Config inputRightText(String inputRightText) {
-            this.radioRightTextStr = inputRightText;
+        public Config inputRightText(String text) {
+            this.radioRightTextStr = text;
             return this;
         }
 
@@ -389,11 +389,11 @@ public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> impl
         /**
          * Set answer init.
          *
-         * @param answerInit boolean answer.
+         * @param answer boolean answer.
          * @return Config
          */
-        public Config answerInit(boolean answerInit) {
-            if (answerInit) this.answerInit = 1;
+        public Config answerInit(boolean answer) {
+            if (answer) this.answerInit = 1;
             else this.answerInit = 0;
             return this;
         }

@@ -280,22 +280,22 @@ public class Open extends BaseQuestion<Open.Config> implements ISlideBackgroundC
         /**
          * Set background style.
          *
-         * @param background {@link ColorInt} resource background.
+         * @param drawable {@link DrawableRes} resource background.
          * @return Config
          */
-        public Config inputBackground(@DrawableRes int background) {
-            this.background = background;
+        public Config inputBackground(@DrawableRes int drawable) {
+            this.background = drawable;
             return this;
         }
 
         /**
          * Set color text.
          *
-         * @param colorText {@link ColorInt} color text.
+         * @param color {@link ColorInt} color text.
          * @return Config
          */
-        public Config inputColorText(@ColorInt int colorText) {
-            this.colorText = colorText;
+        public Config inputColorText(@ColorInt int color) {
+            this.colorText = color;
             return this;
         }
 
@@ -303,33 +303,33 @@ public class Open extends BaseQuestion<Open.Config> implements ISlideBackgroundC
          * Set color background tint.
          * Corresponds to the bottom horizontal line.
          *
-         * @param colorBackgroundTint {@link ColorInt} resource color.
+         * @param color {@link ColorInt} resource color.
          * @return Config
          */
-        public Config inputColorBackgroundTint(@ColorInt int colorBackgroundTint) {
-            this.colorBackgroundTint = colorBackgroundTint;
+        public Config inputColorBackgroundTint(@ColorInt int color) {
+            this.colorBackgroundTint = color;
             return this;
         }
 
         /**
          * Set inputHint message.
          *
-         * @param hint {@link StringRes} resource color.
+         * @param message {@link StringRes} resource color.
          * @return Config
          */
-        public Config inputHint(@StringRes int hint) {
-            this.hint = hint;
+        public Config inputHint(@StringRes int message) {
+            this.hint = message;
             return this;
         }
 
         /**
          * Set hint message.
          *
-         * @param hint {@String}
+         * @param message {@String}
          * @return Config
          */
-        public Config inputHint(String hint) {
-            this.hintStr = hint;
+        public Config inputHint(String message) {
+            this.hintStr = message;
             return this;
         }
 
@@ -337,22 +337,22 @@ public class Open extends BaseQuestion<Open.Config> implements ISlideBackgroundC
          * Set input type.
          * {@link InputType}
          *
-         * @param inputType Input type.
+         * @param type Input type.
          * @return Config
          */
-        public Config inputType(int inputType) {
-            this.inputType = inputType;
+        public Config inputType(int type) {
+            this.inputType = type;
             return this;
         }
 
         /**
          * Set answer init.
          *
-         * @param answerInit {@link String} answer.
+         * @param answer {@link String} answer.
          * @return Config
          */
-        public Config answerInit(String answerInit) {
-            this.answerInit = answerInit;
+        public Config answerInit(String answer) {
+            this.answerInit = answer;
             return this;
         }
 
