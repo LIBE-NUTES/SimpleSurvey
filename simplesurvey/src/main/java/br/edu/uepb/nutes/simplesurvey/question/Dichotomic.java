@@ -43,9 +43,9 @@ import br.edu.uepb.nutes.simplesurvey.base.BaseQuestion;
 import br.edu.uepb.nutes.simplesurvey.base.OnQuestionListener;
 
 /**
- * DichotomicChoice implementation.
+ * Dichotomic implementation.
  */
-public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> implements ISlideBackgroundColorHolder {
+public class Dichotomic extends BaseQuestion<Dichotomic.Config> implements ISlideBackgroundColorHolder {
     private static final String ARG_CONFIGS_PAGE = "arg_configs_page";
     private static final String KEY_OLD_ANSWER_BUNDLE = "old_answer";
 
@@ -57,17 +57,17 @@ public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> impl
     private AppCompatRadioButton radioLeft;
     private AppCompatRadioButton radioRight;
 
-    public DichotomicChoice() {
+    public Dichotomic() {
     }
 
     /**
-     * New DichotomicChoice instance.
+     * New Dichotomic instance.
      *
      * @param configPage {@link Config}
-     * @return DichotomicChoice
+     * @return Dichotomic
      */
-    private static DichotomicChoice builder(Config configPage) {
-        DichotomicChoice pageFragment = new DichotomicChoice();
+    private static Dichotomic builder(Config configPage) {
+        Dichotomic pageFragment = new Dichotomic();
         Bundle args = new Bundle();
         args.putParcelable(ARG_CONFIGS_PAGE, configPage);
 
@@ -258,7 +258,7 @@ public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> impl
     /**
      * Class config page.
      */
-    public static class Config extends BaseConfigQuestion<DichotomicChoice.Config> implements Parcelable {
+    public static class Config extends BaseConfigQuestion<Dichotomic.Config> implements Parcelable {
         private int radioLeftText,
                 radioRightText,
                 radioColorTextNormal,
@@ -399,8 +399,8 @@ public class DichotomicChoice extends BaseQuestion<DichotomicChoice.Config> impl
         }
 
         @Override
-        public DichotomicChoice build() {
-            return DichotomicChoice.builder(this);
+        public Dichotomic build() {
+            return Dichotomic.builder(this);
         }
     }
 

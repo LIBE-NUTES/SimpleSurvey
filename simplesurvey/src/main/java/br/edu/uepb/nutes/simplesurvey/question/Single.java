@@ -42,9 +42,9 @@ import br.edu.uepb.nutes.simplesurvey.base.OnQuestionListener;
 import br.edu.uepb.nutes.simplesurvey.ui.SelectSpinner;
 
 /**
- * SingleChoice implementation.
+ * Single implementation.
  */
-public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements ISlideBackgroundColorHolder {
+public class Single extends BaseQuestion<Single.Config> implements ISlideBackgroundColorHolder {
     protected static final String ARG_CONFIGS_PAGE = "arg_configs_page";
 
     private OnSingleListener mListener;
@@ -52,17 +52,17 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
     private Config configPage;
     private SelectSpinner answerSelectSpinner;
 
-    public SingleChoice() {
+    public Single() {
     }
 
     /**
-     * New SingleChoice instance.
+     * New Single instance.
      *
      * @param configPage
-     * @return SingleChoice
+     * @return Single
      */
-    private static SingleChoice builder(Config configPage) {
-        SingleChoice pageFragment = new SingleChoice();
+    private static Single builder(Config configPage) {
+        Single pageFragment = new Single();
         Bundle args = new Bundle();
         args.putParcelable(ARG_CONFIGS_PAGE, configPage);
 
@@ -211,7 +211,7 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
     /**
      * Class config page.
      */
-    public static class Config extends BaseConfigQuestion<SingleChoice.Config> implements Parcelable {
+    public static class Config extends BaseConfigQuestion<Single.Config> implements Parcelable {
         @ColorInt
         private int colorSelectedText, colorBackgroundTint;
         @StringRes
@@ -347,8 +347,8 @@ public class SingleChoice extends BaseQuestion<SingleChoice.Config> implements I
         }
 
         @Override
-        public SingleChoice build() {
-            return SingleChoice.builder(this);
+        public Single build() {
+            return Single.builder(this);
         }
     }
 

@@ -12,15 +12,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.edu.uepb.nutes.simplesurvey.base.SimpleSurvey;
-import br.edu.uepb.nutes.simplesurvey.question.DichotomicChoice;
+import br.edu.uepb.nutes.simplesurvey.question.Dichotomic;
 import br.edu.uepb.nutes.simplesurvey.question.Infor;
-import br.edu.uepb.nutes.simplesurvey.question.MultipleChoice;
-import br.edu.uepb.nutes.simplesurvey.question.SingleChoice;
+import br.edu.uepb.nutes.simplesurvey.question.Multiple;
+import br.edu.uepb.nutes.simplesurvey.question.Single;
 import br.edu.uepb.nutes.simplesurvey.question.Open;
 
 public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
-        DichotomicChoice.OnDichotomicListener, SingleChoice.OnSingleListener,
-        MultipleChoice.OnMultipleListener,
+        Dichotomic.OnDichotomicListener, Single.OnSingleListener,
+        Multiple.OnMultipleListener,
         Open.OnTextBoxListener {
     private final String LOG_TAG = SimpleSurvey1.class.getSimpleName();
 
@@ -72,7 +72,7 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .pageNumber(2)
                 .build());
 
-        addQuestion(new DichotomicChoice.Config()
+        addQuestion(new Dichotomic.Config()
                 .title("Title of the question 3", Color.WHITE)
                 .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?",
                         Color.WHITE)
@@ -87,7 +87,7 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .pageNumber(3)
                 .build());
 
-        addQuestion(new SingleChoice.Config()
+        addQuestion(new Single.Config()
                 .title("Title of the question 4", Color.WHITE)
                 .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?",
                         Color.WHITE)
@@ -107,14 +107,14 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .pageNumber(4)
                 .build());
 
-        addQuestion(new DichotomicChoice.Config()
+        addQuestion(new Dichotomic.Config()
                 .title("Title of the question 5")
                 .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?")
                 .nextQuestionAuto()
                 .pageNumber(3)
                 .build());
 
-        addQuestion(new MultipleChoice.Config()
+        addQuestion(new Multiple.Config()
                 .title("Simple Survey 6", Color.WHITE)
                 .description("Simple survey from @NUTES", Color.WHITE)
                 .colorBackground(ContextCompat.getColor(this, R.color.colorDeepPurple))

@@ -46,9 +46,9 @@ import br.edu.uepb.nutes.simplesurvey.base.OnQuestionListener;
 import br.edu.uepb.nutes.simplesurvey.ui.MultiSelectSpinner;
 
 /**
- * MultipleChoice implementation.
+ * Multiple implementation.
  */
-public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
+public class Multiple extends BaseQuestion<Multiple.Config>
         implements ISlideBackgroundColorHolder {
     private String KEY_ITEMS_MULTI_SELECT_SPINNER;
 
@@ -59,17 +59,17 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
     private Config configPage;
     private MultiSelectSpinner answerMultiSelectSpinner;
 
-    public MultipleChoice() {
+    public Multiple() {
     }
 
     /**
-     * New MultipleChoice instance.
+     * New Multiple instance.
      *
      * @param configPage {@link Config}
-     * @return MultipleChoice
+     * @return Multiple
      */
-    private static MultipleChoice builder(Config configPage) {
-        MultipleChoice pageFragment = new MultipleChoice();
+    private static Multiple builder(Config configPage) {
+        Multiple pageFragment = new Multiple();
         Bundle args = new Bundle();
         args.putParcelable(ARG_CONFIGS_PAGE, configPage);
 
@@ -170,7 +170,7 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
 
                     @Override
                     public void onAddNewItemSuccess(@NonNull String item, @NonNull int indexItem) {
-                        MultipleChoice.super.saveItemExtraSharedPreferences(
+                        Multiple.super.saveItemExtraSharedPreferences(
                                 KEY_ITEMS_MULTI_SELECT_SPINNER, item);
                     }
 
@@ -251,7 +251,7 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
     /**
      * Class config page.
      */
-    public static class Config extends BaseConfigQuestion<MultipleChoice.Config> implements Parcelable {
+    public static class Config extends BaseConfigQuestion<Multiple.Config> implements Parcelable {
         @ColorInt
         private int colorSelectedText, colorBackgroundTint;
         @StringRes
@@ -441,8 +441,8 @@ public class MultipleChoice extends BaseQuestion<MultipleChoice.Config>
         }
 
         @Override
-        public MultipleChoice build() {
-            return MultipleChoice.builder(this);
+        public Multiple build() {
+            return Multiple.builder(this);
         }
     }
 
