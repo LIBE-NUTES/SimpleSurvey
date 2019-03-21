@@ -3,7 +3,7 @@
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/MIT)
 
 Library for simple survey creation.  
-Simple Survey utilizes the library [AppIntro](https://github.com/AppIntro/AppIntro) as the main dependency.  
+**Simple Survey** utilizes the library [AppIntro](https://github.com/AppIntro/AppIntro) as the main dependency.  
 [AppIntro](https://github.com/AppIntro/AppIntro) is an excellent library for creating introductions to applications
 
 **Simple Survey** provides an easy way to create forms with pre-defined question types.
