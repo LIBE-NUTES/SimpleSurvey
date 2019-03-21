@@ -188,7 +188,7 @@ public abstract class BaseConfigQuestion<T> {
     /**
      * Set title and color.
      *
-     * @param text Title resource
+     * @param text  Title resource
      * @param color Title color
      * @return T
      */
@@ -201,7 +201,20 @@ public abstract class BaseConfigQuestion<T> {
     /**
      * Set title and color.
      *
-     * @param text Title resource
+     * @param text  {@link String}
+     * @param color int
+     * @return T
+     */
+    public T title(String text, @ColorInt int color) {
+        this.titleStr = text;
+        this.titleColor = color;
+        return (T) this;
+    }
+
+    /**
+     * Set title and color.
+     *
+     * @param text  Title resource
      * @param color Title color
      * @param size  Title size in sp
      * @return T
@@ -210,19 +223,6 @@ public abstract class BaseConfigQuestion<T> {
         this.title = text;
         this.titleColor = color;
         this.titleTextSize = size;
-        return (T) this;
-    }
-
-    /**
-     * Set title and color.
-     *
-     * @param text      {@link String}
-     * @param color int
-     * @return T
-     */
-    public T title(String text, @ColorInt int color) {
-        this.titleStr = text;
-        this.titleColor = color;
         return (T) this;
     }
 
@@ -237,13 +237,12 @@ public abstract class BaseConfigQuestion<T> {
         return (T) this;
     }
 
-
     /**
      * Set description, color and text size.
      *
-     * @param text Description text
+     * @param text  Description text
      * @param color Description color
-     * @param size Description size in sp
+     * @param size  Description size in sp
      * @return T
      */
     public T description(@StringRes int text, @ColorInt int color, int size) {
@@ -256,7 +255,21 @@ public abstract class BaseConfigQuestion<T> {
     /**
      * Set description and color.
      *
-     * @param text      {@link String}
+     * @param text  {@link String}
+     * @param color int
+     * @return T
+     */
+    public T description(@StringRes int text, @ColorInt int color) {
+        this.description = text;
+        this.descriptionColor = color;
+        return (T) this;
+    }
+
+
+    /**
+     * Set description and color.
+     *
+     * @param text  {@link String}
      * @param color int
      * @return T
      */

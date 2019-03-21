@@ -1,4 +1,4 @@
-package br.edu.uepb.nutes.simplesurvey;
+package br.edu.uepb.nutes.simplesurvey.example;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -15,8 +15,8 @@ import br.edu.uepb.nutes.simplesurvey.base.SimpleSurvey;
 import br.edu.uepb.nutes.simplesurvey.question.Dichotomic;
 import br.edu.uepb.nutes.simplesurvey.question.Infor;
 import br.edu.uepb.nutes.simplesurvey.question.Multiple;
-import br.edu.uepb.nutes.simplesurvey.question.Single;
 import br.edu.uepb.nutes.simplesurvey.question.Open;
+import br.edu.uepb.nutes.simplesurvey.question.Single;
 
 public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
         Dichotomic.OnDichotomicListener, Single.OnSingleListener,
@@ -52,6 +52,7 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .title("Title of the question 1", Color.WHITE)
                 .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?",
                         Color.WHITE)
+                .descriptionTextSize(18)
                 .colorBackground(ContextCompat.getColor(this, R.color.colorDeepPurple))
                 .image(R.drawable.placeholder)
                 .buttonClose(R.drawable.ic_action_close_dark)

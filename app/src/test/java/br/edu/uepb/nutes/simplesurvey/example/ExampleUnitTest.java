@@ -1,4 +1,4 @@
-package br.edu.uepb.nutes.simplesurvey;
+package br.edu.uepb.nutes.simplesurvey.example;
 
 import org.junit.Test;
 

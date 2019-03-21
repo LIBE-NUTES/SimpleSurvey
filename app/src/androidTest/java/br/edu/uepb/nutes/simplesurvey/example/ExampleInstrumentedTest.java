@@ -1,4 +1,4 @@
-package br.edu.uepb.nutes.simplesurvey;
+package br.edu.uepb.nutes.simplesurvey.example;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

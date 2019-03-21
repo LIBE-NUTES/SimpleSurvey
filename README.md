@@ -28,7 +28,7 @@ allprojects {
 
 ```
 dependencies {
-	 implementation 'com.github.nutes-uepb:simple-survey:v1.0.0'
+	 implementation 'com.github.nutes-uepb:simple-survey:v1.2.1'
 }
 ```
 
