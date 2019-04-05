@@ -6,6 +6,7 @@
     <string name="text_yes">Yes</string>
     <string name="text_ok">Ok</string>
     <string name="message_blocked_page">Answer the current question to go to next&#8230;</string>
+    <string name="select_date">Select Date</string>
 
 
     <!-- SURVEY -->

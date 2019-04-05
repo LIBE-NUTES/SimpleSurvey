@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.edu.uepb.nutes.simplesurvey.base.SimpleSurvey;
+import br.edu.uepb.nutes.simplesurvey.question.DateTimerPicker;
 import br.edu.uepb.nutes.simplesurvey.question.Dichotomic;
 import br.edu.uepb.nutes.simplesurvey.question.Infor;
 import br.edu.uepb.nutes.simplesurvey.question.Multiple;
@@ -42,6 +43,12 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
          */
         setFadeAnimation();
 
+        addQuestion(new DateTimerPicker.Config()
+                .title("Choose a date")
+                .nextQuestionAuto()
+                .pageNumber(6)
+                .build());
+
         addQuestion(new Infor.Config()
                 .layout(R.layout.welcome)
                 .nextQuestionAuto()
@@ -62,6 +69,8 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .nextQuestionAuto()
                 .pageNumber(1)
                 .build());
+
+
 
         addQuestion(new Open.Config()
                 .title("Title of the question 2", Color.WHITE)
@@ -131,6 +140,8 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .nextQuestionAuto()
                 .pageNumber(5)
                 .build());
+
+
 
         addQuestion(new Infor.Config()
                 .title("Thank you for the answers :)")
