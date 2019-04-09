@@ -1,25 +1,25 @@
 package br.edu.uepb.nutes.simplesurvey.question;
 
 import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v4.view.ViewCompat;
 import android.text.InputType;
-import android.view.LayoutInflater;
+import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 
@@ -28,28 +28,30 @@ import java.util.Calendar;
 import br.edu.uepb.nutes.simplesurvey.R;
 import br.edu.uepb.nutes.simplesurvey.base.BaseConfigQuestion;
 import br.edu.uepb.nutes.simplesurvey.base.BaseQuestion;
+import br.edu.uepb.nutes.simplesurvey.base.OnQuestionListener;
 
 import static br.edu.uepb.nutes.simplesurvey.question.Single.ARG_CONFIGS_PAGE;
 
-public class DateTimerPicker extends BaseQuestion<DateTimerPicker.Config> implements ISlideBackgroundColorHolder, View.OnClickListener {
+public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundColorHolder, View.OnClickListener {
 
 
-    private Button btnDatePicker, btnTimePicker;
+    private EditText editDate;
     private TextView txtDate;
     private int mYear, mMonth, mDay, mHour, mMinute;
     private Config configPage;
+    private OnTextBoxListener mListener;
 
-    public DateTimerPicker() {
+    public Date() {
     }
 
     /**
-     * New DateTimerPicker instance.
+     * New Date instance.
      *
      * @param configPage {@link Config}
-     * @return DateTimerPicker
+     * @return Date
      */
-    private static DateTimerPicker builder(Config configPage) {
-        DateTimerPicker pageFragment = new DateTimerPicker();
+    private static Date builder(Config configPage) {
+        Date pageFragment = new Date();
         Bundle args = new Bundle();
         args.putParcelable(ARG_CONFIGS_PAGE, configPage);
 
@@ -74,45 +76,24 @@ public class DateTimerPicker extends BaseQuestion<DateTimerPicker.Config> implem
     public void onClick(View v) {
         int id = v.getId();
 
-        if (id == R.id.btn_date) {
+        if (id == R.id.answer_text_box) {
 
-            // Get Current Date
+            // Get Current Time
             final Calendar c = Calendar.getInstance();
             mYear = c.get(Calendar.YEAR);
             mMonth = c.get(Calendar.MONTH);
             mDay = c.get(Calendar.DAY_OF_MONTH);
-
 
             DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
                     new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year,
                                               int monthOfYear, int dayOfMonth) {
-                            txtDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                            editDate.setText(dayOfMonth + " - " + (monthOfYear + 1) + " - " + year);
                         }
                     }, mYear, mMonth, mDay);
             datePickerDialog.show();
         }
-//        if (id == R.id.btn_time) {
-//
-//            // Get Current Time
-//            final Calendar c = Calendar.getInstance();
-//            mHour = c.get(Calendar.HOUR_OF_DAY);
-//            mMinute = c.get(Calendar.MINUTE);
-//
-//            // Launch Time Picker Dialog
-//            TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
-//                    new TimePickerDialog.OnTimeSetListener() {
-//
-//                        @Override
-//                        public void onTimeSet(TimePicker view, int hourOfDay,
-//                                              int minute) {
-//
-//                            txtTime.setText(hourOfDay + ":" + minute);
-//                        }
-//                    }, mHour, mMinute, false);
-//            timePickerDialog.show();
-//        }
     }
 
 
@@ -124,37 +105,80 @@ public class DateTimerPicker extends BaseQuestion<DateTimerPicker.Config> implem
     @Override
     public void initView(View v) {
         // Initialize components
-        this.btnDatePicker = v.findViewById(R.id.btn_date);
-//        this.btnTimePicker = v.findViewById(R.id.btn_time);
-        this.txtDate = v.findViewById(R.id.in_date);
-//        this.txtTime = v.findViewById(R.id.in_time);
+        this.editDate = v.findViewById(R.id.answer_text_box);
+        this.txtDate = v.findViewById(R.id.question_description);
 
-        btnDatePicker.setOnClickListener(this);
-//        btnTimePicker.setOnClickListener(this);
-
+        editDate.setOnClickListener(this);
 
         if (this.configPage.background != 0) {
-            this.btnDatePicker.setBackgroundResource(this.configPage.background);
+            this.editDate.setBackgroundResource(this.configPage.background);
         }
-
-        if (this.configPage.background != 0) {
-            this.btnTimePicker.setBackgroundResource(this.configPage.background);
-        }
-
-//        if (this.configPage.buttonText != 0) {
-//            this.button.setText(this.configPage.buttonText);
-//        } else if (this.configPage.buttonTextStr != null &&
-//                !this.configPage.buttonTextStr.isEmpty()) {
-//            this.button.setText(this.configPage.buttonTextStr);
-//        }
 
         if (configPage.colorText != 0) {
-            this.btnDatePicker.setTextColor(this.configPage.colorText);
-        }
-        if (configPage.colorText != 0) {
-            this.btnTimePicker.setTextColor(this.configPage.colorText);
+            this.editDate.setTextColor(this.configPage.colorText);
         }
 
+        if (editDate != null) {
+            editDate.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+
+            if (configPage.hintStr != null && !configPage.hintStr.isEmpty()) {
+                editDate.setHint(configPage.hintStr);
+            } else if (configPage.hint != 0) {
+                editDate.setHint(configPage.hint);
+            }
+
+            if (configPage.inputType != 0)
+                editDate.setInputType(configPage.inputType);
+
+            if (configPage.answerInit != null && !configPage.answerInit.isEmpty())
+                editDate.setText(configPage.answerInit);
+
+            if (configPage.background != 0)
+                editDate.setBackgroundResource(configPage.background);
+
+            if (configPage.colorBackgroundTint != 0) {
+                ViewCompat.setBackgroundTintList(editDate,
+                        ColorStateList.valueOf(configPage.colorBackgroundTint));
+            }
+
+            if (configPage.colorText != 0) {
+                editDate.setTextColor(configPage.colorText);
+                editDate.setHintTextColor(configPage.colorText);
+            }
+        }
+
+    }
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (editDate == null) return;
+
+        editDate.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    InputMethodManager imm = (InputMethodManager) v.getContext()
+                            .getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    if (String.valueOf(editDate.getText()).isEmpty()) {
+                        blockQuestion();
+                        return true;
+                    }
+
+                    if (mListener != null) {
+                        mListener.onAnswerTextBox(configPage.getPageNumber(),
+                                String.valueOf(editDate.getText()));
+                    }
+                    if (configPage.isNextQuestionAuto()) nextQuestion();
+                    else unlockQuestion();
+
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -202,7 +226,7 @@ public class DateTimerPicker extends BaseQuestion<DateTimerPicker.Config> implem
             this.background = 0;
             this.colorBackgroundTint = 0;
             this.colorBackgroundTint = 0;
-            this.hint = R.string.survey_enter_an_answer;
+            this.hint = R.string.select_date;
             this.answerInit = null;
             this.inputType = InputType.TYPE_CLASS_TEXT;
         }
@@ -325,8 +349,14 @@ public class DateTimerPicker extends BaseQuestion<DateTimerPicker.Config> implem
         }
 
         @Override
-        public DateTimerPicker build() {
-            return DateTimerPicker.builder(this);
+        public Date build() {
+            return Date.builder(this);
         }
+    }
+    /**
+     * Interface OnTextBoxListener.
+     */
+    public interface OnTextBoxListener extends OnQuestionListener {
+        void onAnswerTextBox(int page, String value);
     }
 }

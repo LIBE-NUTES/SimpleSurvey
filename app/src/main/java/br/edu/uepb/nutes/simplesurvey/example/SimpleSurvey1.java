@@ -12,12 +12,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.edu.uepb.nutes.simplesurvey.base.SimpleSurvey;
-import br.edu.uepb.nutes.simplesurvey.question.DateTimerPicker;
+import br.edu.uepb.nutes.simplesurvey.question.Date;
 import br.edu.uepb.nutes.simplesurvey.question.Dichotomic;
 import br.edu.uepb.nutes.simplesurvey.question.Infor;
 import br.edu.uepb.nutes.simplesurvey.question.Multiple;
 import br.edu.uepb.nutes.simplesurvey.question.Open;
 import br.edu.uepb.nutes.simplesurvey.question.Single;
+import br.edu.uepb.nutes.simplesurvey.question.Time;
 
 public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
         Dichotomic.OnDichotomicListener, Single.OnSingleListener,
@@ -43,11 +44,20 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
          */
         setFadeAnimation();
 
-        addQuestion(new DateTimerPicker.Config()
-                .title("Choose a date")
+        addQuestion(new Time.Config()
+                .title("Title of the question 7", Color.WHITE)
+                .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?", Color.WHITE)
+                .descriptionTextSize(18)
+                .colorBackground(ContextCompat.getColor(this, R.color.colorDeepPurple))
+                .image(R.drawable.placeholder)
+                .buttonClose(R.drawable.ic_action_close_dark)
+                .inputColorBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
+                .inputColorText(Color.WHITE)
+                .inputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME | InputType.TYPE_TEXT_FLAG_CAP_WORDS)
                 .nextQuestionAuto()
                 .pageNumber(6)
                 .build());
+
 
         addQuestion(new Infor.Config()
                 .layout(R.layout.welcome)
@@ -69,7 +79,6 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .nextQuestionAuto()
                 .pageNumber(1)
                 .build());
-
 
 
         addQuestion(new Open.Config()
@@ -141,6 +150,19 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .pageNumber(5)
                 .build());
 
+        addQuestion(new Date.Config()
+                .title("Title of the question 6", Color.WHITE)
+                .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?", Color.WHITE)
+                .descriptionTextSize(18)
+                .colorBackground(ContextCompat.getColor(this, R.color.colorDeepPurple))
+                .image(R.drawable.placeholder)
+                .buttonClose(R.drawable.ic_action_close_dark)
+                .inputColorBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
+                .inputColorText(Color.WHITE)
+                .inputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME | InputType.TYPE_TEXT_FLAG_CAP_WORDS)
+                .nextQuestionAuto()
+                .pageNumber(6)
+                .build());
 
 
         addQuestion(new Infor.Config()

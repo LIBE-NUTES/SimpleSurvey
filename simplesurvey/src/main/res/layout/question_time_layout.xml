@@ -92,7 +92,7 @@
                 android:scrollbars="vertical">
 
                 <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/question_description"
+                    android:id="@+id/question_description_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -109,19 +109,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="40dp"
-            android:gravity="center"
             android:orientation="vertical"
             android:padding="@dimen/spinner_answer_margin">
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/answer_button"
-                android:layout_width="wrap_content"
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/answer_text_box"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_background_black"
-                android:paddingLeft="60dp"
-                android:paddingRight="60dp"
-                android:text="@android:string/ok" />
+                android:gravity="top|left"
+                android:imeOptions="actionDone"
+                android:overScrollMode="always"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="vertical" />
         </LinearLayout>
         <!-- END BOX INPUT -->
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
+
