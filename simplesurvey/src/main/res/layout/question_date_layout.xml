@@ -116,6 +116,8 @@
                 android:id="@+id/answer_text_box"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:enabled="true"
+                android:focusable="false"
                 android:gravity="top|left"
                 android:imeOptions="actionDone"
                 android:overScrollMode="always"

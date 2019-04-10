@@ -2,6 +2,7 @@ package br.edu.uepb.nutes.simplesurvey.question;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcel;
@@ -10,6 +11,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v4.view.ViewCompat;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.View;
@@ -33,10 +35,9 @@ import static br.edu.uepb.nutes.simplesurvey.question.Single.ARG_CONFIGS_PAGE;
 public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundColorHolder, View.OnClickListener {
 
     private EditText editTime;
-    private TextView txtTime;
-    private int mYear, mMonth, mDay, mHour, mMinute;
+    private int mHour, mMinute;
     private Config configPage;
-    private OnTextBoxListener mListener;
+    private OnTimeBoxListener mListener;
 
     public Time() {
     }
@@ -59,7 +60,7 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        super.blockQuestion();
+//        super.blockQuestion();
 
         // Retrieving arguments
         if (getArguments() != null && getArguments().size() != 0) {
@@ -72,7 +73,6 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
     @Override
     public void onClick(View v) {
         int id = v.getId();
-
 
         if (id == R.id.answer_text_box) {
 
@@ -91,31 +91,46 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
 
                             editTime.setText(hourOfDay + ":" + minute);
                         }
-                    }, mHour, mMinute, false);
+                    }, mHour, mMinute, true);
             timePickerDialog.show();
         }
     }
 
 
     @Override
-    public void clearAnswer() {
-
-    }
-
-    @Override
     public void initView(View v) {
         // Initialize components
         this.editTime = v.findViewById(R.id.answer_text_box);
-        this.txtTime = v.findViewById(R.id.question_description);
 
         this.editTime.setOnClickListener(this);
 
-        if (this.configPage.background != 0) {
-            this.editTime.setBackgroundResource(this.configPage.background);
-        }
+        if (editTime != null) {
+            editTime.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
-        if (configPage.colorText != 0) {
-            this.editTime.setTextColor(this.configPage.colorText);
+            if (configPage.hintStr != null && !configPage.hintStr.isEmpty()) {
+                editTime.setHint(configPage.hintStr);
+            } else if (configPage.hint != 0) {
+                editTime.setHint(configPage.hint);
+            }
+
+            if (configPage.inputType != 0)
+                editTime.setInputType(configPage.inputType);
+
+            if (configPage.answerInit != null && !configPage.answerInit.isEmpty())
+                editTime.setText(configPage.answerInit);
+
+            if (configPage.background != 0)
+                editTime.setBackgroundResource(configPage.background);
+
+            if (configPage.colorBackgroundTint != 0) {
+                ViewCompat.setBackgroundTintList(editTime,
+                        ColorStateList.valueOf(configPage.colorBackgroundTint));
+            }
+
+            if (configPage.colorText != 0) {
+                editTime.setTextColor(configPage.colorText);
+                editTime.setHintTextColor(configPage.colorText);
+            }
         }
 
     }
@@ -139,7 +154,7 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
                     }
 
                     if (mListener != null) {
-                        mListener.onAnswerTextBox(configPage.getPageNumber(),
+                        mListener.onAnswerTime(configPage.getPageNumber(),
                                 String.valueOf(editTime.getText()));
                     }
                     if (configPage.isNextQuestionAuto()) nextQuestion();
@@ -158,25 +173,61 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
     }
 
     @Override
-    public Config getConfigsQuestion() {
+    public Time.Config getConfigsQuestion() {
         return this.configPage;
     }
 
     @Override
     public View getComponentAnswer() {
-        return null;
+        return editTime;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Time.OnTimeBoxListener) {
+            mListener = (Time.OnTimeBoxListener) context;
+            super.setListener(mListener);
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 
     @Override
     public int getDefaultBackgroundColor() {
-        return (configPage.getColorBackground() != 0) ? configPage.getColorBackground() : Color.GRAY;
+        return configPage.getColorBackground();
     }
 
     @Override
     public void setBackgroundColor(int backgroundColor) {
-        if (configPage.getColorBackground() != 0 && getView() != null) {
-            getView().setBackgroundColor(configPage.getColorBackground());
-        }
+        if (getView() != null) getView().setBackgroundColor(configPage.getColorBackground());
+    }
+
+    @Override
+    public void clearAnswer() {
+        editTime.setText("");
+        editTime.setHint(configPage.hint);
+        // Block page
+        super.blockQuestion();
+    }
+
+    /**
+     * Set Answer.
+     *
+     * @param value {@link String}
+     */
+    private void setAnswer(String value) {
+        super.unlockQuestion();
+        if (value != null && !value.isEmpty()) editTime.setText(value);
     }
 
     /**
@@ -326,9 +377,9 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
     }
 
     /**
-     * Interface OnTextBoxListener.
+     * Interface OnTimeBoxListener.
      */
-    public interface OnTextBoxListener extends OnQuestionListener {
-        void onAnswerTextBox(int page, String value);
+    public interface OnTimeBoxListener extends OnQuestionListener {
+        void onAnswerTime(int page, String value);
     }
 }

@@ -33,13 +33,12 @@ import br.edu.uepb.nutes.simplesurvey.base.OnQuestionListener;
 import static br.edu.uepb.nutes.simplesurvey.question.Single.ARG_CONFIGS_PAGE;
 
 public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundColorHolder, View.OnClickListener {
-
+    private static final String ARG_CONFIGS_PAGE = "arg_configs_page";
 
     private EditText editDate;
-    private TextView txtDate;
-    private int mYear, mMonth, mDay, mHour, mMinute;
+    private int mYear, mMonth, mDay;
     private Config configPage;
-    private OnTextBoxListener mListener;
+    private OnDateBoxListener mListener;
 
     public Date() {
     }
@@ -62,7 +61,7 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        super.blockQuestion();
+//        super.blockQuestion();
 
         // Retrieving arguments
         if (getArguments() != null && getArguments().size() != 0) {
@@ -76,6 +75,7 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
     public void onClick(View v) {
         int id = v.getId();
 
+
         if (id == R.id.answer_text_box) {
 
             // Get Current Time
@@ -87,9 +87,8 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
             DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
                     new DatePickerDialog.OnDateSetListener() {
                         @Override
-                        public void onDateSet(DatePicker view, int year,
-                                              int monthOfYear, int dayOfMonth) {
-                            editDate.setText(dayOfMonth + " - " + (monthOfYear + 1) + " - " + year);
+                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                            editDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                         }
                     }, mYear, mMonth, mDay);
             datePickerDialog.show();
@@ -98,25 +97,11 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
 
 
     @Override
-    public void clearAnswer() {
-
-    }
-
-    @Override
     public void initView(View v) {
         // Initialize components
         this.editDate = v.findViewById(R.id.answer_text_box);
-        this.txtDate = v.findViewById(R.id.question_description);
 
         editDate.setOnClickListener(this);
-
-        if (this.configPage.background != 0) {
-            this.editDate.setBackgroundResource(this.configPage.background);
-        }
-
-        if (configPage.colorText != 0) {
-            this.editDate.setTextColor(this.configPage.colorText);
-        }
 
         if (editDate != null) {
             editDate.setImeOptions(EditorInfo.IME_ACTION_DONE);
@@ -149,6 +134,7 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
         }
 
     }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -168,7 +154,7 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
                     }
 
                     if (mListener != null) {
-                        mListener.onAnswerTextBox(configPage.getPageNumber(),
+                        mListener.onAnswerDate(configPage.getPageNumber(),
                                 String.valueOf(editDate.getText()));
                     }
                     if (configPage.isNextQuestionAuto()) nextQuestion();
@@ -193,19 +179,55 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
 
     @Override
     public View getComponentAnswer() {
-        return null;
+        return editDate;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Date.OnDateBoxListener) {
+            mListener = (Date.OnDateBoxListener) context;
+            super.setListener(mListener);
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 
     @Override
     public int getDefaultBackgroundColor() {
-        return (configPage.getColorBackground() != 0) ? configPage.getColorBackground() : Color.GRAY;
+        return configPage.getColorBackground();
     }
 
     @Override
     public void setBackgroundColor(int backgroundColor) {
-        if (configPage.getColorBackground() != 0 && getView() != null) {
-            getView().setBackgroundColor(configPage.getColorBackground());
-        }
+        if (getView() != null) getView().setBackgroundColor(configPage.getColorBackground());
+    }
+
+    @Override
+    public void clearAnswer() {
+        editDate.setText("");
+        editDate.setHint(configPage.hint);
+        // Block page
+        super.blockQuestion();
+    }
+
+    /**
+     * Set Answer.
+     *
+     * @param value {@link String}
+     */
+    private void setAnswer(String value) {
+        super.unlockQuestion();
+        if (value != null && !value.isEmpty()) editDate.setText(value);
     }
 
     /**
@@ -353,10 +375,11 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
             return Date.builder(this);
         }
     }
+
     /**
-     * Interface OnTextBoxListener.
+     * Interface OnDateBoxListener.
      */
-    public interface OnTextBoxListener extends OnQuestionListener {
-        void onAnswerTextBox(int page, String value);
+    public interface OnDateBoxListener extends OnQuestionListener {
+        void onAnswerDate(int page, String value);
     }
 }

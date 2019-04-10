@@ -23,7 +23,7 @@ import br.edu.uepb.nutes.simplesurvey.question.Time;
 public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
         Dichotomic.OnDichotomicListener, Single.OnSingleListener,
         Multiple.OnMultipleListener,
-        Open.OnTextBoxListener {
+        Open.OnTextBoxListener, Date.OnDateBoxListener, Time.OnTimeBoxListener {
     private final String LOG_TAG = SimpleSurvey1.class.getSimpleName();
 
     @Override
@@ -43,21 +43,6 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
          * More details: {https://github.com/AppIntro/AppIntro#animations}
          */
         setFadeAnimation();
-
-        addQuestion(new Time.Config()
-                .title("Title of the question 7", Color.WHITE)
-                .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?", Color.WHITE)
-                .descriptionTextSize(18)
-                .colorBackground(ContextCompat.getColor(this, R.color.colorDeepPurple))
-                .image(R.drawable.placeholder)
-                .buttonClose(R.drawable.ic_action_close_dark)
-                .inputColorBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
-                .inputColorText(Color.WHITE)
-                .inputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME | InputType.TYPE_TEXT_FLAG_CAP_WORDS)
-                .nextQuestionAuto()
-                .pageNumber(6)
-                .build());
-
 
         addQuestion(new Infor.Config()
                 .layout(R.layout.welcome)
@@ -150,8 +135,9 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .pageNumber(5)
                 .build());
 
+
         addQuestion(new Date.Config()
-                .title("Title of the question 6", Color.WHITE)
+                .title("Title of the question 7", Color.WHITE)
                 .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?", Color.WHITE)
                 .descriptionTextSize(18)
                 .colorBackground(ContextCompat.getColor(this, R.color.colorDeepPurple))
@@ -164,6 +150,19 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .pageNumber(6)
                 .build());
 
+        addQuestion(new Time.Config()
+                .title("Title of the question 8", Color.WHITE)
+                .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?", Color.WHITE)
+                .descriptionTextSize(18)
+                .colorBackground(ContextCompat.getColor(this, R.color.colorDeepPurple))
+                .image(R.drawable.placeholder)
+                .buttonClose(R.drawable.ic_action_close_dark)
+                .inputColorBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
+                .inputColorText(Color.WHITE)
+                .inputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME | InputType.TYPE_TEXT_FLAG_CAP_WORDS)
+                .nextQuestionAuto()
+                .pageNumber(7)
+                .build());
 
         addQuestion(new Infor.Config()
                 .title("Thank you for the answers :)")
@@ -215,6 +214,18 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
 
     @Override
     public void onAnswerTextBox(int page, String value) {
+        Log.d(LOG_TAG, "onAnswerTextBox() | PAGE:  " + page
+                + " | ANSWER: " + value);
+    }
+
+    @Override
+    public void onAnswerDate(int page, String value) {
+        Log.d(LOG_TAG, "onAnswerTextBox() | PAGE:  " + page
+                + " | ANSWER: " + value);
+    }
+
+    @Override
+    public void onAnswerTime(int page, String value) {
         Log.d(LOG_TAG, "onAnswerTextBox() | PAGE:  " + page
                 + " | ANSWER: " + value);
     }
