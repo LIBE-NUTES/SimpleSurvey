@@ -91,7 +91,7 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
                     new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                            editDate.setText(configPage.selectDateFormat(year, (monthOfYear), dayOfMonth));
+                            editDate.setText(formatDate(year, (monthOfYear), dayOfMonth));
                         }
                     }, mYear, mMonth, mDay);
             datePickerDialog.show();
@@ -229,6 +229,16 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
         if (value != null && !value.isEmpty()) editDate.setText(value);
     }
 
+    private String formatDate(int year, int month, int day) {
+        String format_date = configPage.formatDate;
+
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.set(year, month, day);
+
+        return new SimpleDateFormat(format_date, Locale.getDefault()).format(calendar.getTime());
+    }
+
+
     /**
      * Class config page.
      */
@@ -240,6 +250,7 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
         private int hint;
         private String answerInit, hintStr;
         private int inputType;
+        private String formatDate;
 
         public Config() {
             super.layout(R.layout.question_date_layout);
@@ -248,6 +259,7 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
             this.hint = R.string.select_date;
             this.answerInit = null;
             this.inputType = InputType.TYPE_CLASS_TEXT;
+            this.formatDate = "yyyy-MM-dd";
         }
 
         protected Config(Parcel in) {
@@ -257,6 +269,7 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
             answerInit = in.readString();
             inputType = in.readInt();
             hintStr = in.readString();
+            formatDate = in.readString();
         }
 
         @Override
@@ -267,21 +280,8 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
             dest.writeString(answerInit);
             dest.writeInt(inputType);
             dest.writeString(hintStr);
+            dest.writeString(formatDate);
         }
-
-        public static String selectDateFormat(int year, int month, int day) {
-
-            //String format_date = "dd-MM-yyyy";
-            String format_date = "yyyy-MM-dd";
-
-            Calendar calendar = GregorianCalendar.getInstance();
-            calendar.set(year, month, day);
-
-            DateFormat dateFormat = new SimpleDateFormat(format_date);
-
-            return dateFormat.format(calendar.getTime());
-        }
-
 
         @Override
         public int describeContents() {
@@ -355,6 +355,17 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
          */
         public Config inputType(int type) {
             this.inputType = type;
+            return this;
+        }
+
+        /**
+         * Set format date selected .
+         *
+         * @param format {@link String} format date.
+         * @return Config
+         */
+        public Config formatSelectedDate(String format) {
+            this.formatDate = format;
             return this;
         }
 
