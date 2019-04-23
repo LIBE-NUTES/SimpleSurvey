@@ -1,14 +1,13 @@
 package br.edu.uepb.nutes.simplesurvey.question;
 
+
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.view.ViewCompat;
@@ -23,14 +22,19 @@ import android.widget.TextView;
 
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import br.edu.uepb.nutes.simplesurvey.R;
 import br.edu.uepb.nutes.simplesurvey.base.BaseConfigQuestion;
 import br.edu.uepb.nutes.simplesurvey.base.BaseQuestion;
 import br.edu.uepb.nutes.simplesurvey.base.OnQuestionListener;
 
-import static br.edu.uepb.nutes.simplesurvey.question.Single.ARG_CONFIGS_PAGE;
 
 public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundColorHolder, View.OnClickListener {
     private static final String ARG_CONFIGS_PAGE = "arg_configs_page";
@@ -75,10 +79,9 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
     public void onClick(View v) {
         int id = v.getId();
 
-
         if (id == R.id.answer_text_box) {
 
-            // Get Current Time
+            // Get Current Date
             final Calendar c = Calendar.getInstance();
             mYear = c.get(Calendar.YEAR);
             mMonth = c.get(Calendar.MONTH);
@@ -88,7 +91,7 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
                     new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                            editDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                            editDate.setText(configPage.selectDateFormat(year, (monthOfYear), dayOfMonth));
                         }
                     }, mYear, mMonth, mDay);
             datePickerDialog.show();
@@ -106,7 +109,6 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
         if (editDate != null) {
             editDate.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
-
             if (configPage.hintStr != null && !configPage.hintStr.isEmpty()) {
                 editDate.setHint(configPage.hintStr);
             } else if (configPage.hint != 0) {
@@ -118,9 +120,6 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
 
             if (configPage.answerInit != null && !configPage.answerInit.isEmpty())
                 editDate.setText(configPage.answerInit);
-
-            if (configPage.background != 0)
-                editDate.setBackgroundResource(configPage.background);
 
             if (configPage.colorBackgroundTint != 0) {
                 ViewCompat.setBackgroundTintList(editDate,
@@ -234,8 +233,7 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
      * Class config page.
      */
     public static class Config extends BaseConfigQuestion<Config> implements Parcelable {
-        @DrawableRes
-        private int background;
+
         @ColorInt
         int colorText, colorBackgroundTint;
         @StringRes
@@ -245,7 +243,6 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
 
         public Config() {
             super.layout(R.layout.question_date_layout);
-            this.background = 0;
             this.colorBackgroundTint = 0;
             this.colorBackgroundTint = 0;
             this.hint = R.string.select_date;
@@ -254,7 +251,6 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
         }
 
         protected Config(Parcel in) {
-            background = in.readInt();
             colorText = in.readInt();
             colorBackgroundTint = in.readInt();
             hint = in.readInt();
@@ -265,7 +261,6 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
-            dest.writeInt(background);
             dest.writeInt(colorText);
             dest.writeInt(colorBackgroundTint);
             dest.writeInt(hint);
@@ -273,6 +268,20 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
             dest.writeInt(inputType);
             dest.writeString(hintStr);
         }
+
+        public static String selectDateFormat(int year, int month, int day) {
+
+            //String format_date = "dd-MM-yyyy";
+            String format_date = "yyyy-MM-dd";
+
+            Calendar calendar = GregorianCalendar.getInstance();
+            calendar.set(year, month, day);
+
+            DateFormat dateFormat = new SimpleDateFormat(format_date);
+
+            return dateFormat.format(calendar.getTime());
+        }
+
 
         @Override
         public int describeContents() {
@@ -291,16 +300,6 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
             }
         };
 
-        /**
-         * Set background style.
-         *
-         * @param drawable {@link DrawableRes} resource background.
-         * @return Config
-         */
-        public Config inputBackground(@DrawableRes int drawable) {
-            this.background = drawable;
-            return this;
-        }
 
         /**
          * Set color text.

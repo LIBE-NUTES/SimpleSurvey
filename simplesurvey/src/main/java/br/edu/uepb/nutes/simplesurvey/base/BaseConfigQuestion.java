@@ -22,6 +22,7 @@
  */
 package br.edu.uepb.nutes.simplesurvey.base;
 
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
@@ -44,6 +45,7 @@ public abstract class BaseConfigQuestion<T> {
     private int title, description;
     @DrawableRes
     private int image, drawableClose;
+    private AlertDialog mAlertDialog;
     @ColorRes
     private int colorBackground, titleColor, descriptionColor;
     private boolean zoomDisabled, nextQuestionAuto, isRequired;

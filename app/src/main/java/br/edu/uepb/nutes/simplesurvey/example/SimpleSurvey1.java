@@ -135,17 +135,16 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .pageNumber(5)
                 .build());
 
-
         addQuestion(new Date.Config()
                 .title("Title of the question 7", Color.WHITE)
                 .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?", Color.WHITE)
                 .descriptionTextSize(18)
-                .colorBackground(ContextCompat.getColor(this, R.color.colorDeepPurple))
+                .colorBackground(ContextCompat.getColor(this, R.color.colorAccent))
                 .image(R.drawable.placeholder)
                 .buttonClose(R.drawable.ic_action_close_dark)
-                .inputColorBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
+                .inputColorBackgroundTint(ContextCompat.getColor(this, R.color.colorWhite))
                 .inputColorText(Color.WHITE)
-                .inputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME | InputType.TYPE_TEXT_FLAG_CAP_WORDS)
+//                .selectDateFormat("yyyy/MM/dd")
                 .nextQuestionAuto()
                 .pageNumber(6)
                 .build());

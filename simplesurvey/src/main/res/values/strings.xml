@@ -6,8 +6,6 @@
     <string name="text_yes">Yes</string>
     <string name="text_ok">Ok</string>
     <string name="message_blocked_page">Answer the current question to go to next&#8230;</string>
-    <string name="select_date">Select Date</string>
-    <string name="select_time">Select Time</string>
 
     <!-- SURVEY -->
     <string name="survey_select_an_answer">Select an answer&#8230;</string>
@@ -17,5 +15,7 @@
     <string name="survey_add_new_item">Add new item</string>
     <string name="survey_please_add_new_item">Please add new items&#8230;</string>
     <string name="survey_dialog_remove_add_new_item">Added items that are not used will be removed.\nAre you sure you do not want to select the item?</string>
+    <string name="select_date">Select date&#8230;</string>
+    <string name="select_time">Select time&#8230;</string>
     <!-- END SURVEY -->
 </resources>

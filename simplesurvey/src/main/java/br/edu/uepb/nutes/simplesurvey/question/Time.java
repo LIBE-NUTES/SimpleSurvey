@@ -1,9 +1,10 @@
 package br.edu.uepb.nutes.simplesurvey.question;
 
+
+import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -60,7 +61,7 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        super.blockQuestion();
+        //super.blockQuestion();
 
         // Retrieving arguments
         if (getArguments() != null && getArguments().size() != 0) {
@@ -84,7 +85,6 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
             // Launch Time Picker Dialog
             TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
                     new TimePickerDialog.OnTimeSetListener() {
-
                         @Override
                         public void onTimeSet(TimePicker view, int hourOfDay,
                                               int minute) {
@@ -152,7 +152,6 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
                         blockQuestion();
                         return true;
                     }
-
                     if (mListener != null) {
                         mListener.onAnswerTime(configPage.getPageNumber(),
                                 String.valueOf(editTime.getText()));
