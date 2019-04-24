@@ -50,39 +50,6 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .pageNumber(0)
                 .build());
 
-        /**
-         * date formats:
-         *  - dd-MM-yyyy
-         *  - yyyy-MM-dd
-         */
-        addQuestion(new Date.Config()
-                .title("Title of the question 7", Color.WHITE)
-                .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?", Color.WHITE)
-                .descriptionTextSize(18)
-                .colorBackground(ContextCompat.getColor(this, R.color.colorAccent))
-                .image(R.drawable.placeholder)
-                .buttonClose(R.drawable.ic_action_close_dark)
-                .inputColorBackgroundTint(ContextCompat.getColor(this, R.color.colorWhite))
-                .inputColorText(Color.WHITE)
-                .formatSelectedDate("dd-MM-yyyy")
-                .nextQuestionAuto()
-                .pageNumber(6)
-                .build());
-
-        addQuestion(new Time.Config()
-                .title("Title of the question 8", Color.WHITE)
-                .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?", Color.WHITE)
-                .descriptionTextSize(18)
-                .colorBackground(ContextCompat.getColor(this, R.color.colorDeepPurple))
-                .image(R.drawable.placeholder)
-                .buttonClose(R.drawable.ic_action_close_dark)
-                .inputColorBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
-                .inputColorText(Color.WHITE)
-                .inputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME | InputType.TYPE_TEXT_FLAG_CAP_WORDS)
-                .nextQuestionAuto()
-                .pageNumber(7)
-                .build());
-
         addQuestion(new Open.Config()
                 .title("Title of the question 1", Color.WHITE)
                 .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?",
@@ -97,7 +64,6 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .nextQuestionAuto()
                 .pageNumber(1)
                 .build());
-
 
         addQuestion(new Open.Config()
                 .title("Title of the question 2", Color.WHITE)
@@ -168,6 +134,12 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .pageNumber(5)
                 .build());
 
+        /**
+         * formatSelectedDate - date formats:
+         *  - dd-MM-yyyy
+         *  - yyyy-MM-dd
+         *  - dd-MM-yyyy HH:mm:ss
+         */
         addQuestion(new Date.Config()
                 .title("Title of the question 7", Color.WHITE)
                 .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?", Color.WHITE)
@@ -182,6 +154,10 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .pageNumber(6)
                 .build());
 
+        /**
+         * setTimeFormat - time formats:
+         *  - HH:mm:ss
+         */
         addQuestion(new Time.Config()
                 .title("Title of the question 8", Color.WHITE)
                 .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?", Color.WHITE)
@@ -192,6 +168,8 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .inputColorBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
                 .inputColorText(Color.WHITE)
                 .inputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME | InputType.TYPE_TEXT_FLAG_CAP_WORDS)
+                .enable24Hours()
+                .setTimeFormat("HH:mm:ss")
                 .nextQuestionAuto()
                 .pageNumber(7)
                 .build());

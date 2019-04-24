@@ -65,7 +65,7 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        super.blockQuestion();
+        super.blockQuestion();
 
         // Retrieving arguments
         if (getArguments() != null && getArguments().size() != 0) {
@@ -91,7 +91,7 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
                     new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                            editDate.setText(formatDate(year, (monthOfYear), dayOfMonth));
+                            setAnswer(formatDate(year, (monthOfYear), dayOfMonth));
                         }
                     }, mYear, mMonth, mDay);
             datePickerDialog.show();
@@ -229,6 +229,9 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
         if (value != null && !value.isEmpty()) editDate.setText(value);
     }
 
+    /**
+     * sets the date format.
+     */
     private String formatDate(int year, int month, int day) {
         String format_date = configPage.formatDate;
 

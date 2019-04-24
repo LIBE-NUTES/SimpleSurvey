@@ -1,7 +1,5 @@
 package br.edu.uepb.nutes.simplesurvey.question;
 
-
-import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -24,7 +22,10 @@ import android.widget.TimePicker;
 
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import br.edu.uepb.nutes.simplesurvey.R;
 import br.edu.uepb.nutes.simplesurvey.base.BaseConfigQuestion;
@@ -61,7 +62,7 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //super.blockQuestion();
+        super.blockQuestion();
 
         // Retrieving arguments
         if (getArguments() != null && getArguments().size() != 0) {
@@ -89,9 +90,9 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
                         public void onTimeSet(TimePicker view, int hourOfDay,
                                               int minute) {
 
-                            editTime.setText(hourOfDay + ":" + minute);
+                            setAnswer(timeFormat(hourOfDay, minute));
                         }
-                    }, mHour, mMinute, true);
+                    }, mHour, mMinute, configPage.enable24Hours);
             timePickerDialog.show();
         }
     }
@@ -230,6 +231,19 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
     }
 
     /**
+     * sets the time format.
+     */
+    private String timeFormat(int hour, int minutes) {
+        String format_hour = configPage.formatHour;
+
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.set(0, 0, 0, hour, minutes, 0);
+
+        return new SimpleDateFormat(format_hour, Locale.getDefault()).format(calendar.getTime());
+    }
+
+
+    /**
      * Class config page.
      */
     public static class Config extends BaseConfigQuestion<Config> implements Parcelable {
@@ -241,6 +255,8 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
         private int hint;
         private String answerInit, hintStr;
         private int inputType;
+        private boolean enable24Hours;
+        private String formatHour;
 
         public Config() {
             super.layout(R.layout.question_time_layout);
@@ -250,6 +266,9 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
             this.hint = R.string.select_time;
             this.answerInit = null;
             this.inputType = InputType.TYPE_CLASS_TEXT;
+            this.enable24Hours = false;
+            this.formatHour = "HH:mm:ss";
+
         }
 
         protected Config(Parcel in) {
@@ -260,6 +279,8 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
             answerInit = in.readString();
             inputType = in.readInt();
             hintStr = in.readString();
+            enable24Hours = Boolean.parseBoolean(in.readString());
+            formatHour = in.readString();
         }
 
         @Override
@@ -271,6 +292,8 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
             dest.writeString(answerInit);
             dest.writeInt(inputType);
             dest.writeString(hintStr);
+            dest.writeString(String.valueOf(enable24Hours));
+            dest.writeString(formatHour);
         }
 
         @Override
@@ -355,6 +378,26 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
          */
         public Config inputType(int type) {
             this.inputType = type;
+            return this;
+        }
+
+        /**
+         * Enable 24 hours format.
+         *
+         * @return Config
+         */
+        public Config enable24Hours() {
+            this.enable24Hours = true;
+            return this;
+        }
+
+        /**
+         * Enable 24 hours format.
+         *
+         * @return Config
+         */
+        public Config setTimeFormat(String format) {
+            this.formatHour = format;
             return this;
         }
 
