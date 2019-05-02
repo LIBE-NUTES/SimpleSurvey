@@ -156,7 +156,7 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
 
         /**
          * setTimeFormat - time formats:
-         *  - HH:mm:ss
+         *  - "HH:mm:ss
          */
         addQuestion(new Time.Config()
                 .title("Title of the question 8", Color.WHITE)
@@ -165,9 +165,8 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .colorBackground(ContextCompat.getColor(this, R.color.colorDeepPurple))
                 .image(R.drawable.placeholder)
                 .buttonClose(R.drawable.ic_action_close_dark)
-                .inputColorBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
+                .inputColorBackgroundTint(ContextCompat.getColor(this, R.color.colorWhite))
                 .inputColorText(Color.WHITE)
-                .inputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME | InputType.TYPE_TEXT_FLAG_CAP_WORDS)
                 .enable24Hours()
                 .setTimeFormat("HH:mm:ss")
                 .nextQuestionAuto()
@@ -230,13 +229,13 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
 
     @Override
     public void onAnswerDate(int page, String value) {
-        Log.d(LOG_TAG, "onAnswerTextBox() | PAGE:  " + page
+        Log.d(LOG_TAG, "onAnswerDate() | PAGE:  " + page
                 + " | ANSWER: " + value);
     }
 
     @Override
     public void onAnswerTime(int page, String value) {
-        Log.d(LOG_TAG, "onAnswerTextBox() | PAGE:  " + page
+        Log.d(LOG_TAG, "onAnswerTime() | PAGE:  " + page
                 + " | ANSWER: " + value);
     }
 }

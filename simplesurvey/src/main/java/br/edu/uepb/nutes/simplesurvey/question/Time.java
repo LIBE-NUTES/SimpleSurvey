@@ -113,15 +113,8 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
             } else if (configPage.hint != 0) {
                 editTime.setHint(configPage.hint);
             }
-
-            if (configPage.inputType != 0)
-                editTime.setInputType(configPage.inputType);
-
             if (configPage.answerInit != null && !configPage.answerInit.isEmpty())
                 editTime.setText(configPage.answerInit);
-
-            if (configPage.background != 0)
-                editTime.setBackgroundResource(configPage.background);
 
             if (configPage.colorBackgroundTint != 0) {
                 ViewCompat.setBackgroundTintList(editTime,
@@ -242,7 +235,6 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
         return new SimpleDateFormat(format_hour, Locale.getDefault()).format(calendar.getTime());
     }
 
-
     /**
      * Class config page.
      */
@@ -254,7 +246,6 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
         @StringRes
         private int hint;
         private String answerInit, hintStr;
-        private int inputType;
         private boolean enable24Hours;
         private String formatHour;
 
@@ -262,10 +253,8 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
             super.layout(R.layout.question_time_layout);
             this.background = 0;
             this.colorBackgroundTint = 0;
-            this.colorBackgroundTint = 0;
             this.hint = R.string.select_time;
             this.answerInit = null;
-            this.inputType = InputType.TYPE_CLASS_TEXT;
             this.enable24Hours = false;
             this.formatHour = "HH:mm:ss";
 
@@ -277,7 +266,6 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
             colorBackgroundTint = in.readInt();
             hint = in.readInt();
             answerInit = in.readString();
-            inputType = in.readInt();
             hintStr = in.readString();
             enable24Hours = Boolean.parseBoolean(in.readString());
             formatHour = in.readString();
@@ -290,7 +278,6 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
             dest.writeInt(colorBackgroundTint);
             dest.writeInt(hint);
             dest.writeString(answerInit);
-            dest.writeInt(inputType);
             dest.writeString(hintStr);
             dest.writeString(String.valueOf(enable24Hours));
             dest.writeString(formatHour);
@@ -313,16 +300,6 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
             }
         };
 
-        /**
-         * Set background style.
-         *
-         * @param drawable {@link DrawableRes} resource background.
-         * @return Config
-         */
-        public Config inputBackground(@DrawableRes int drawable) {
-            this.background = drawable;
-            return this;
-        }
 
         /**
          * Set color text.
@@ -348,40 +325,6 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
         }
 
         /**
-         * Set inputHint message.
-         *
-         * @param message {@link StringRes} resource color.
-         * @return Config
-         */
-        public Config inputHint(@StringRes int message) {
-            this.hint = message;
-            return this;
-        }
-
-        /**
-         * Set hint message.
-         *
-         * @param message {@String}
-         * @return Config
-         */
-        public Config inputHint(String message) {
-            this.hintStr = message;
-            return this;
-        }
-
-        /**
-         * Set input type.
-         * {@link InputType}
-         *
-         * @param type Input type.
-         * @return Config
-         */
-        public Config inputType(int type) {
-            this.inputType = type;
-            return this;
-        }
-
-        /**
          * Enable 24 hours format.
          *
          * @return Config
@@ -392,23 +335,12 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
         }
 
         /**
-         * Enable 24 hours format.
+         * set time format.
          *
          * @return Config
          */
         public Config setTimeFormat(String format) {
             this.formatHour = format;
-            return this;
-        }
-
-        /**
-         * Set answer init.
-         *
-         * @param answer {@link String} answer.
-         * @return Config
-         */
-        public Config answerInit(String answer) {
-            this.answerInit = answer;
             return this;
         }
 

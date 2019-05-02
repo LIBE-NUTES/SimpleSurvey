@@ -1,6 +1,5 @@
 package br.edu.uepb.nutes.simplesurvey.question;
 
-
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -22,13 +21,10 @@ import android.widget.TextView;
 
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import br.edu.uepb.nutes.simplesurvey.R;
 import br.edu.uepb.nutes.simplesurvey.base.BaseConfigQuestion;
@@ -114,9 +110,6 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
             } else if (configPage.hint != 0) {
                 editDate.setHint(configPage.hint);
             }
-
-            if (configPage.inputType != 0)
-                editDate.setInputType(configPage.inputType);
 
             if (configPage.answerInit != null && !configPage.answerInit.isEmpty())
                 editDate.setText(configPage.answerInit);
@@ -252,16 +245,13 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
         @StringRes
         private int hint;
         private String answerInit, hintStr;
-        private int inputType;
         private String formatDate;
 
         public Config() {
             super.layout(R.layout.question_date_layout);
             this.colorBackgroundTint = 0;
-            this.colorBackgroundTint = 0;
             this.hint = R.string.select_date;
             this.answerInit = null;
-            this.inputType = InputType.TYPE_CLASS_TEXT;
             this.formatDate = "yyyy-MM-dd";
         }
 
@@ -270,8 +260,7 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
             colorBackgroundTint = in.readInt();
             hint = in.readInt();
             answerInit = in.readString();
-            inputType = in.readInt();
-            hintStr = in.readString();
+           hintStr = in.readString();
             formatDate = in.readString();
         }
 
@@ -281,7 +270,6 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
             dest.writeInt(colorBackgroundTint);
             dest.writeInt(hint);
             dest.writeString(answerInit);
-            dest.writeInt(inputType);
             dest.writeString(hintStr);
             dest.writeString(formatDate);
         }
@@ -302,7 +290,6 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
                 return new Config[size];
             }
         };
-
 
         /**
          * Set color text.
@@ -328,40 +315,6 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
         }
 
         /**
-         * Set inputHint message.
-         *
-         * @param message {@link StringRes} resource color.
-         * @return Config
-         */
-        public Config inputHint(@StringRes int message) {
-            this.hint = message;
-            return this;
-        }
-
-        /**
-         * Set hint message.
-         *
-         * @param message {@String}
-         * @return Config
-         */
-        public Config inputHint(String message) {
-            this.hintStr = message;
-            return this;
-        }
-
-        /**
-         * Set input type.
-         * {@link InputType}
-         *
-         * @param type Input type.
-         * @return Config
-         */
-        public Config inputType(int type) {
-            this.inputType = type;
-            return this;
-        }
-
-        /**
          * Set format date selected .
          *
          * @param format {@link String} format date.
@@ -369,17 +322,6 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
          */
         public Config formatSelectedDate(String format) {
             this.formatDate = format;
-            return this;
-        }
-
-        /**
-         * Set answer init.
-         *
-         * @param answer {@link String} answer.
-         * @return Config
-         */
-        public Config answerInit(String answer) {
-            this.answerInit = answer;
             return this;
         }
 
