@@ -7,11 +7,10 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.view.ViewCompat;
-import android.text.InputType;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -24,6 +23,7 @@ import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
@@ -36,10 +36,11 @@ import static br.edu.uepb.nutes.simplesurvey.question.Single.ARG_CONFIGS_PAGE;
 
 public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundColorHolder, View.OnClickListener {
 
+    String TAG = "Time";
     private EditText editTime;
     private int mHour, mMinute;
     private Config configPage;
-    private OnTimeBoxListener mListener;
+    private OnTimeListener mListener;
 
     public Time() {
     }
@@ -84,13 +85,21 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
             mMinute = c.get(Calendar.MINUTE);
 
             // Launch Time Picker Dialog
-            TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
+            final TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
                     new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker view, int hourOfDay,
                                               int minute) {
 
                             setAnswer(timeFormat(hourOfDay, minute));
+
+                            //c.set(hourOfDay, minute);
+
+//                            c.setTimeInMillis(Long.parseLong(timeFormat(hourOfDay, minute)));
+//
+//                            configPage.answerInit(c.getTimeInMillis());
+                            //configPage.answerInit(Long.parseLong(timeFormat(hourOfDay, minute)));
+                            //Log.d(TAG, "onTimeSet: " + configPage.answerInit);
                         }
                     }, mHour, mMinute, configPage.enable24Hours);
             timePickerDialog.show();
@@ -113,8 +122,8 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
             } else if (configPage.hint != 0) {
                 editTime.setHint(configPage.hint);
             }
-            if (configPage.answerInit != null && !configPage.answerInit.isEmpty())
-                editTime.setText(configPage.answerInit);
+            if (configPage.answerInit != 0)
+                editTime.setText("" + configPage.answerInit);
 
             if (configPage.colorBackgroundTint != 0) {
                 ViewCompat.setBackgroundTintList(editTime,
@@ -126,7 +135,6 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
                 editTime.setHintTextColor(configPage.colorText);
             }
         }
-
     }
 
     @Override
@@ -148,7 +156,7 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
                     }
                     if (mListener != null) {
                         mListener.onAnswerTime(configPage.getPageNumber(),
-                                String.valueOf(editTime.getText()));
+                                String.valueOf(editTime.getText()), configPage.getCalendar());
                     }
                     if (configPage.isNextQuestionAuto()) nextQuestion();
                     else unlockQuestion();
@@ -183,8 +191,8 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof Time.OnTimeBoxListener) {
-            mListener = (Time.OnTimeBoxListener) context;
+        if (context instanceof Time.OnTimeListener) {
+            mListener = (Time.OnTimeListener) context;
             super.setListener(mListener);
         }
     }
@@ -239,33 +247,30 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
      * Class config page.
      */
     public static class Config extends BaseConfigQuestion<Config> implements Parcelable {
-        @DrawableRes
-        private int background;
+
         @ColorInt
         int colorText, colorBackgroundTint;
         @StringRes
         private int hint;
-        private String answerInit, hintStr;
+        private String hintStr;
+        private long answerInit;
         private boolean enable24Hours;
         private String formatHour;
 
         public Config() {
             super.layout(R.layout.question_time_layout);
-            this.background = 0;
             this.colorBackgroundTint = 0;
             this.hint = R.string.select_time;
-            this.answerInit = null;
+            this.answerInit = 0;
             this.enable24Hours = false;
-            this.formatHour = "HH:mm:ss";
-
+            this.formatHour = "HH:mm";
         }
 
         protected Config(Parcel in) {
-            background = in.readInt();
             colorText = in.readInt();
             colorBackgroundTint = in.readInt();
             hint = in.readInt();
-            answerInit = in.readString();
+            answerInit = in.readLong();
             hintStr = in.readString();
             enable24Hours = Boolean.parseBoolean(in.readString());
             formatHour = in.readString();
@@ -273,11 +278,10 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
-            dest.writeInt(background);
             dest.writeInt(colorText);
             dest.writeInt(colorBackgroundTint);
             dest.writeInt(hint);
-            dest.writeString(answerInit);
+            dest.writeLong(answerInit);
             dest.writeString(hintStr);
             dest.writeString(String.valueOf(enable24Hours));
             dest.writeString(formatHour);
@@ -339,7 +343,7 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
          *
          * @return Config
          */
-        public Config setTimeFormat(String format) {
+        public Config formatSelectedTime(String format) {
             this.formatHour = format;
             return this;
         }
@@ -348,12 +352,29 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
         public Time build() {
             return Time.builder(this);
         }
+
+        /**
+         * Set answer init.
+         *
+         * @param milliseconds {@link long} answer.
+         * @return Config
+         */
+        public Config answerInit(long milliseconds) {
+            this.answerInit = milliseconds;
+            return this;
+        }
+
+        public Calendar getCalendar() {
+            Calendar calendar = GregorianCalendar.getInstance();
+            return calendar;
+        }
+
     }
 
     /**
-     * Interface OnTimeBoxListener.
+     * Interface OnTimeListener.
      */
-    public interface OnTimeBoxListener extends OnQuestionListener {
-        void onAnswerTime(int page, String value);
+    public interface OnTimeListener extends OnQuestionListener {
+        void onAnswerTime(int page, String value, Calendar calendar);
     }
 }

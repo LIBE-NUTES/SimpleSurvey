@@ -9,6 +9,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import br.edu.uepb.nutes.simplesurvey.base.SimpleSurvey;
@@ -23,7 +24,7 @@ import br.edu.uepb.nutes.simplesurvey.question.Time;
 public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
         Dichotomic.OnDichotomicListener, Single.OnSingleListener,
         Multiple.OnMultipleListener,
-        Open.OnTextBoxListener, Date.OnDateBoxListener, Time.OnTimeBoxListener {
+        Open.OnTextBoxListener, Date.OnDateListener, Time.OnTimeListener {
     private final String LOG_TAG = SimpleSurvey1.class.getSimpleName();
 
     @Override
@@ -48,6 +49,25 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .layout(R.layout.welcome)
                 .nextQuestionAuto()
                 .pageNumber(0)
+                .build());
+
+        /**
+         * formatSelectedTime - time formats:
+         *  - "HH:mm:ss
+         */
+        addQuestion(new Time.Config()
+                .title("Title of the question 8", Color.WHITE)
+                .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?", Color.WHITE)
+                .descriptionTextSize(18)
+                .colorBackground(ContextCompat.getColor(this, R.color.colorDeepPurple))
+                .image(R.drawable.placeholder)
+                .buttonClose(R.drawable.ic_action_close_dark)
+                .inputColorBackgroundTint(ContextCompat.getColor(this, R.color.colorWhite))
+                .inputColorText(Color.WHITE)
+                .enable24Hours()
+                .formatSelectedTime("HH:mm")
+                .nextQuestionAuto()
+                .pageNumber(7)
                 .build());
 
         addQuestion(new Open.Config()
@@ -154,24 +174,6 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .pageNumber(6)
                 .build());
 
-        /**
-         * setTimeFormat - time formats:
-         *  - "HH:mm:ss
-         */
-        addQuestion(new Time.Config()
-                .title("Title of the question 8", Color.WHITE)
-                .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?", Color.WHITE)
-                .descriptionTextSize(18)
-                .colorBackground(ContextCompat.getColor(this, R.color.colorDeepPurple))
-                .image(R.drawable.placeholder)
-                .buttonClose(R.drawable.ic_action_close_dark)
-                .inputColorBackgroundTint(ContextCompat.getColor(this, R.color.colorWhite))
-                .inputColorText(Color.WHITE)
-                .enable24Hours()
-                .setTimeFormat("HH:mm:ss")
-                .nextQuestionAuto()
-                .pageNumber(7)
-                .build());
 
         addQuestion(new Infor.Config()
                 .title("Thank you for the answers :)")
@@ -234,8 +236,8 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
     }
 
     @Override
-    public void onAnswerTime(int page, String value) {
+    public void onAnswerTime(int page, String value, Calendar calendar) {
         Log.d(LOG_TAG, "onAnswerTime() | PAGE:  " + page
-                + " | ANSWER: " + value);
+                + " | ANSWER: " + value+ "CALENDAR: "+calendar);
     }
 }
