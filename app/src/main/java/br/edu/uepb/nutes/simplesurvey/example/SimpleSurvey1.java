@@ -52,6 +52,28 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .build());
 
         /**
+         * formatSelectedDate - date formats:
+         *  - dd-MM-yyyy
+         *  - yyyy-MM-dd
+         *  - dd-MM-yyyy HH:mm:ss
+         */
+        addQuestion(new Date.Config()
+                .title("Title of the question 7", Color.WHITE)
+                .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?", Color.WHITE)
+                .descriptionTextSize(18)
+                .colorBackground(ContextCompat.getColor(this, R.color.colorAccent))
+                .image(R.drawable.placeholder)
+                .buttonClose(R.drawable.ic_action_close_dark)
+                .inputColorBackgroundTint(ContextCompat.getColor(this, R.color.colorWhite))
+                .inputColorText(Color.WHITE)
+                .formatSelectedDate("dd-MM-yyyy")
+                .answerInit("25-02-2019")
+                .nextQuestionAuto()
+                .pageNumber(6)
+                .build());
+
+
+        /**
          * formatSelectedTime - time formats:
          *  - "HH:mm:ss
          */
@@ -65,7 +87,7 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .inputColorBackgroundTint(ContextCompat.getColor(this, R.color.colorWhite))
                 .inputColorText(Color.WHITE)
                 .enable24Hours()
-                .formatSelectedTime("HH:mm")
+                .answerInit("12:50")
                 .nextQuestionAuto()
                 .pageNumber(7)
                 .build());
@@ -154,26 +176,6 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .pageNumber(5)
                 .build());
 
-        /**
-         * formatSelectedDate - date formats:
-         *  - dd-MM-yyyy
-         *  - yyyy-MM-dd
-         *  - dd-MM-yyyy HH:mm:ss
-         */
-        addQuestion(new Date.Config()
-                .title("Title of the question 7", Color.WHITE)
-                .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?", Color.WHITE)
-                .descriptionTextSize(18)
-                .colorBackground(ContextCompat.getColor(this, R.color.colorAccent))
-                .image(R.drawable.placeholder)
-                .buttonClose(R.drawable.ic_action_close_dark)
-                .inputColorBackgroundTint(ContextCompat.getColor(this, R.color.colorWhite))
-                .inputColorText(Color.WHITE)
-                .formatSelectedDate("dd-MM-yyyy")
-                .nextQuestionAuto()
-                .pageNumber(6)
-                .build());
-
 
         addQuestion(new Infor.Config()
                 .title("Thank you for the answers :)")
@@ -238,6 +240,6 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
     @Override
     public void onAnswerTime(int page, String value, Calendar calendar) {
         Log.d(LOG_TAG, "onAnswerTime() | PAGE:  " + page
-                + " | ANSWER: " + value+ "CALENDAR: "+calendar);
+                + " | ANSWER: " + value + "CALENDAR: " + calendar.getTimeInMillis());
     }
 }

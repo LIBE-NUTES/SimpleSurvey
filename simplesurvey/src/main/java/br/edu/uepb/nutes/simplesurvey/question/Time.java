@@ -7,23 +7,19 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
-import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.view.ViewCompat;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
@@ -36,7 +32,6 @@ import static br.edu.uepb.nutes.simplesurvey.question.Single.ARG_CONFIGS_PAGE;
 
 public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundColorHolder, View.OnClickListener {
 
-    String TAG = "Time";
     private EditText editTime;
     private int mHour, mMinute;
     private Config configPage;
@@ -81,6 +76,10 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
 
             // Get Current Time
             final Calendar c = Calendar.getInstance();
+            if (configPage.answerInit > 0) {
+                c.setTimeInMillis(configPage.answerInit);
+            }
+
             mHour = c.get(Calendar.HOUR_OF_DAY);
             mMinute = c.get(Calendar.MINUTE);
 
@@ -91,15 +90,13 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
                         public void onTimeSet(TimePicker view, int hourOfDay,
                                               int minute) {
 
-                            setAnswer(timeFormat(hourOfDay, minute));
+                            Calendar c = Calendar.getInstance();
+                            c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                            c.set(Calendar.MINUTE, minute);
+                            String timeStr = timeFormat(c.getTimeInMillis());
+                            setAnswer(timeStr);
 
-                            //c.set(hourOfDay, minute);
-
-//                            c.setTimeInMillis(Long.parseLong(timeFormat(hourOfDay, minute)));
-//
-//                            configPage.answerInit(c.getTimeInMillis());
-                            //configPage.answerInit(Long.parseLong(timeFormat(hourOfDay, minute)));
-                            //Log.d(TAG, "onTimeSet: " + configPage.answerInit);
+                            mListener.onAnswerTime(configPage.getPageNumber(), timeStr, c);
                         }
                     }, mHour, mMinute, configPage.enable24Hours);
             timePickerDialog.show();
@@ -122,8 +119,10 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
             } else if (configPage.hint != 0) {
                 editTime.setHint(configPage.hint);
             }
-            if (configPage.answerInit != 0)
-                editTime.setText("" + configPage.answerInit);
+
+            if (configPage.answerInit > 0) {
+                editTime.setText(timeFormat(configPage.answerInit));
+            }
 
             if (configPage.colorBackgroundTint != 0) {
                 ViewCompat.setBackgroundTintList(editTime,
@@ -135,37 +134,6 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
                 editTime.setHintTextColor(configPage.colorText);
             }
         }
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        if (editTime == null) return;
-
-        editTime.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    InputMethodManager imm = (InputMethodManager) v.getContext()
-                            .getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                    if (String.valueOf(editTime.getText()).isEmpty()) {
-                        blockQuestion();
-                        return true;
-                    }
-                    if (mListener != null) {
-                        mListener.onAnswerTime(configPage.getPageNumber(),
-                                String.valueOf(editTime.getText()), configPage.getCalendar());
-                    }
-                    if (configPage.isNextQuestionAuto()) nextQuestion();
-                    else unlockQuestion();
-
-                    return true;
-                }
-                return false;
-            }
-        });
     }
 
     @Override
@@ -234,11 +202,11 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
     /**
      * sets the time format.
      */
-    private String timeFormat(int hour, int minutes) {
+    private String timeFormat(long millis) {
         String format_hour = configPage.formatHour;
 
         Calendar calendar = GregorianCalendar.getInstance();
-        calendar.set(0, 0, 0, hour, minutes, 0);
+        calendar.setTimeInMillis(millis);
 
         return new SimpleDateFormat(format_hour, Locale.getDefault()).format(calendar.getTime());
     }
@@ -261,9 +229,9 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
             super.layout(R.layout.question_time_layout);
             this.colorBackgroundTint = 0;
             this.hint = R.string.select_time;
-            this.answerInit = 0;
+            this.answerInit = -1;
             this.enable24Hours = false;
-            this.formatHour = "HH:mm";
+            this.formatHour = "hh:mm a";
         }
 
         protected Config(Parcel in) {
@@ -335,6 +303,7 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
          */
         public Config enable24Hours() {
             this.enable24Hours = true;
+            this.formatHour = "HH:mm";
             return this;
         }
 
@@ -348,9 +317,22 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
             return this;
         }
 
-        @Override
-        public Time build() {
-            return Time.builder(this);
+        /**
+         * Set answer init.
+         * Hour in HH:mm format.
+         *
+         * @param time {@link long} answer.
+         * @return Config
+         */
+        public Config answerInit(String time) {
+            SimpleDateFormat f = new SimpleDateFormat("HH:mm", Locale.getDefault());
+
+            try {
+                this.answerInit = f.parse(time).getTime();
+            } catch (ParseException e) {
+                throw new IllegalArgumentException(e.getMessage());
+            }
+            return this;
         }
 
         /**
@@ -364,9 +346,9 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
             return this;
         }
 
-        public Calendar getCalendar() {
-            Calendar calendar = GregorianCalendar.getInstance();
-            return calendar;
+        @Override
+        public Time build() {
+            return Time.builder(this);
         }
 
     }

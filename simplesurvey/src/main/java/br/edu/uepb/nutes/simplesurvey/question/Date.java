@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -76,9 +77,12 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
         int id = v.getId();
 
         if (id == R.id.answer_text_box) {
-
             // Get Current Date
             final Calendar c = Calendar.getInstance();
+            if (!configPage.answerInit.isEmpty()) {
+                c.setTime(ConvertToDate(configPage.answerInit));
+                Log.d("Teste", "onClick: " + ConvertToDate(configPage.answerInit));
+            }
             mYear = c.get(Calendar.YEAR);
             mMonth = c.get(Calendar.MONTH);
             mDay = c.get(Calendar.DAY_OF_MONTH);
@@ -88,7 +92,6 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
                         @Override
                         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                             setAnswer(formatDate(year, (monthOfYear), dayOfMonth));
-                            configPage.answerInit(formatDate(year, (monthOfYear), dayOfMonth));
                         }
                     }, mYear, mMonth, mDay);
             datePickerDialog.show();
@@ -145,7 +148,6 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
                         blockQuestion();
                         return true;
                     }
-
                     if (mListener != null) {
                         mListener.onAnswerDate(configPage.getPageNumber(),
                                 String.valueOf(editDate.getText()));
@@ -233,6 +235,18 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
         calendar.set(year, month, day);
 
         return new SimpleDateFormat(format_date, Locale.getDefault()).format(calendar.getTime());
+    }
+
+
+    private java.util.Date ConvertToDate(String dateString) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        java.util.Date convertedDate = new java.util.Date();
+        try {
+            convertedDate = dateFormat.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return convertedDate;
     }
 
 
