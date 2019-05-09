@@ -67,7 +67,7 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .inputColorBackgroundTint(ContextCompat.getColor(this, R.color.colorWhite))
                 .inputColorText(Color.WHITE)
                 .formatSelectedDate("dd-MM-yyyy")
-                .answerInit("25-02-2019")
+                .answerInit("05-02-2022")
                 .nextQuestionAuto()
                 .pageNumber(6)
                 .build());

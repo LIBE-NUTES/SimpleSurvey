@@ -7,21 +7,17 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
-import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.view.ViewCompat;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 
 import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -32,12 +28,10 @@ import br.edu.uepb.nutes.simplesurvey.base.BaseConfigQuestion;
 import br.edu.uepb.nutes.simplesurvey.base.BaseQuestion;
 import br.edu.uepb.nutes.simplesurvey.base.OnQuestionListener;
 
-
 public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundColorHolder, View.OnClickListener {
     private static final String ARG_CONFIGS_PAGE = "arg_configs_page";
 
     private EditText editDate;
-    private int mYear, mMonth, mDay;
     private Config configPage;
     private OnDateListener mListener;
 
@@ -79,19 +73,28 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
         if (id == R.id.answer_text_box) {
             // Get Current Date
             final Calendar c = Calendar.getInstance();
-            if (!configPage.answerInit.isEmpty()) {
-                c.setTime(ConvertToDate(configPage.answerInit));
-                Log.d("Teste", "onClick: " + ConvertToDate(configPage.answerInit));
+            if (configPage.answerInit > 0) {
+                c.setTimeInMillis(configPage.answerInit);
             }
-            mYear = c.get(Calendar.YEAR);
-            mMonth = c.get(Calendar.MONTH);
-            mDay = c.get(Calendar.DAY_OF_MONTH);
+            final int mYear = c.get(Calendar.YEAR);
+            final int mMonth = c.get(Calendar.MONTH);
+            final int mDay = c.get(Calendar.DAY_OF_MONTH);
 
             DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
                     new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                            setAnswer(formatDate(year, (monthOfYear), dayOfMonth));
+
+                            Calendar c = Calendar.getInstance();
+                            c.set(Calendar.YEAR, mYear);
+                            c.set(Calendar.MONTH, mMonth);
+                            c.set(Calendar.DAY_OF_MONTH, mDay);
+
+                            String timeStr = dateFormat(c.getTimeInMillis());
+                            setAnswer(timeStr);
+
+                            mListener.onAnswerDate(configPage.getPageNumber(),
+                                    String.valueOf(editDate.getText()));
                         }
                     }, mYear, mMonth, mDay);
             datePickerDialog.show();
@@ -114,8 +117,8 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
             } else if (configPage.hint != 0) {
                 editDate.setHint(configPage.hint);
             }
-            if (configPage.answerInit != null && !configPage.answerInit.isEmpty()) {
-                editDate.setText(configPage.answerInit);
+            if (configPage.answerInit > 0) {
+                editDate.setText(dateFormat(configPage.answerInit));
             }
 
             if (configPage.colorBackgroundTint != 0) {
@@ -128,39 +131,8 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
                 editDate.setHintTextColor(configPage.colorText);
             }
         }
-
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        if (editDate == null) return;
-
-        editDate.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    InputMethodManager imm = (InputMethodManager) v.getContext()
-                            .getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                    if (String.valueOf(editDate.getText()).isEmpty()) {
-                        blockQuestion();
-                        return true;
-                    }
-                    if (mListener != null) {
-                        mListener.onAnswerDate(configPage.getPageNumber(),
-                                String.valueOf(editDate.getText()));
-                    }
-                    if (configPage.isNextQuestionAuto()) nextQuestion();
-                    else unlockQuestion();
-
-                    return true;
-                }
-                return false;
-            }
-        });
-    }
 
     @Override
     public int getLayout() {
@@ -228,27 +200,14 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
     /**
      * sets the date format.
      */
-    private String formatDate(int year, int month, int day) {
+    private String dateFormat(long date) {
         String format_date = configPage.formatDate;
 
         Calendar calendar = GregorianCalendar.getInstance();
-        calendar.set(year, month, day);
+        calendar.setTimeInMillis(date);
 
         return new SimpleDateFormat(format_date, Locale.getDefault()).format(calendar.getTime());
     }
-
-
-    private java.util.Date ConvertToDate(String dateString) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        java.util.Date convertedDate = new java.util.Date();
-        try {
-            convertedDate = dateFormat.parse(dateString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return convertedDate;
-    }
-
 
     /**
      * Class config page.
@@ -259,14 +218,15 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
         int colorText, colorBackgroundTint;
         @StringRes
         private int hint;
-        private String answerInit, hintStr;
+        private String hintStr;
         private String formatDate;
+        private long answerInit;
 
         public Config() {
             super.layout(R.layout.question_date_layout);
             this.colorBackgroundTint = 0;
             this.hint = R.string.select_date;
-            this.answerInit = null;
+            this.answerInit = -1;
             this.formatDate = "yyyy-MM-dd";
         }
 
@@ -274,7 +234,7 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
             colorText = in.readInt();
             colorBackgroundTint = in.readInt();
             hint = in.readInt();
-            answerInit = in.readString();
+            answerInit = in.readLong();
             hintStr = in.readString();
             formatDate = in.readString();
         }
@@ -284,7 +244,7 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
             dest.writeInt(colorText);
             dest.writeInt(colorBackgroundTint);
             dest.writeInt(hint);
-            dest.writeString(answerInit);
+            dest.writeLong(answerInit);
             dest.writeString(hintStr);
             dest.writeString(formatDate);
         }
@@ -347,11 +307,29 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
 
         /**
          * Set answer init.
+         * Date in dd-MM-yyyy format.
+         *
+         * @param date {@link long} answer.
+         * @return Config
+         */
+        public Config answerInit(String date) {
+            SimpleDateFormat f = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+
+            try {
+                this.answerInit = f.parse(date).getTime();
+            } catch (ParseException e) {
+                throw new IllegalArgumentException(e.getMessage());
+            }
+            return this;
+        }
+
+        /**
+         * Set answer init.
          *
          * @param date {@link String} answer.
          * @return Config
          */
-        public Config answerInit(String date) {
+        public Config answerInit(long date) {
             this.answerInit = date;
             return this;
         }
