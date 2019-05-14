@@ -51,47 +51,6 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .pageNumber(0)
                 .build());
 
-        /**
-         * formatSelectedDate - date formats:
-         *  - dd-MM-yyyy
-         *  - yyyy-MM-dd
-         *  - dd-MM-yyyy HH:mm:ss
-         */
-        addQuestion(new Date.Config()
-                .title("Title of the question 7", Color.WHITE)
-                .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?", Color.WHITE)
-                .descriptionTextSize(18)
-                .colorBackground(ContextCompat.getColor(this, R.color.colorAccent))
-                .image(R.drawable.placeholder)
-                .buttonClose(R.drawable.ic_action_close_dark)
-                .inputColorBackgroundTint(ContextCompat.getColor(this, R.color.colorWhite))
-                .inputColorText(Color.WHITE)
-                .formatSelectedDate("dd-MM-yyyy")
-                .answerInit("05-02-2022")
-                .nextQuestionAuto()
-                .pageNumber(6)
-                .build());
-
-
-        /**
-         * formatSelectedTime - time formats:
-         *  - "HH:mm:ss
-         */
-        addQuestion(new Time.Config()
-                .title("Title of the question 8", Color.WHITE)
-                .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?", Color.WHITE)
-                .descriptionTextSize(18)
-                .colorBackground(ContextCompat.getColor(this, R.color.colorDeepPurple))
-                .image(R.drawable.placeholder)
-                .buttonClose(R.drawable.ic_action_close_dark)
-                .inputColorBackgroundTint(ContextCompat.getColor(this, R.color.colorWhite))
-                .inputColorText(Color.WHITE)
-                .enable24Hours()
-                .answerInit("12:50")
-                .nextQuestionAuto()
-                .pageNumber(7)
-                .build());
-
         addQuestion(new Open.Config()
                 .title("Title of the question 1", Color.WHITE)
                 .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?",
@@ -174,6 +133,36 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .inputColorSelectedText(Color.WHITE)
                 .nextQuestionAuto()
                 .pageNumber(5)
+                .build());
+
+        addQuestion(new Date.Config()
+                .title("Title of the question 7", Color.WHITE)
+                .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?", Color.WHITE)
+                .descriptionTextSize(18)
+                .colorBackground(ContextCompat.getColor(this, R.color.colorAccent))
+                .image(R.drawable.placeholder)
+                .buttonClose(R.drawable.ic_action_close_dark)
+                .inputColorBackgroundTint(ContextCompat.getColor(this, R.color.colorWhite))
+                .inputColorText(Color.WHITE)
+                .formatSelectedDate("dd-MM-yyyy")
+                .answerInit("05-02-2022")
+                .nextQuestionAuto()
+                .pageNumber(6)
+                .build());
+
+        addQuestion(new Time.Config()
+                .title("Title of the question 8", Color.WHITE)
+                .description("Lorem Ipsum is simply dummy text of the printing and typesetting industry?", Color.WHITE)
+                .descriptionTextSize(18)
+                .colorBackground(ContextCompat.getColor(this, R.color.colorDeepPurple))
+                .image(R.drawable.placeholder)
+                .buttonClose(R.drawable.ic_action_close_dark)
+                .inputColorBackgroundTint(ContextCompat.getColor(this, R.color.colorWhite))
+                .inputColorText(Color.WHITE)
+                .enable24Hours()
+                .answerInit("12:50")
+                .nextQuestionAuto()
+                .pageNumber(7)
                 .build());
 
 

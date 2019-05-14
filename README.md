@@ -13,6 +13,8 @@ This library has as main dependency the library [AppIntro](https://github.com/Ap
 	- Single choice
 	- Multiple choose
 	- Open question
+	- Date choice
+	- Time choice
 - Presentation page
 - Question blocked until response is obtained.
 

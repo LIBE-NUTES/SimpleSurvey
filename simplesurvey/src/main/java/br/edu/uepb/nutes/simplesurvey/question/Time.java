@@ -9,7 +9,6 @@ import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.StringRes;
 import android.support.v4.view.ViewCompat;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -31,9 +30,9 @@ import br.edu.uepb.nutes.simplesurvey.base.OnQuestionListener;
 import static br.edu.uepb.nutes.simplesurvey.question.Single.ARG_CONFIGS_PAGE;
 
 public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundColorHolder, View.OnClickListener {
+    private static final String ARG_CONFIGS_PAGE = "arg_configs_page";
 
     private EditText editTime;
-    private int mHour, mMinute;
     private Config configPage;
     private OnTimeListener mListener;
 
@@ -80,8 +79,8 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
                 c.setTimeInMillis(configPage.answerInit);
             }
 
-            mHour = c.get(Calendar.HOUR_OF_DAY);
-            mMinute = c.get(Calendar.MINUTE);
+            final int mHour = c.get(Calendar.HOUR_OF_DAY);
+            final int mMinute = c.get(Calendar.MINUTE);
 
             // Launch Time Picker Dialog
             final TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
@@ -102,7 +101,6 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
             timePickerDialog.show();
         }
     }
-
 
     @Override
     public void initView(View v) {
@@ -272,7 +270,6 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
             }
         };
 
-
         /**
          * Set color text.
          *
@@ -304,16 +301,6 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
         public Config enable24Hours() {
             this.enable24Hours = true;
             this.formatHour = "HH:mm";
-            return this;
-        }
-
-        /**
-         * set time format.
-         *
-         * @return Config
-         */
-        public Config formatSelectedTime(String format) {
-            this.formatHour = format;
             return this;
         }
 
@@ -350,7 +337,6 @@ public class Time extends BaseQuestion<Time.Config> implements ISlideBackgroundC
         public Time build() {
             return Time.builder(this);
         }
-
     }
 
     /**

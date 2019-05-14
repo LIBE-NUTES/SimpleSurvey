@@ -17,7 +17,6 @@ import android.widget.EditText;
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 
 import java.text.ParseException;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -86,9 +85,9 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
                         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
                             Calendar c = Calendar.getInstance();
-                            c.set(Calendar.YEAR, mYear);
-                            c.set(Calendar.MONTH, mMonth);
-                            c.set(Calendar.DAY_OF_MONTH, mDay);
+                            c.set(Calendar.YEAR, year);
+                            c.set(Calendar.MONTH, monthOfYear);
+                            c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
                             String timeStr = dateFormat(c.getTimeInMillis());
                             setAnswer(timeStr);
@@ -100,7 +99,6 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
             datePickerDialog.show();
         }
     }
-
 
     @Override
     public void initView(View v) {
@@ -132,7 +130,6 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
             }
         }
     }
-
 
     @Override
     public int getLayout() {
@@ -334,7 +331,6 @@ public class Date extends BaseQuestion<Date.Config> implements ISlideBackgroundC
             return this;
         }
     }
-
 
     /**
      * Interface OnDateListener.
