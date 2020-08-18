@@ -90,6 +90,7 @@ public class Single extends BaseQuestion<Single.Config> implements ISlideBackgro
     public void initView(View v) {
         this.answerSelectSpinner = v.findViewById(R.id.answer_spinner);
 
+        this.answerSelectSpinner.setTextAlign(configPage.getTextAlign());
         this.answerSelectSpinner.setItems(this.configPage.items);
         this.answerSelectSpinner.setEnabledAddNewItem(this.configPage.enabledAdNewItem);
 

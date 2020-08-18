@@ -49,6 +49,7 @@ public abstract class BaseConfigQuestion<T> {
     private boolean zoomDisabled, nextQuestionAuto, isRequired;
     private String titleStr, descriptionStr;
     private int pageNumber, titleTextSize, descriptionTextSize;
+    private int textAlign;
 
     protected BaseConfigQuestion() {
         this.layout = 0;
@@ -64,6 +65,7 @@ public abstract class BaseConfigQuestion<T> {
         this.zoomDisabled = true;
         this.nextQuestionAuto = false;
         this.isRequired = true;
+        this.textAlign = TextAlign.START;
     }
 
     public int getLayout() {
@@ -128,6 +130,10 @@ public abstract class BaseConfigQuestion<T> {
 
     public int getDescriptionTextSize() {
         return descriptionTextSize;
+    }
+
+    public int getTextAlign() {
+        return textAlign;
     }
 
     /**
@@ -376,6 +382,17 @@ public abstract class BaseConfigQuestion<T> {
         return (T) this;
     }
 
+    /**
+     * Set text align
+     *
+     * @param align int {@link TextAlign}
+     * @return T
+     */
+    public T inputTextAlign(int align) {
+        this.textAlign = align;
+        return (T) this;
+    }
+
 //    /**
 //     * Enable answer required.
 //     *
@@ -388,3 +405,4 @@ public abstract class BaseConfigQuestion<T> {
 
     public abstract Fragment build();
 }
+

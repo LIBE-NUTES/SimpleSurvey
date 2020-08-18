@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.edu.uepb.nutes.simplesurvey.base.SimpleSurvey;
+import br.edu.uepb.nutes.simplesurvey.base.TextAlign;
 import br.edu.uepb.nutes.simplesurvey.question.Dichotomic;
 import br.edu.uepb.nutes.simplesurvey.question.Infor;
 import br.edu.uepb.nutes.simplesurvey.question.Multiple;
@@ -70,6 +71,7 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 .inputBackground(R.drawable.edittext_border_style)
                 .inputColorText(Color.WHITE)
                 .inputType(InputType.TYPE_CLASS_NUMBER)
+                .inputTextAlign(TextAlign.CENTER)
                 .pageNumber(2)
                 .build());
 
@@ -103,6 +105,7 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                     add("Item 3");
                     add("Item 4");
                 }})
+                .inputTextAlign(TextAlign.CENTER)
                 .inputDisableAddNewItem()
                 .nextQuestionAuto()
                 .pageNumber(4)
@@ -128,6 +131,7 @@ public class SimpleSurvey1 extends SimpleSurvey implements Infor.OnInfoListener,
                 }})
                 .inputColorBackgroundTint(Color.WHITE)
                 .inputColorSelectedText(Color.WHITE)
+                .inputTextAlign(TextAlign.CENTER)
                 .nextQuestionAuto()
                 .pageNumber(5)
                 .build());
