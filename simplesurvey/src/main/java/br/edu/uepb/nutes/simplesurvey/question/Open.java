@@ -33,6 +33,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.view.ViewCompat;
 import android.text.InputType;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -46,6 +47,7 @@ import br.edu.uepb.nutes.simplesurvey.R;
 import br.edu.uepb.nutes.simplesurvey.base.BaseConfigQuestion;
 import br.edu.uepb.nutes.simplesurvey.base.BaseQuestion;
 import br.edu.uepb.nutes.simplesurvey.base.OnQuestionListener;
+import br.edu.uepb.nutes.simplesurvey.base.TextAlign;
 
 /**
  * Open question implementation.
@@ -93,6 +95,8 @@ public class Open extends BaseQuestion<Open.Config> implements ISlideBackgroundC
 
         if (textBox != null) {
             textBox.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+            setTextAlign(configPage.getTextAlign());
 
             if (configPage.hintStr != null && !configPage.hintStr.isEmpty()) {
                 textBox.setHint(configPage.hintStr);
@@ -214,6 +218,13 @@ public class Open extends BaseQuestion<Open.Config> implements ISlideBackgroundC
     private void setAnswer(String value) {
         super.unlockQuestion();
         if (value != null && !value.isEmpty()) textBox.setText(value);
+    }
+
+    private void setTextAlign(int align) {
+        // text align
+        if (align == TextAlign.CENTER) textBox.setGravity(Gravity.CENTER);
+        else if (align == TextAlign.END) textBox.setGravity(Gravity.END);
+        else textBox.setGravity(Gravity.START);
     }
 
     /**

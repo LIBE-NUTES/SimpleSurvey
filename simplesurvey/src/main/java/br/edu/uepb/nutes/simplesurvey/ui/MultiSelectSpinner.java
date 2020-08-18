@@ -22,6 +22,7 @@
  */
 package br.edu.uepb.nutes.simplesurvey.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -49,7 +50,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -61,8 +61,6 @@ import java.util.List;
 import br.edu.uepb.nutes.simplesurvey.R;
 
 public class MultiSelectSpinner extends LinearLayout implements DialogInterface.OnMultiChoiceClickListener {
-    private final String TAG = "MultiSelectSpinner";
-
     private final Context context;
     private OnSpinnerListener mListener;
     private AppCompatSpinner mSpinner;
@@ -106,7 +104,7 @@ public class MultiSelectSpinner extends LinearLayout implements DialogInterface.
                 setTitleDialogAddNewItem(typedArray.getString(R.styleable.MultiSelectSpinner_titleDialogAddNewItem));
                 setColorSelectedText(typedArray.getColor(R.styleable.MultiSelectSpinner_colorSelectedText, Color.GRAY));
                 setColorBackgroundTint(typedArray.getColor(R.styleable.MultiSelectSpinner_colorBackgroundTint, Color.GRAY));
-                setEnabledAddNewItem(typedArray.getBoolean(R.styleable.MultiSelectSpinner_colorBackgroundTint, true));
+                setEnabledAddNewItem(typedArray.getBoolean(R.styleable.MultiSelectSpinner_enabledAddNewItem, true));
                 setTextAlign(typedArray.getInt(R.styleable.MultiSelectSpinner_textAlign, 0));
             } finally {
                 typedArray.recycle();
@@ -155,6 +153,7 @@ public class MultiSelectSpinner extends LinearLayout implements DialogInterface.
         });
 
         this.mSpinner.setOnTouchListener(new OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) openDialogItems();
@@ -178,10 +177,8 @@ public class MultiSelectSpinner extends LinearLayout implements DialogInterface.
 
     /**
      * Open AlertDialog with the inputItems to choose.
-     *
-     * @return true
      */
-    public boolean openDialogItems() {
+    public void openDialogItems() {
         if (this.items.isEmpty())
             this.dialogBuilder.setMessage(messageEmpty);
         this.dialogBuilder.setTitle(hint);
@@ -207,8 +204,6 @@ public class MultiSelectSpinner extends LinearLayout implements DialogInterface.
             });
         }
         this.dialogBuilder.show();
-
-        return true;
     }
 
     /**
@@ -395,7 +390,7 @@ public class MultiSelectSpinner extends LinearLayout implements DialogInterface.
     /**
      * Set {@link OnSpinnerListener}
      *
-     * @param listener
+     * @param listener {@link OnSpinnerListener}
      */
     public void setOnSpinnerListener(OnSpinnerListener listener) {
         this.mListener = listener;
@@ -404,7 +399,7 @@ public class MultiSelectSpinner extends LinearLayout implements DialogInterface.
     /**
      * Select item in list by index.
      *
-     * @param index
+     * @param index Int
      */
     public void selection(int index) {
         if (index >= 0 && index < this.itemsSelected.size()) this.itemsSelected.set(index, true);
@@ -417,7 +412,7 @@ public class MultiSelectSpinner extends LinearLayout implements DialogInterface.
     /**
      * Select item in list by item name.
      *
-     * @param item
+     * @param item {@link String}
      */
     public void selection(String item) {
         for (int i = 0; i < this.items.size(); i++) {
@@ -452,13 +447,13 @@ public class MultiSelectSpinner extends LinearLayout implements DialogInterface.
     /**
      * Select array inputItems in list.
      *
-     * @param selectedIndicies
+     * @param selectedIndexes int[]
      */
-    private void internalSelection(int[] selectedIndicies) {
+    private void internalSelection(int[] selectedIndexes) {
         for (int i = 0; i < this.itemsSelected.size(); i++)
             this.itemsSelected.set(i, false);
 
-        for (int index : selectedIndicies) {
+        for (int index : selectedIndexes) {
             if (index >= 0 && index < this.itemsSelected.size())
                 this.itemsSelected.set(index, true);
         }
@@ -603,15 +598,13 @@ public class MultiSelectSpinner extends LinearLayout implements DialogInterface.
         }
 
         alertBuilder.show();
-        openKeyBoard(input);
+        openKeyBoard();
     }
 
     /**
      * Open Keyboard.
-     *
-     * @param view
      */
-    private void openKeyBoard(View view) {
+    private void openKeyBoard() {
         InputMethodManager inputMethodManager = (InputMethodManager) context
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED,
@@ -619,7 +612,7 @@ public class MultiSelectSpinner extends LinearLayout implements DialogInterface.
     }
 
     /**
-     * Close Keyboad.
+     * Close Keyboard.
      */
     private void closeKeyBoard() {
         InputMethodManager inputMethodManager = (InputMethodManager) (this.context)
@@ -684,9 +677,10 @@ public class MultiSelectSpinner extends LinearLayout implements DialogInterface.
         }
 
         public long getItemId(int i) {
-            return (long) i;
+            return i;
         }
 
+        @SuppressLint("RtlHardcoded")
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -697,8 +691,8 @@ public class MultiSelectSpinner extends LinearLayout implements DialogInterface.
 
             // text align
             if (textAlign == 1) txt.setGravity(Gravity.CENTER);
-            else if (textAlign == 2) txt.setGravity(Gravity.RIGHT);
-            else txt.setGravity(Gravity.LEFT);
+            else if (textAlign == 2) txt.setGravity(Gravity.END);
+            else txt.setGravity(Gravity.START);
 
             return txt;
         }
@@ -710,7 +704,7 @@ public class MultiSelectSpinner extends LinearLayout implements DialogInterface.
     public interface OnSpinnerListener {
         void onMultiItemSelected(@NonNull List<String> items, @NonNull List<Integer> indexItems);
 
-        void onAddNewItemSuccess(@NonNull String item, @NonNull int indexItem);
+        void onAddNewItemSuccess(@NonNull String item, int indexItem);
 
         void onAddNewItemCancel();
     }

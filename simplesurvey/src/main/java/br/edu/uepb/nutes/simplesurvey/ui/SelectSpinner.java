@@ -22,6 +22,7 @@
  */
 package br.edu.uepb.nutes.simplesurvey.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -50,7 +51,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -61,8 +61,6 @@ import java.util.List;
 import br.edu.uepb.nutes.simplesurvey.R;
 
 public class SelectSpinner extends LinearLayout {
-    private final String TAG = "SelectSpinner";
-
     protected final Context context;
     protected OnSpinnerListener mListener;
     protected AppCompatSpinner mSpinner;
@@ -81,6 +79,7 @@ public class SelectSpinner extends LinearLayout {
     @ColorInt
     protected int colorBackgroundTint;
     protected boolean enabledAddNewItem;
+    protected int textAlign;
 
     public SelectSpinner(Context context) {
         super(context);
@@ -102,7 +101,8 @@ public class SelectSpinner extends LinearLayout {
                 setHint(typedArray.getString(R.styleable.SelectSpinner_android_hint));
                 setColorSelectedText(typedArray.getColor(R.styleable.SelectSpinner_colorSelectedText, Color.GRAY));
                 setColorBackgroundTint(typedArray.getColor(R.styleable.SelectSpinner_colorBackgroundTint, Color.GRAY));
-                setEnabledAddNewItem(typedArray.getBoolean(R.styleable.SelectSpinner_colorBackgroundTint, true));
+                setEnabledAddNewItem(typedArray.getBoolean(R.styleable.SelectSpinner_enabledAddNewItem, true));
+                setTextAlign(typedArray.getInt(R.styleable.SelectSpinner_textAlign, 0));
             } finally {
                 typedArray.recycle();
             }
@@ -153,13 +153,14 @@ public class SelectSpinner extends LinearLayout {
                 if (position > 0 && mListener != null) {
                     mListener.onItemSelected(
                             String.valueOf(parent.getItemAtPosition(position)),
-                            position - 1);
+                            position - 1
+                    );
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                // Not implemented!
             }
         });
     }
@@ -235,8 +236,9 @@ public class SelectSpinner extends LinearLayout {
         this.items = new ArrayList<>();
         if (entries == null) return;
 
-        for (CharSequence c : entries)
+        for (CharSequence c : entries) {
             this.items.add(String.valueOf(c));
+        }
 
         addHintInItems();
     }
@@ -274,7 +276,7 @@ public class SelectSpinner extends LinearLayout {
 
     public String getItemSelected() {
         if (this.indexItemSelected >= 0 && (this.indexItemSelected + 1) <= this.items.size()) {
-            if (this.items.contains(new String(getHint())))
+            if (this.items.contains(getHint()))
                 return this.items.get(this.indexItemSelected + 1);
             else return this.items.get(this.indexItemSelected);
         }
@@ -287,7 +289,7 @@ public class SelectSpinner extends LinearLayout {
     private void addHintInItems() {
         if (this.items == null || this.hint == null) return;
 
-        this.items.remove(new String(getHint()));
+        this.items.remove(getHint());
         this.items.add(0, getHint());
         refreshComponent();
     }
@@ -297,10 +299,16 @@ public class SelectSpinner extends LinearLayout {
         refreshComponent();
     }
 
+    public void setTextAlign(int textAlign) {
+        this.textAlign = textAlign;
+        initAdapter();
+    }
+
+
     /**
      * Set {@link OnSpinnerListener}
      *
-     * @param listener
+     * @param listener OnSpinnerListener
      */
     public void setOnSpinnerListener(OnSpinnerListener listener) {
         this.mListener = listener;
@@ -309,7 +317,7 @@ public class SelectSpinner extends LinearLayout {
     /**
      * Select item in list.
      *
-     * @param index
+     * @param index int
      */
     public void selection(int index) {
         if (index >= 0 && (index + 1) <= this.items.size()) {
@@ -326,9 +334,7 @@ public class SelectSpinner extends LinearLayout {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
         if (this.titleDialogAddNewItem != null) alertBuilder.setTitle(this.titleDialogAddNewItem);
 
-        /**
-         * Creating EditText
-         */
+        // Creating EditText
         final EditText input = new EditText(context);
         input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         input.setSingleLine();
@@ -342,9 +348,7 @@ public class SelectSpinner extends LinearLayout {
         layout.addView(input);
         alertBuilder.setView(layout);
 
-        /**
-         * Action add
-         */
+        // Action add
         alertBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -385,15 +389,13 @@ public class SelectSpinner extends LinearLayout {
         }
 
         alertBuilder.show();
-        openKeyBoard(input);
+        openKeyBoard();
     }
 
     /**
      * Open Keyboard.
-     *
-     * @param view
      */
-    private void openKeyBoard(View view) {
+    private void openKeyBoard() {
         InputMethodManager inputMethodManager = (InputMethodManager) this.context
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED,
@@ -401,7 +403,7 @@ public class SelectSpinner extends LinearLayout {
     }
 
     /**
-     * Close Keyboad.
+     * Close Keyboard.
      */
     private void closeKeyBoard() {
         InputMethodManager inputMethodManager = (InputMethodManager) (this.context)
@@ -448,7 +450,7 @@ public class SelectSpinner extends LinearLayout {
         }
 
         public long getItemId(int i) {
-            return (long) i;
+            return i;
         }
 
         @Override
@@ -470,14 +472,19 @@ public class SelectSpinner extends LinearLayout {
             return txt;
         }
 
+        @SuppressLint("InflateParams")
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             TextView txt = new TextView(context);
-            txt.setGravity(Gravity.CENTER);
             txt.setText(_items.get(position));
             txt.setTextSize(16);
-            txt.setTextColor(colorSelectedText);
+            txt.setTextColor(getColorSelectedText());
+
+            // text align
+            if (textAlign == 1) txt.setGravity(Gravity.CENTER);
+            else if (textAlign == 2) txt.setGravity(Gravity.END);
+            else txt.setGravity(Gravity.START);
 
             return txt;
         }
@@ -485,7 +492,7 @@ public class SelectSpinner extends LinearLayout {
         @Override
         public boolean isEnabled(int position) {
             // If the spinner has hint, disable it
-            return (position == 0) ? false : true;
+            return position != 0;
         }
     }
 

@@ -116,7 +116,6 @@
                 android:id="@+id/answer_text_box"
                 android:layout_width="match_parent"
                 android:scrollbars="vertical"
-                android:gravity="top|left"
                 android:scrollbarStyle="insideInset"
                 android:overScrollMode="always"
                 android:layout_height="wrap_content"

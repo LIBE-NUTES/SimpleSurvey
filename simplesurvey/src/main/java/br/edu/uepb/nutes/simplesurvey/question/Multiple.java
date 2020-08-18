@@ -102,9 +102,9 @@ public class Multiple extends BaseQuestion<Multiple.Config>
     public void initView(View v) {
         this.answerMultiSelectSpinner = v.findViewById(R.id.answer_multi_select_spinner);
 
+        this.answerMultiSelectSpinner.setTextAlign(configPage.getTextAlign());
         this.answerMultiSelectSpinner.setItems(this.configPage.items);
         this.answerMultiSelectSpinner.setEnabledAddNewItem(this.configPage.enabledAdNewItem);
-
 
         if (this.configPage.hintStr != null &&
                 !this.configPage.hintStr.isEmpty()) {
